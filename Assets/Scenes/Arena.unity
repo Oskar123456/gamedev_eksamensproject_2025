@@ -1341,6 +1341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1775436962}
   - component: {fileID: 1775436963}
+  - component: {fileID: 1775436965}
   - component: {fileID: 1775436964}
   m_Layer: 0
   m_Name: Arena
@@ -1382,7 +1383,8 @@ MonoBehaviour:
   tile_prefabs:
   - {fileID: 8562595125766384472, guid: 45e15140cc2293a37b1b7033e4c85be5, type: 3}
   deco_prefabs:
-  - {fileID: 0}
+  - {fileID: 16038835297913163, guid: 7c7baabdbc078cb4098d5880fc72c0f3, type: 3}
+  level_prefab: {fileID: 0}
   maze_width: 10
   maze_height: 10
 --- !u!114 &1775436964
@@ -1417,6 +1419,30 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 6b18b8f9494b424dfb9d041934dc27ff, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1775436965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775436961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160ae5458d83751558c2da89db83dabf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  medieval_wall_prefabs:
+  - {fileID: 2454342098214737506, guid: 01b014d1c03440f0087291d570ed7f7c, type: 3}
+  medieval_tile_prefabs:
+  - {fileID: 3857567868186726941, guid: c7b24699db20f6d3f9f99c6585f2a0d7, type: 3}
+  medieval_lamp_prefabs:
+  - {fileID: 8060405944448375545, guid: 7970c12d6b19a504fbc82353b8a43abe, type: 3}
+  medieval_level_height: 20
+  medieval_wall_width: 4
+  medieval_wall_variance: 2
+  medieval_avg_room_width: 4
+  medieval_avg_room_height: 4
+  medieval_avg_room_variance: 2
 --- !u!1 &1918983734
 GameObject:
   m_ObjectHideFlags: 0
