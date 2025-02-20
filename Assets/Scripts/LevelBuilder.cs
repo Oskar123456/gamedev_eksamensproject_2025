@@ -63,9 +63,10 @@ public class LevelBuilder : MonoBehaviour
                     if (level.maze.walls[z_idx, x_idx]) {
                         level.voxels[x, y, z] = Voxel.Wall;
                         Instantiate(medieval_wall_prefabs[0], new Vector3(x, y, z), Quaternion.identity, parent);
-                    } else if (y <= level.level_voxel_height / 2) {
+                    } else if (y <= level.level_voxel_height / 5) {
+                        float noise = MultiLayerNoise(x + 0.015f, z + 0.013f);
                         level.voxels[x, y, z] = Voxel.Floor;
-                        Instantiate(medieval_tile_prefabs[0], new Vector3(x, y, z), Quaternion.identity, parent);
+                        Instantiate(medieval_tile_prefabs[0], new Vector3(x, y + noise, z), Quaternion.identity, parent);
                     } else {
                         level.voxels[x, y, z] = Voxel.Air;
                     }
@@ -77,7 +78,7 @@ public class LevelBuilder : MonoBehaviour
     private static float MultiLayerNoise(float x, float z)
     {
         float total = 0;
-        float freq = 0.04f;
+        float freq = 0.07f;
         float amp = 1.0f;
         float amp_sum = 0;
         float per = 0.5f;

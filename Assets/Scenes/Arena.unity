@@ -1384,7 +1384,7 @@ MonoBehaviour:
   - {fileID: 8562595125766384472, guid: 45e15140cc2293a37b1b7033e4c85be5, type: 3}
   deco_prefabs:
   - {fileID: 16038835297913163, guid: 7c7baabdbc078cb4098d5880fc72c0f3, type: 3}
-  level_prefab: {fileID: 0}
+  level_prefab: {fileID: 1545280369457043851, guid: bc11b9ea7e7cd7b78a8c86319d11f3cb, type: 3}
   maze_width: 10
   maze_height: 10
 --- !u!114 &1775436964
@@ -1437,12 +1437,12 @@ MonoBehaviour:
   - {fileID: 3857567868186726941, guid: c7b24699db20f6d3f9f99c6585f2a0d7, type: 3}
   medieval_lamp_prefabs:
   - {fileID: 8060405944448375545, guid: 7970c12d6b19a504fbc82353b8a43abe, type: 3}
-  medieval_level_height: 20
-  medieval_wall_width: 4
-  medieval_wall_variance: 2
-  medieval_avg_room_width: 4
-  medieval_avg_room_height: 4
-  medieval_avg_room_variance: 2
+  medieval_level_height: 4
+  medieval_wall_width: 2
+  medieval_wall_variance: 1
+  medieval_avg_room_width: 2
+  medieval_avg_room_height: 2
+  medieval_avg_room_variance: 1
 --- !u!1 &1918983734
 GameObject:
   m_ObjectHideFlags: 0
