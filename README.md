@@ -4,6 +4,6 @@
 
 ## Instructions
 
-## ThirdParty Assetlist
+## ThirdParty Asset List
 
   - [lol](https://lol.com)
