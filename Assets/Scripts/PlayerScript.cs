@@ -1,0 +1,339 @@
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
+
+using System;
+using UnityEngine;
+
+public class PlayerScript : MonoBehaviour
+{
+    CharacterController char_ctrl;
+    Animator animator;
+    Transform trf;
+    System.Random rng = new System.Random();
+
+    CameraThirdPerson cam;
+    CameraMiniMap cam_minimap;
+    float yaw, pitch;
+
+    public float camera_angle = 45;
+    public float camera_rotation = 45;
+    public float camera_dist = 20;
+    public float minimap_camera_dist = 100;
+
+    /* state flags */
+    bool did_move = false;
+    bool did_move_when_jump = false;
+    bool did_jump = false;
+    bool did_sprint = false;
+    bool did_land = false;
+    bool did_attack = false;
+    bool is_attacking = false;
+    bool was_hit = false;
+    bool is_falling = false;
+    /* state parameters */
+    float move_speed;
+    public float move_speed_normal = 10.0f;
+    public float move_speed_sprint = 30.0f;
+
+    public float fall_init = -35;
+    public float fall_acc = 3.0f;
+    public float fall_forward_acc = 0.03f;
+    public float fall_speed = 0;
+
+    public float attack_time = 0.25f;
+    public float attack_time_dmg_lo = 0.3f, attack_time_dmg_hi = 0.5f;
+    float attack_time_left = 0;
+    int attack_num = 0;
+    /* animator parameters */
+    float anim_mul_move_speed = 0.25f;
+    float anim_mul_fall_speed = 0.15f;
+    float[] anim_attack_time = { 1.0f, 1.333f };
+
+    void Start()
+    {
+        trf = GetComponent<Transform>();
+        char_ctrl = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        cam = new CameraThirdPerson(camera_angle, camera_dist, camera_rotation, GameObject.Find("MainCamera").GetComponent<Transform>());
+        cam_minimap = new CameraMiniMap(GameObject.Find("MiniMapCamera").GetComponent<Transform>(), cam.trf, trf);
+        cam_minimap.dist = minimap_camera_dist;
+    }
+
+    void Update()
+    {
+        UpdateFall();
+        PollKeys();
+        PollMouse();
+        PollMovement();
+        PollAttack();
+        PollMisc();
+
+        ChooseAnimation();
+
+        if (did_attack) {
+            is_attacking = true;
+        }
+
+        if (did_jump) {
+            char_ctrl.Move(trf.up * move_speed * Time.deltaTime);
+        }
+
+        if (did_move) {
+            char_ctrl.Move(trf.forward * move_speed * Time.deltaTime);
+        }
+
+        cam.Update(trf.position + new Vector3(0, trf.localScale.y / 2, 0), trf.hasChanged);
+        cam_minimap.Update(cam.rotation, trf.position, trf.hasChanged);
+
+        ResetState();
+
+        if (is_falling) {
+            float incl_forward = (did_move_when_jump) ? 1 : 0;
+            char_ctrl.Move(trf.forward * move_speed * Time.deltaTime * incl_forward);
+        }
+        char_ctrl.Move(Vector3.down * fall_speed * Time.deltaTime);
+    }
+
+    void PollKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            cam.rot_targ += 90;
+        }
+
+        if (Input.GetKey(KeyCode.PageUp)) {
+            cam.angle += 0.1f;
+        }
+
+        if (Input.GetKey(KeyCode.PageDown)) {
+            cam.angle -= 0.1f;
+        }
+    }
+
+    void PollMouse()
+    {
+        float mwheel = Input.GetAxis("Mouse ScrollWheel");
+        if (mwheel != 0) {
+            cam.dist -= 5f * mwheel;
+        }
+    }
+
+    void PollAttack()
+    {
+        if (!is_attacking) {
+            if (Input.GetMouseButton(0)) {
+                attack_num = rng.Next() % 2;
+                attack_time_left = attack_time;
+                did_attack = true;
+            } else {
+                return;
+            }
+        }
+
+        attack_time_left -= Time.deltaTime;
+        if (attack_time_left > 0)
+            is_attacking = true;
+        else
+            is_attacking = false;
+    }
+
+    void PollMisc() {}
+
+    void PollMovement()
+    {
+        if (is_falling || is_attacking) {
+            // Debug.Log("PollMovement: is_falling");
+            return;
+        }
+
+        did_move = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A));
+
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            did_sprint = true;
+            move_speed = move_speed_sprint;
+        } else {
+            did_sprint = false;
+            move_speed = move_speed_normal;
+        }
+
+        if (Input.GetKey(KeyCode.W)) {
+            pitch = 0f + cam.rotation;
+            if (Input.GetKey(KeyCode.D))
+                pitch += 45f;
+            if (Input.GetKey(KeyCode.A))
+                pitch -= 45f;
+        }
+        else if (Input.GetKey(KeyCode.D)) {
+            pitch = 90f + cam.rotation;
+            if (Input.GetKey(KeyCode.S))
+                pitch += 45f;
+            if (Input.GetKey(KeyCode.W))
+                pitch -= 45f;
+        }
+        else if (Input.GetKey(KeyCode.S)) {
+            pitch = 180f + cam.rotation;
+            if (Input.GetKey(KeyCode.A))
+                pitch += 45f;
+            if (Input.GetKey(KeyCode.D))
+                pitch -= 45f;
+        }
+        else if (Input.GetKey(KeyCode.A)) {
+            pitch = 270f + cam.rotation;
+            if (Input.GetKey(KeyCode.W))
+                pitch += 45f;
+            if (Input.GetKey(KeyCode.S))
+                pitch -= 45f;
+        }
+
+        if (Input.GetKey(KeyCode.Space)) {
+            did_jump = true;
+            fall_speed = fall_init;
+            if (did_move) {
+                did_move_when_jump = true;
+            } else {
+                did_move_when_jump = false;
+            }
+        }
+
+        if (did_move)
+            trf.eulerAngles = new Vector3(0, pitch, 0);
+    }
+
+    void UpdateFall()
+    {
+        if (char_ctrl.isGrounded) {
+            is_falling = false;
+            fall_speed = fall_acc;
+            animator.SetFloat("fall_speed", fall_speed * anim_mul_fall_speed);
+            return;
+        }
+
+        is_falling = true;
+
+        fall_speed += fall_acc;
+        animator.SetFloat("fall_speed", fall_speed * anim_mul_fall_speed);
+        move_speed = Math.Max(move_speed - fall_forward_acc, 0);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Vector3 normal = hit.normal;
+        if (normal.y >= 0.9 && is_falling) {
+            // Debug.Log("OnControllerColliderHit");
+            did_land = true;
+            is_falling = false;
+        }
+    }
+
+    void ChooseAnimation()
+    {
+        AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (is_attacking) {
+            animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
+            if (attack_num == 0)
+                animator.Play("Attack01");
+            if (attack_num == 1)
+                animator.Play("Attack04");
+        }
+
+        else if (did_move) {
+            if (did_sprint) {
+                animator.SetFloat("move_speed", anim_mul_move_speed * move_speed / 2);
+                animator.Play("BattleRunForward");
+            } else {
+                animator.SetFloat("move_speed", anim_mul_move_speed * move_speed);
+                animator.Play("WalkForward");
+            }
+        }
+
+        else if (is_falling) {
+            animator.SetFloat("fall_speed", anim_mul_fall_speed * fall_speed);
+            if (fall_speed > 20.0f) { animator.Play("JumpAir"); }
+            else if (fall_speed < -30.0f) { animator.Play("JumpStart"); }
+            else if (fall_speed < 0.0f) { animator.Play("JumpUp"); }
+        }
+
+        else {
+            animator.Play("Idle02");
+        }
+    }
+
+    void ResetState()
+    {
+        did_jump = false;
+        did_move = false;
+        did_land = false;
+        did_attack = false;
+        did_sprint = false;
+    }
+}
+
+public class CameraThirdPerson
+{
+    public Transform trf;
+    public float angle = 30;
+    public float dist = 30;
+    public float rotation = 45;
+
+    float rot_speed = 135;
+    public float rot_targ;
+
+    public CameraThirdPerson(float a, float d, float r, Transform t) {
+        trf = t; angle = a; dist = d; rotation = r; rot_targ = r;
+    }
+
+    public void Update(Vector3 look_at, bool has_moved)
+    {
+        if (rot_targ != rotation) {
+            float sign = ((rot_targ < rotation) ? -1 : 1);
+            float rot_add = Time.deltaTime * rot_speed * sign;
+            rotation = rotation + rot_add;
+            if (sign < 0)
+                if (rotation < rot_targ)
+                    rotation = rot_targ;
+            if (sign > 0)
+                if (rotation > rot_targ)
+                    rotation = rot_targ;
+        }
+        if (has_moved) {
+            trf.position = new Vector3(look_at.x,
+                    look_at.y + dist * (float)Math.Tan(angle * ((Math.PI * 2) / 360)),
+                    look_at.z - dist);
+
+            Vector3 c = trf.position - look_at;
+            c = Quaternion.Euler(0, rotation, 0) * c;
+            c += look_at;
+            trf.position = c;
+            trf.eulerAngles = new Vector3(angle, rotation, 0);
+        }
+    }
+}
+
+public class CameraMiniMap {
+    public Transform player_trf;
+    public Transform trf;
+    public float dist = 50;
+
+    Vector3 rot;
+
+    public CameraMiniMap(Transform t, Transform pt, Transform mct) {trf = t; player_trf = pt;}
+
+    public void Update(float main_cam_rot, Vector3 pos, bool has_moved)
+    {
+        if (!has_moved)
+            return;
+        trf.rotation = Quaternion.Euler(new Vector3(90, -player_trf.rotation.y + main_cam_rot, 0));
+        trf.position = new Vector3(pos.x, pos.y + dist, pos.z);
+    }
+}
