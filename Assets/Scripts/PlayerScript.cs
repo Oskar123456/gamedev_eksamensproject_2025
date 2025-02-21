@@ -22,14 +22,16 @@ public class PlayerScript : MonoBehaviour
     Transform trf;
     System.Random rng = new System.Random();
 
-    CameraThirdPerson cam;
-    CameraMiniMap cam_minimap;
-    float yaw, pitch;
+    // public float camera_angle = 45;
+    // public float camera_rotation = 45;
+    public float camera_dist = 0.5f;
+    // public float minimap_camera_dist = 100;
 
-    public float camera_angle = 45;
-    public float camera_rotation = 45;
-    public float camera_dist = 20;
-    public float minimap_camera_dist = 100;
+    float yaw, pitch;
+    Transform cam_trf;
+    // Transform cam_minimap_trf;
+    float cam_trf_angle_x, cam_trf_angle_y;
+    Vector3 cam_trf_dist = new Vector3(-10, 16.85f, -10);
 
     /* state flags */
     bool did_move = false;
@@ -65,9 +67,13 @@ public class PlayerScript : MonoBehaviour
         trf = GetComponent<Transform>();
         char_ctrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        cam = new CameraThirdPerson(camera_angle, camera_dist, camera_rotation, GameObject.Find("MainCamera").GetComponent<Transform>());
-        cam_minimap = new CameraMiniMap(GameObject.Find("MiniMapCamera").GetComponent<Transform>(), cam.trf, trf);
-        cam_minimap.dist = minimap_camera_dist;
+
+        cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
+        cam_trf_angle_x = cam_trf.eulerAngles.x;
+        cam_trf_angle_y = cam_trf.eulerAngles.y;
+
+        trf.eulerAngles = new Vector3(0, pitch, 0);
+        UpdateCam();
     }
 
     void Update()
@@ -93,9 +99,6 @@ public class PlayerScript : MonoBehaviour
             char_ctrl.Move(trf.forward * move_speed * Time.deltaTime);
         }
 
-        cam.Update(trf.position + new Vector3(0, trf.localScale.y / 2, 0), trf.hasChanged);
-        cam_minimap.Update(cam.rotation, trf.position, trf.hasChanged);
-
         ResetState();
 
         if (is_falling) {
@@ -103,20 +106,23 @@ public class PlayerScript : MonoBehaviour
             char_ctrl.Move(trf.forward * move_speed * Time.deltaTime * incl_forward);
         }
         char_ctrl.Move(Vector3.down * fall_speed * Time.deltaTime);
+
+        // cam.Update(trf.position + new Vector3(0, trf.localScale.y / 2, 0), trf.hasChanged);
+        // cam_minimap.Update(cam.rotation, trf.position, trf.hasChanged);
     }
 
     void PollKeys()
     {
         if (Input.GetKeyDown(KeyCode.R)) {
-            cam.rot_targ += 90;
+            // cam.rot_targ += 90;
         }
 
         if (Input.GetKey(KeyCode.PageUp)) {
-            cam.angle += 0.1f;
+            // cam.angle += 0.1f;
         }
 
         if (Input.GetKey(KeyCode.PageDown)) {
-            cam.angle -= 0.1f;
+            // cam.angle -= 0.1f;
         }
     }
 
@@ -124,7 +130,8 @@ public class PlayerScript : MonoBehaviour
     {
         float mwheel = Input.GetAxis("Mouse ScrollWheel");
         if (mwheel != 0) {
-            cam.dist -= 5f * mwheel;
+            camera_dist -= 0.1f * mwheel;
+            UpdateCam();
         }
     }
 
@@ -135,6 +142,7 @@ public class PlayerScript : MonoBehaviour
                 attack_num = rng.Next() % 2;
                 attack_time_left = attack_time;
                 did_attack = true;
+                animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
             } else {
                 return;
             }
@@ -167,28 +175,28 @@ public class PlayerScript : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.W)) {
-            pitch = 0f + cam.rotation;
+            pitch = 45f;
             if (Input.GetKey(KeyCode.D))
                 pitch += 45f;
             if (Input.GetKey(KeyCode.A))
                 pitch -= 45f;
         }
         else if (Input.GetKey(KeyCode.D)) {
-            pitch = 90f + cam.rotation;
+            pitch = 135;
             if (Input.GetKey(KeyCode.S))
                 pitch += 45f;
             if (Input.GetKey(KeyCode.W))
                 pitch -= 45f;
         }
         else if (Input.GetKey(KeyCode.S)) {
-            pitch = 180f + cam.rotation;
+            pitch = 225;
             if (Input.GetKey(KeyCode.A))
                 pitch += 45f;
             if (Input.GetKey(KeyCode.D))
                 pitch -= 45f;
         }
         else if (Input.GetKey(KeyCode.A)) {
-            pitch = 270f + cam.rotation;
+            pitch = 315;
             if (Input.GetKey(KeyCode.W))
                 pitch += 45f;
             if (Input.GetKey(KeyCode.S))
@@ -205,8 +213,10 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (did_move)
+        if (did_move) {
             trf.eulerAngles = new Vector3(0, pitch, 0);
+            UpdateCam();
+        }
     }
 
     void UpdateFall()
@@ -237,10 +247,9 @@ public class PlayerScript : MonoBehaviour
 
     void ChooseAnimation()
     {
-        AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
+        // AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
 
         if (is_attacking) {
-            animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
             if (attack_num == 0)
                 animator.Play("Attack01");
             if (attack_num == 1)
@@ -277,63 +286,10 @@ public class PlayerScript : MonoBehaviour
         did_attack = false;
         did_sprint = false;
     }
-}
 
-public class CameraThirdPerson
-{
-    public Transform trf;
-    public float angle = 30;
-    public float dist = 30;
-    public float rotation = 45;
-
-    float rot_speed = 135;
-    public float rot_targ;
-
-    public CameraThirdPerson(float a, float d, float r, Transform t) {
-        trf = t; angle = a; dist = d; rotation = r; rot_targ = r;
-    }
-
-    public void Update(Vector3 look_at, bool has_moved)
+    void UpdateCam()
     {
-        if (rot_targ != rotation) {
-            float sign = ((rot_targ < rotation) ? -1 : 1);
-            float rot_add = Time.deltaTime * rot_speed * sign;
-            rotation = rotation + rot_add;
-            if (sign < 0)
-                if (rotation < rot_targ)
-                    rotation = rot_targ;
-            if (sign > 0)
-                if (rotation > rot_targ)
-                    rotation = rot_targ;
-        }
-        if (has_moved) {
-            trf.position = new Vector3(look_at.x,
-                    look_at.y + dist * (float)Math.Tan(angle * ((Math.PI * 2) / 360)),
-                    look_at.z - dist);
-
-            Vector3 c = trf.position - look_at;
-            c = Quaternion.Euler(0, rotation, 0) * c;
-            c += look_at;
-            trf.position = c;
-            trf.eulerAngles = new Vector3(angle, rotation, 0);
-        }
-    }
-}
-
-public class CameraMiniMap {
-    public Transform player_trf;
-    public Transform trf;
-    public float dist = 50;
-
-    Vector3 rot;
-
-    public CameraMiniMap(Transform t, Transform pt, Transform mct) {trf = t; player_trf = pt;}
-
-    public void Update(float main_cam_rot, Vector3 pos, bool has_moved)
-    {
-        if (!has_moved)
-            return;
-        trf.rotation = Quaternion.Euler(new Vector3(90, -player_trf.rotation.y + main_cam_rot, 0));
-        trf.position = new Vector3(pos.x, pos.y + dist, pos.z);
+        cam_trf.position = trf.position + cam_trf_dist * camera_dist;
+        cam_trf.eulerAngles = new Vector3(cam_trf_angle_x, cam_trf_angle_y, 0);
     }
 }

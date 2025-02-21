@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 939e9a2214e37ec4e8eb4fe85d074704, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -550,6 +550,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   hp_max: 100
+--- !u!4 &573771675 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
+  m_PrefabInstance: {fileID: 1129666524}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &621691029
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,7 +798,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.8639336
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -801,7 +806,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.2562447
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -835,9 +840,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6345952515272562453, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
+      propertyPath: fall_init
+      value: -65
+      objectReference: {fileID: 0}
+    - target: {fileID: 6345952515272562453, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
+      propertyPath: camera_dist
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6345952515272562453, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
+      propertyPath: camera_angle
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3845006826509138333, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1960521766}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4543671994619479162, guid: c81f8a0226ee20f80a5e88e0ab9f934f, type: 3}
       insertIndex: -1
@@ -939,7 +959,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
@@ -965,7 +985,7 @@ Transform:
   m_GameObject: {fileID: 1218180048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1295,6 +1315,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a312b34990c3869ad45abc175e1421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1691406438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1691406440}
+  - component: {fileID: 1691406439}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1691406439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691406438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116d2cedec446cbc9b75d8e79978b09b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1691406440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691406438}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1700725975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1381,7 +1445,7 @@ MonoBehaviour:
   wall_prefabs:
   - {fileID: 2454342098214737506, guid: 01b014d1c03440f0087291d570ed7f7c, type: 3}
   tile_prefabs:
-  - {fileID: 8562595125766384472, guid: 45e15140cc2293a37b1b7033e4c85be5, type: 3}
+  - {fileID: 5781920386605525542, guid: 0c3040c66e6af6028b85a16974baa795, type: 3}
   deco_prefabs:
   - {fileID: 16038835297913163, guid: 7c7baabdbc078cb4098d5880fc72c0f3, type: 3}
   level_prefab: {fileID: 1545280369457043851, guid: bc11b9ea7e7cd7b78a8c86319d11f3cb, type: 3}
@@ -1431,18 +1495,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160ae5458d83751558c2da89db83dabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  medieval_wall_prefabs:
-  - {fileID: 2454342098214737506, guid: 01b014d1c03440f0087291d570ed7f7c, type: 3}
-  medieval_tile_prefabs:
-  - {fileID: 3857567868186726941, guid: c7b24699db20f6d3f9f99c6585f2a0d7, type: 3}
-  medieval_lamp_prefabs:
-  - {fileID: 8060405944448375545, guid: 7970c12d6b19a504fbc82353b8a43abe, type: 3}
-  medieval_level_height: 4
-  medieval_wall_width: 2
-  medieval_wall_variance: 1
-  medieval_avg_room_width: 2
-  medieval_avg_room_height: 2
-  medieval_avg_room_variance: 1
+  scale: 3
+  floor_noise_scale: 1.2
+  black_plane: {fileID: 5753351290427783747, guid: 92dfe607fb09e31edb5b4363dc002f03, type: 3}
+  medieval_wall_skeleton: {fileID: 7277719298293175102, guid: 8080b8194c3c072dba3f36913f5edf64, type: 3}
+  medieval_floor_skeleton: {fileID: 1412554010015604074, guid: d72c97d3527598bf9b8443de2e09ca5a, type: 3}
+  medieval_ceiling_skeleton: {fileID: 2434737542694297685, guid: f468cb00eb48814ffaf83f4d676a6b08, type: 3}
+  medieval_level_height: 5
+  medieval_wall_width: 5
+  medieval_wall_variance: 2
+  medieval_avg_room_width: 6
+  medieval_avg_room_height: 6
+  medieval_avg_room_variance: 3
 --- !u!1 &1918983734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,13 +1714,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1960521763}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.39044833, y: 0.34682897, z: -0.161729, w: 0.8373192}
+  m_LocalPosition: {x: -10, y: 16.85, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 573771675}
+  m_LocalEulerAnglesHint: {x: 50, y: 45, z: 0}
 --- !u!114 &1960521767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1705,10 +1769,10 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1960521766}
-  - {fileID: 1218180051}
   - {fileID: 1918983736}
   - {fileID: 621691032}
   - {fileID: 1640077103}
   - {fileID: 1775436962}
   - {fileID: 1129666524}
+  - {fileID: 1218180051}
+  - {fileID: 1691406440}

@@ -29,73 +29,91 @@ using UnityEngine;
 
 public class LevelBuilder : MonoBehaviour
 {
-    public List<GameObject> medieval_wall_prefabs;
-    public List<GameObject> medieval_tile_prefabs;
-    public List<GameObject> medieval_lamp_prefabs;
+    public float scale = 4;
+    public static float voxel_scale = 4;
+    public float floor_noise_scale = 1.2f;
+    public static float noise_scale = 1.2f;
 
-    public int medieval_level_height;
-    public int medieval_wall_width;
-    public int medieval_wall_variance;
-    public int medieval_avg_room_width;
-    public int medieval_avg_room_height;
-    public int medieval_avg_room_variance;
+    public GameObject black_plane;
+
+    public GameObject medieval_wall_skeleton;
+    public GameObject medieval_floor_skeleton;
+    public GameObject medieval_ceiling_skeleton;
+
+    public int medieval_level_height = 5;
+    public int medieval_wall_width = 5;
+    public int medieval_wall_variance = 2;
+    public int medieval_avg_room_width = 5;
+    public int medieval_avg_room_height = 5;
+    public int medieval_avg_room_variance = 2;
 
     private System.Random rng = new System.Random();
 
-    public void Medieval(Maze maze, Transform parent)
+    public void Init()
+    {
+        voxel_scale = scale;
+    }
+
+    public Level Medieval(Maze maze, Transform parent)
     {
         Level level = new Level(maze, medieval_level_height, parent);
 
         for (int x = 0; x < maze.width; x++)
-            level.row_heights[x] = medieval_avg_room_height + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
+            level.column_widths[x] = medieval_avg_room_width + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
         for (int y = 0; y < maze.height; y++)
-            level.column_widths[y]  = medieval_avg_room_width  + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
+            level.row_heights[y]  = medieval_avg_room_height  + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
 
         level.InitVoxels();
+        level.BuildMesh();
 
-        for (int x = 0; x < level.voxel_width; x++) {
-            for (int y = 0; y < level.level_voxel_height; y++) {
-                for (int z = 0; z < level.voxel_height; z++) {
-                    int x_idx = 0, z_idx = 0;
-                    int x_sum = level.column_widths[0], z_sum = level.row_heights[0];
-                    while (x > x_sum) x_sum += level.column_widths[++x_idx];
-                    while (z > z_sum) z_sum += level.row_heights[++z_idx];
-                    if (level.maze.walls[z_idx, x_idx]) {
-                        level.voxels[x, y, z] = Voxel.Wall;
-                        Instantiate(medieval_wall_prefabs[0], new Vector3(x, y, z), Quaternion.identity, parent);
-                    } else if (y <= level.level_voxel_height / 5) {
-                        float noise = MultiLayerNoise(x + 0.015f, z + 0.013f);
-                        level.voxels[x, y, z] = Voxel.Floor;
-                        Instantiate(medieval_tile_prefabs[0], new Vector3(x, y + noise, z), Quaternion.identity, parent);
-                    } else {
-                        level.voxels[x, y, z] = Voxel.Air;
-                    }
-                }
-            }
+        List<GameObject> floors = new List<GameObject>();
+        List<GameObject> walls = new List<GameObject>();
+        List<GameObject> ceilings = new List<GameObject>();
+
+        for (int i = 0; i < level.floor_vertices.Count; i++) {
+            GameObject floor = Instantiate(medieval_floor_skeleton, Vector3.zero, Quaternion.identity, parent);
+            SetMesh(floor, level.floor_vertices[i], level.floor_triangles[i], level.floor_uvs[i]);
+            floors.Add(floor);
         }
+        for (int i = 0; i < level.wall_vertices.Count; i++) {
+            GameObject wall = Instantiate(medieval_wall_skeleton, Vector3.zero, Quaternion.identity, parent);
+            SetMesh(wall, level.wall_vertices[i], level.wall_triangles[i], level.wall_uvs[i]);
+            walls.Add(wall);
+        }
+        for (int i = 0; i < level.ceiling_vertices.Count; i++) {
+            GameObject ceiling = Instantiate(medieval_ceiling_skeleton, Vector3.zero, Quaternion.identity, parent);
+            SetMesh(ceiling, level.ceiling_vertices[i], level.ceiling_triangles[i], level.ceiling_uvs[i]);
+            ceilings.Add(ceiling);
+        }
+
+        return level;
     }
 
-    private static float MultiLayerNoise(float x, float z)
+    void SetMesh(GameObject skeleton, List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
     {
-        float total = 0;
-        float freq = 0.07f;
-        float amp = 1.0f;
-        float amp_sum = 0;
-        float per = 0.5f;
-        int oct = 4;
+        MeshFilter mesh_filter = skeleton.GetComponent<MeshFilter>();
+        Mesh mesh = skeleton.GetComponent<MeshFilter>().mesh;
+        MeshCollider mesh_collider = skeleton.GetComponent<MeshCollider>();
+        NavMeshSurface nav_mesh_surface = skeleton.GetComponent<NavMeshSurface>();
 
-        for (int i = 0; i < oct; ++i) {
-            total += (float)(Mathf.PerlinNoise(x * freq, z * freq) * amp);
-            amp_sum += amp;
-            amp *= per;
-            freq *= 2;
-        }
+        mesh.Clear();
 
-        return (float)Math.Clamp(Math.Pow(total / amp_sum, 2), 0, 1);
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.uv = uvs.ToArray();
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+
+        Mesh mesh_for_collider = new Mesh();
+        mesh_for_collider.vertices = vertices.ToArray();
+        mesh_for_collider.triangles = triangles.ToArray();
+        mesh_for_collider.RecalculateBounds();
+        mesh_for_collider.RecalculateNormals();
+        mesh_collider.sharedMesh = mesh_for_collider;
     }
 }
 
-public enum Voxel { None, Air, Wall, Floor }
+public enum Voxel { None, Air, Wall, Floor, Ceiling }
 
 public class Level
 {
@@ -105,6 +123,24 @@ public class Level
     public Voxel[,,] voxels;
     public int[] column_widths, row_heights;
     public int voxel_width = 0, voxel_height = 0, level_voxel_height = 0;
+    public float world_width = 0, world_height = 0;
+    public float[,] noise_levels;
+
+    public List<List<Vector3>> floor_vertices = new List<List<Vector3>>();
+    public List<List<int>> floor_triangles = new List<List<int>>();
+    public List<List<Vector2>> floor_uvs = new List<List<Vector2>>();
+
+    public List<List<Vector3>> wall_vertices = new List<List<Vector3>>();
+    public List<List<int>> wall_triangles = new List<List<int>>();
+    public List<List<Vector2>> wall_uvs = new List<List<Vector2>>();
+
+    public List<List<Vector3>> ceiling_vertices = new List<List<Vector3>>();
+    public List<List<int>> ceiling_triangles = new List<List<int>>();
+    public List<List<Vector2>> ceiling_uvs = new List<List<Vector2>>();
+
+    int max_vertex_data = (1 << 16) - 1;
+    int[] indices = { 0, 1, 2, 0, 2, 3 };
+    Vector2[] uv = { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(1, 0) };
 
     public void InitVoxels()
     {
@@ -113,7 +149,56 @@ public class Level
         for (int y = 0; y < maze.height; y++)
             voxel_height += row_heights[y];
 
+        world_width = voxel_width * LevelBuilder.voxel_scale;
+        world_height = voxel_height * LevelBuilder.voxel_scale;
+
         voxels = new Voxel[voxel_width, level_voxel_height, voxel_height];
+        noise_levels = new float[voxel_width, voxel_height];
+
+        for (int x = 0; x < voxel_width; x++) {
+            for (int y = 0; y < level_voxel_height; y++) {
+                for (int z = 0; z < voxel_height; z++) {
+                    if (noise_levels[x, z] == 0)
+                        noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f, z + 0.013f);
+
+                    if (!IsWall(x, z) && y == 0) {
+                        voxels[x, y, z] = Voxel.Floor;
+                    }
+                    else if (IsWall(x, z)) {
+                        if (y == level_voxel_height - 1)
+                            voxels[x, y, z] = Voxel.Ceiling;
+                        else
+                            voxels[x, y, z] = Voxel.Wall;
+                    } else {
+                        voxels[x, y, z] = Voxel.Air;
+                    }
+                }
+            }
+        }
+    }
+
+    public bool IsWall(int x, int z)
+    {
+        if (x >= voxel_width || z >= voxel_height)
+            return false;
+
+        int x_idx = 0, z_idx = 0;
+        int x_sum = column_widths[0], z_sum = row_heights[0];
+        while (x >= x_sum && x_idx < maze.width - 1) x_sum += column_widths[++x_idx];
+        while (z >= z_sum && z_idx < maze.height - 1) z_sum += row_heights[++z_idx];
+
+        if (x < 0 || z < 0 || x_idx >= maze.width || z_idx >= maze.height)
+            return false;
+        return maze.walls[z_idx, x_idx];
+    }
+
+    public void GetMazeIdx(int x, int z, out int maze_x, out int maze_z)
+    {
+        int x_idx = 0, z_idx = 0;
+        int x_sum = column_widths[0], z_sum = row_heights[0];
+        while (x >= x_sum && x_idx < maze.width - 1) x_sum += column_widths[++x_idx];
+        while (z >= z_sum && z_idx < maze.height - 1) z_sum += row_heights[++z_idx];
+        maze_x = x_idx; maze_z = z_idx;
     }
 
     public Level(Maze maze, int level_voxel_height, Transform parent)
@@ -124,22 +209,138 @@ public class Level
         column_widths = new int[maze.width];
         this.level_voxel_height = level_voxel_height;
     }
+
+    public void BuildMesh()
+    {
+        for (int z = 0; z < voxel_height; z++) {
+            for (int y = 0; y < level_voxel_height; y++) {
+                for (int x = 0; x < voxel_width; x++) {
+                    if (voxels[x, y, z] == Voxel.None || voxels[x, y, z] == Voxel.Air)
+                        continue;
+                    if (voxels[x, y, z] == Voxel.Floor) {
+                        AddCubeQuads(x, y + noise_levels[x, z] * LevelBuilder.noise_scale, z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
+                    }
+                    if (voxels[x, y, z] == Voxel.Wall) {
+                        if (IsCubeVisible(x, y, z))
+                            AddCubeQuads(x, y, z, 1, 1, wall_vertices, wall_triangles, wall_uvs, false);
+                    }
+                    if (voxels[x, y, z] == Voxel.Ceiling) {
+                        AddCubeQuads(x, y, z, 1, 0.01f / LevelBuilder.voxel_scale, ceiling_vertices, ceiling_triangles, ceiling_uvs, false);
+                    }
+                }
+            }
+        }
+        Debug.Log("wall counts: " + wall_vertices.Count);
+        Debug.Log("floor counts: " + floor_vertices.Count);
+    }
+
+    bool IsCubeVisible(int x, int y, int z)
+    {
+        Vector3Int p = new Vector3Int(x, y, z);
+        foreach (Direction3D dir in Direction3D.GetValues(typeof(Direction3D))) {
+            Vector3Int p_n = p + Utils.DirVec3D(dir);
+            if (p_n.x < 0 || p_n.x >= voxel_width || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < 0 || p_n.z >= voxel_height) {
+                return true;
+            }
+            if (voxels[p_n.x, p_n.y, p_n.z] == Voxel.Air || voxels[p_n.x, p_n.y, p_n.z] == Voxel.None) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool IsQuadVisible(int x, int y, int z, Direction3D dir)
+    {
+        Vector3Int p = new Vector3Int(x, y, z);
+        Vector3Int p_n = p + Utils.DirVec3D(dir);
+        if (p_n.x < 0 || p_n.x >= voxel_width || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < 0 || p_n.z >= voxel_height) {
+            return true;
+        }
+        if (voxels[p_n.x, p_n.y, p_n.z] == Voxel.Air || voxels[p_n.x, p_n.y, p_n.z] == Voxel.None || voxels[p_n.x, p_n.y, p_n.z] == Voxel.Floor) {
+            return true;
+        }
+        return false;
+    }
+
+    void AddCubeQuads(float x, float y, float z, float w, float h,
+            List<List<Vector3>> vertices, List<List<int>> triangles, List<List<Vector2>> uvs,
+            bool force_sides)
+    {
+        if (vertices.Count < 1 || vertices[vertices.Count - 1].Count >= max_vertex_data - 72) {
+            vertices.Add(new List<Vector3>());
+            triangles.Add(new List<int>());
+            uvs.Add(new List<Vector2>());
+        }
+
+        w *= LevelBuilder.voxel_scale;
+        h *= LevelBuilder.voxel_scale;
+
+        float x_scaled = x * LevelBuilder.voxel_scale;
+        float y_scaled = y * LevelBuilder.voxel_scale;
+        float z_scaled = z * LevelBuilder.voxel_scale;
+
+        Vector3[] top = {
+            new Vector3(x_scaled, y_scaled + h, z_scaled),
+            new Vector3(x_scaled, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled),
+        };
+
+        Vector3[] left = {
+            new Vector3(x_scaled, y_scaled, z_scaled + w),
+            new Vector3(x_scaled, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled, y_scaled + h, z_scaled),
+            new Vector3(x_scaled, y_scaled, z_scaled),
+        };
+
+        Vector3[] right = {
+            new Vector3(x_scaled + w, y_scaled, z_scaled),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled + w, y_scaled, z_scaled + w),
+        };
+
+        Vector3[] front = {
+            new Vector3(x_scaled, y_scaled, z_scaled),
+            new Vector3(x_scaled, y_scaled + h, z_scaled),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled),
+            new Vector3(x_scaled + w, y_scaled, z_scaled),
+        };
+
+        Vector3[] back = {
+            new Vector3(x_scaled + w, y_scaled, z_scaled + w),
+            new Vector3(x_scaled + w, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled, y_scaled + h, z_scaled + w),
+            new Vector3(x_scaled, y_scaled, z_scaled + w),
+        };
+
+        if (IsQuadVisible((int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z), Direction3D.Up)) {
+            triangles[triangles.Count - 1].InsertRange(0, indices.Select(i => i + vertices[vertices.Count - 1].Count));
+            vertices[vertices.Count - 1].InsertRange(0, top);
+            uvs[uvs.Count - 1].InsertRange(0, uv);
+        }
+        if (force_sides || IsQuadVisible((int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z), Direction3D.North)) {
+            triangles[triangles.Count - 1].InsertRange(0, indices.Select(i => i + vertices[vertices.Count - 1].Count));
+            vertices[vertices.Count - 1].InsertRange(0, back);
+            uvs[uvs.Count - 1].InsertRange(0, uv);
+        }
+        if (force_sides || IsQuadVisible((int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z), Direction3D.South)) {
+            triangles[triangles.Count - 1].InsertRange(0, indices.Select(i => i + vertices[vertices.Count - 1].Count));
+            vertices[vertices.Count - 1].InsertRange(0, front);
+            uvs[uvs.Count - 1].InsertRange(0, uv);
+        }
+        if (force_sides || IsQuadVisible((int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z), Direction3D.West)) {
+            triangles[triangles.Count - 1].InsertRange(0, indices.Select(i => i + vertices[vertices.Count - 1].Count));
+            vertices[vertices.Count - 1].InsertRange(0, left);
+            uvs[uvs.Count - 1].InsertRange(0, uv);
+        }
+        if (force_sides || IsQuadVisible((int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z), Direction3D.East)) {
+            triangles[triangles.Count - 1].InsertRange(0, indices.Select(i => i + vertices[vertices.Count - 1].Count));
+            vertices[vertices.Count - 1].InsertRange(0, right);
+            uvs[uvs.Count - 1].InsertRange(0, uv);
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

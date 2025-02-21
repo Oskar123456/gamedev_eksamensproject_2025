@@ -34,6 +34,8 @@ public class PCGScript : MonoBehaviour
     public List<GameObject> deco_prefabs;
     public GameObject level_prefab;
 
+    public int maze_width, maze_height;
+
     LevelBuilder level_builder;
 
     List<GameObject> walls = new List<GameObject>();
@@ -46,65 +48,52 @@ public class PCGScript : MonoBehaviour
     PlayerStats player_stats;
 
     System.Random rng = new System.Random();
-    int level, difficulty;
-    public int maze_width, maze_height;
+    public int level, difficulty;
     Maze maze;
 
-    void Start()
+    void Awake()
     {
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_stats = player.GetComponent<PlayerStats>();
-        level_builder = GetComponent<LevelBuilder>();
 
-        GenMaze();
+        level_builder = GetComponent<LevelBuilder>();
+    }
+
+    void Start()
+    {
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab)) {
-            Clean();
-            GenMaze();
-        }
     }
 
     void Clean()
     {
         Destroy(level_go);
-        // foreach (GameObject go in walls) Destroy(go); walls.Clear();
-        // foreach (GameObject go in tiles) Destroy(go); tiles.Clear();
-        // foreach (GameObject go in decos) Destroy(go); decos.Clear();
     }
 
-    void GenMaze()
+    public Level New()
     {
+        Clean();
         level_go = Instantiate(level_prefab, Vector3.zero, Quaternion.identity, transform);
         maze = new Maze(maze_width, maze_height);
-        level_builder.Medieval(maze, level_go.GetComponent<Transform>());
-
-        // for (int y = 0; y < maze.height; y++) {
-        //     for (int x = 0; x < maze.width; x++) {
-        //         if (maze.walls[y, x])
-        //             walls.Add(Instantiate(wall_prefabs[rng.Next() % wall_prefabs.Count], new Vector3(x, 0, y), Quaternion.identity, transform));
-        //         else
-        //             tiles.Add(Instantiate(tile_prefabs[rng.Next() % tile_prefabs.Count], new Vector3(x, 0, y), Quaternion.identity, transform));
-        //     }
-        // }
+        return level_builder.Medieval(maze, level_go.GetComponent<Transform>());
     }
 }
 
 [Flags] public enum Direction2D { North, East, South, West }
-[Flags] public enum Direction3D { Up_x, Down_x, Up_y, Down_y, Up_z, Down_z }
+[Flags] public enum Direction3D { North, East, South, West, Up, Down }
 
 public class Utils
 {
     public static readonly Vector3Int[] dirs_3D = {
-        new Vector3Int( 1,  0,  0),
-        new Vector3Int(-1,  0,  0),
-        new Vector3Int( 0,  1,  0),
-        new Vector3Int( 0, -1,  0),
         new Vector3Int( 0,  0,  1),
-        new Vector3Int( 0,  0, -1)
+        new Vector3Int( 1,  0,  0),
+        new Vector3Int( 0,  0,  -1),
+        new Vector3Int( -1, 0,  0),
+        new Vector3Int( 0,  1,  0),
+        new Vector3Int( 0,  -1, 0)
     };
 
     public static readonly Vector2Int[] dirs_2D = {
@@ -118,4 +107,23 @@ public class Utils
     public static Vector2Int DirVec2D(int dir) { return dirs_2D[dir]; }
     public static Vector3Int DirVec3D(Direction3D dir) { return dirs_3D[(int)dir]; }
     public static Vector3Int DirVec3D(int dir) { return dirs_3D[dir]; }
+
+    public static float MultiLayerNoise(float x, float z)
+    {
+        float total = 0;
+        float freq = 0.09f;
+        float amp = 1.0f;
+        float amp_sum = 0;
+        float per = 0.6f;
+        int oct = 4;
+
+        for (int i = 0; i < oct; ++i) {
+            total += (float)(Mathf.PerlinNoise(x * freq, z * freq) * amp);
+            amp_sum += amp;
+            amp *= per;
+            freq *= 2;
+        }
+
+        return (float)Math.Clamp(Math.Pow(total / amp_sum, 2), 0, 1);
+    }
 }
