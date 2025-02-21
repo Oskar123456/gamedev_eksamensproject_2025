@@ -13,10 +13,15 @@
  * */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    public GameObject stone_slash_prefab;
+
+    PlayerStats stats;
     CharacterController char_ctrl;
     Animator animator;
     Transform trf;
@@ -61,9 +66,16 @@ public class PlayerScript : MonoBehaviour
     float anim_mul_move_speed = 0.25f;
     float anim_mul_fall_speed = 0.15f;
     float[] anim_attack_time = { 1.0f, 1.333f };
+    /* effects */
+    Vector3 halfway_up_vec;
+    Queue<GameObject> attacks = new Queue<GameObject>();
 
     void Start()
     {
+        stats = new PlayerStats();
+        stats.attack_stats = new AttackStats();
+        stats.attack_stats.damage = 1;
+
         trf = GetComponent<Transform>();
         char_ctrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -74,6 +86,7 @@ public class PlayerScript : MonoBehaviour
 
         trf.eulerAngles = new Vector3(0, pitch, 0);
         UpdateCam();
+        halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
     }
 
     void Update()
@@ -139,20 +152,28 @@ public class PlayerScript : MonoBehaviour
     {
         if (!is_attacking) {
             if (Input.GetMouseButton(0)) {
-                attack_num = rng.Next() % 2;
+                attack_num = 1; // rng.Next() % 2;
                 attack_time_left = attack_time;
                 did_attack = true;
                 animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
+
+                GameObject attack_obj = Instantiate(stone_slash_prefab, transform.position + halfway_up_vec, transform.rotation);
+                AttackScript ascr = attack_obj.GetComponent<AttackScript>();
+                ascr.SetStats(stats.attack_stats);
+                ascr.SetAttacker(gameObject);
+                attacks.Enqueue(attack_obj);
             } else {
                 return;
             }
         }
 
         attack_time_left -= Time.deltaTime;
-        if (attack_time_left > 0)
+        if (attack_time_left > 0) {
             is_attacking = true;
-        else
+        } else {
             is_attacking = false;
+            Destroy(attacks.Dequeue());
+        }
     }
 
     void PollMisc() {}
@@ -291,5 +312,12 @@ public class PlayerScript : MonoBehaviour
     {
         cam_trf.position = trf.position + cam_trf_dist * camera_dist;
         cam_trf.eulerAngles = new Vector3(cam_trf_angle_x, cam_trf_angle_y, 0);
+    }
+
+    void OnHit(AttackInfo ai)
+    {
+        AttackStats attack_stats = ai.attack_stats;
+
+        Debug.Log("player attacked at " + transform.position.ToString() + " for " + attack_stats.damage + " damage");
     }
 }

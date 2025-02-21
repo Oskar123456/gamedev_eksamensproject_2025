@@ -43,6 +43,7 @@ public class PCGScript : MonoBehaviour
     List<GameObject> decos = new List<GameObject>();
     GameObject level_go;
 
+    NavMeshSurface nms;
     GameObject player;
     Transform player_trf;
     PlayerStats player_stats;
@@ -53,6 +54,7 @@ public class PCGScript : MonoBehaviour
 
     void Awake()
     {
+        nms = GetComponent<NavMeshSurface>();
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_stats = player.GetComponent<PlayerStats>();
@@ -78,7 +80,9 @@ public class PCGScript : MonoBehaviour
         Clean();
         level_go = Instantiate(level_prefab, Vector3.zero, Quaternion.identity, transform);
         maze = new Maze(maze_width, maze_height);
-        return level_builder.Medieval(maze, level_go.GetComponent<Transform>());
+        Level level = level_builder.Medieval(maze, level_go.GetComponent<Transform>());
+        level_go.GetComponent<NavMeshSurface>().BuildNavMesh();
+        return level;
     }
 }
 
@@ -87,6 +91,8 @@ public class PCGScript : MonoBehaviour
 
 public class Utils
 {
+    public static System.Random rng = new System.Random();
+
     public static readonly Vector3Int[] dirs_3D = {
         new Vector3Int( 0,  0,  1),
         new Vector3Int( 1,  0,  0),

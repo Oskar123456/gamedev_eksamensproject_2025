@@ -125,6 +125,7 @@ public class Level
     public int voxel_width = 0, voxel_height = 0, level_voxel_height = 0;
     public float world_width = 0, world_height = 0;
     public float[,] noise_levels;
+    public bool[,] occupied;
 
     public List<List<Vector3>> floor_vertices = new List<List<Vector3>>();
     public List<List<int>> floor_triangles = new List<List<int>>();
@@ -142,6 +143,15 @@ public class Level
     int[] indices = { 0, 1, 2, 0, 2, 3 };
     Vector2[] uv = { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(1, 0) };
 
+    public Level(Maze maze, int level_voxel_height, Transform parent)
+    {
+        parent_trf = parent;
+        this.maze = maze;
+        row_heights   = new int[maze.height];
+        column_widths = new int[maze.width];
+        this.level_voxel_height = level_voxel_height;
+    }
+
     public void InitVoxels()
     {
         for (int x = 0; x < maze.width; x++)
@@ -154,17 +164,19 @@ public class Level
 
         voxels = new Voxel[voxel_width, level_voxel_height, voxel_height];
         noise_levels = new float[voxel_width, voxel_height];
+        occupied = new bool[voxel_width, voxel_height];
 
         for (int x = 0; x < voxel_width; x++) {
             for (int y = 0; y < level_voxel_height; y++) {
                 for (int z = 0; z < voxel_height; z++) {
                     if (noise_levels[x, z] == 0)
-                        noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f, z + 0.013f);
+                        noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f, z + 0.013f) * LevelBuilder.noise_scale;
 
                     if (!IsWall(x, z) && y == 0) {
                         voxels[x, y, z] = Voxel.Floor;
                     }
                     else if (IsWall(x, z)) {
+                        occupied[x, z] = true;
                         if (y == level_voxel_height - 1)
                             voxels[x, y, z] = Voxel.Ceiling;
                         else
@@ -175,6 +187,34 @@ public class Level
                 }
             }
         }
+    }
+
+    public void MarkOccupiedPosition(int voxel_x, int voxel_z) { occupied[voxel_x, voxel_z] = true; }
+    public void UnMarkOccupiedPosition(int voxel_x, int voxel_z) { occupied[voxel_x, voxel_z] = false; }
+
+    public Vector3 GetRandomUnoccupiedPosition()
+    {
+        while (true) {
+            int x = Utils.rng.Next() % voxel_width;
+            int z = Utils.rng.Next() % voxel_height;
+            if (!occupied[x, z]) {
+                return new Vector3(x * LevelBuilder.voxel_scale,
+                        noise_levels[x, z] + LevelBuilder.voxel_scale / 2.0f, z * LevelBuilder.voxel_scale);
+            }
+        }
+        return Vector3.zero;
+    }
+
+    public Vector3 GetStartPosition()
+    {
+        Vector2Int start_cell_voxel_off = MapCellToVoxelOffset(maze.start.x, maze.start.y);
+        return MapCellVoxelToWorld(maze.start.x, maze.start.y, column_widths[maze.start.x] / 2, row_heights[maze.start.y] / 2);
+    }
+
+    public Vector3 GetFinishPosition()
+    {
+        Vector2Int finish_cell_voxel_off = MapCellToVoxelOffset(maze.finish.x, maze.finish.y);
+        return MapCellVoxelToWorld(maze.finish.x, maze.finish.y, column_widths[maze.finish.x] / 2, row_heights[maze.finish.y] / 2);
     }
 
     public bool IsWall(int x, int z)
@@ -201,13 +241,28 @@ public class Level
         maze_x = x_idx; maze_z = z_idx;
     }
 
-    public Level(Maze maze, int level_voxel_height, Transform parent)
+    public Vector2Int MapCellToVoxelOffset(int x, int z)
     {
-        parent_trf = parent;
-        this.maze = maze;
-        row_heights   = new int[maze.height];
-        column_widths = new int[maze.width];
-        this.level_voxel_height = level_voxel_height;
+        int x_off = 0, z_off = 0;
+        for (int i = 0; i < x; i++) x_off += column_widths[i];
+        for (int i = 0; i < z; i++) z_off += row_heights[i];
+        return new Vector2Int(x_off, z_off);
+    }
+
+    public Vector2 MapCellToWorldOffset(int x, int z)
+    {
+        int x_off = 0, z_off = 0;
+        for (int i = 0; i < x; i++) x_off += column_widths[i];
+        for (int i = 0; i < z; i++) z_off += row_heights[i];
+        return new Vector2(x_off * LevelBuilder.voxel_scale, z_off * LevelBuilder.voxel_scale);
+    }
+
+    public Vector3 MapCellVoxelToWorld(int cell_x, int cell_z, int voxel_x, int voxel_z)
+    {
+        Vector2 cell_pos = MapCellToWorldOffset(cell_x, cell_z);
+        return new Vector3(cell_pos.x + voxel_x * LevelBuilder.voxel_scale,
+                noise_levels[cell_x + voxel_x, cell_z + voxel_z] + LevelBuilder.voxel_scale / 2.0f,
+                cell_pos.y + voxel_z * LevelBuilder.voxel_scale);
     }
 
     public void BuildMesh()
@@ -218,7 +273,7 @@ public class Level
                     if (voxels[x, y, z] == Voxel.None || voxels[x, y, z] == Voxel.Air)
                         continue;
                     if (voxels[x, y, z] == Voxel.Floor) {
-                        AddCubeQuads(x, y + noise_levels[x, z] * LevelBuilder.noise_scale, z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
+                        AddCubeQuads(x, y + noise_levels[x, z], z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
                     }
                     if (voxels[x, y, z] == Voxel.Wall) {
                         if (IsCubeVisible(x, y, z))
