@@ -92,7 +92,7 @@ public class EnemyScript : MonoBehaviour
 
             // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
             RaycastHit hit_info;
-            if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 1000)) {
+            if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 200)) {
                 if (hit_info.collider.gameObject.CompareTag("Player")) {
                     // Debug.Log("in line of sight");
                     nma.SetDestination(player_trf.position);

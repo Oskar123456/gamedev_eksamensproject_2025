@@ -114,6 +114,7 @@ public class LevelBuilder : MonoBehaviour
 }
 
 public enum Voxel { None, Air, Wall, Floor, Ceiling }
+public enum LevelType { Medieval }
 
 public class Level
 {
@@ -124,6 +125,7 @@ public class Level
     public Voxel[,,] voxels_with_boundary;
     public int[] column_widths, row_heights;
     public int voxel_width = 0, voxel_height = 0, level_voxel_height = 0;
+    public int height, width;
     public float world_width = 0, world_height = 0;
     public float[,] noise_levels;
     public bool[,] occupied;
@@ -151,6 +153,8 @@ public class Level
         this.maze = maze;
         row_heights   = new int[maze.height];
         column_widths = new int[maze.width];
+        height = maze.height;
+        width = maze.width;
         this.level_voxel_height = level_voxel_height;
     }
 

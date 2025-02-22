@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 939e9a2214e37ec4e8eb4fe85d074704, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 24b4b75ade1f0b3a5bee75f9a48639f8, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 5ee1c0e11a126494d87b11ca1dcbf0c4, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -119,6 +119,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &111836266
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.3204398
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.799248
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423403879286395854, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
+      propertyPath: m_Name
+      value: Little_Ghost_ZOMbi (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
 --- !u!1 &398444190 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9097905884296654425, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
@@ -147,6 +204,11 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!4 &398444201 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1665907541131615394, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
+  m_PrefabInstance: {fileID: 3258748113682881335}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &621691029
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +288,127 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1382741722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1382741723}
+  - component: {fileID: 1382741725}
+  - component: {fileID: 1382741724}
+  m_Layer: 0
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1382741723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382741722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.77, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 398444201}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1382741724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382741722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 0
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+--- !u!108 &1382741725
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382741722}
+  m_Enabled: 1
+  serializedVersion: 11
+  m_Type: 2
+  m_Color: {r: 1, g: 0.846819, b: 0.6416407, a: 1}
+  m_Intensity: 8
+  m_Range: 100
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: 2048
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &1691406438
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,15 +506,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc5660c9bedbc7e38da7aefdb616443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wall_prefabs:
-  - {fileID: 2454342098214737506, guid: 01b014d1c03440f0087291d570ed7f7c, type: 3}
-  tile_prefabs:
-  - {fileID: 5781920386605525542, guid: 0c3040c66e6af6028b85a16974baa795, type: 3}
-  deco_prefabs:
+  level_container_prefab: {fileID: 1545280369457043851, guid: bc11b9ea7e7cd7b78a8c86319d11f3cb, type: 3}
+  medieval_deco_prefabs:
   - {fileID: 16038835297913163, guid: 7c7baabdbc078cb4098d5880fc72c0f3, type: 3}
-  level_prefab: {fileID: 1545280369457043851, guid: bc11b9ea7e7cd7b78a8c86319d11f3cb, type: 3}
-  maze_width: 4
-  maze_height: 4
+  - {fileID: 7337419084678994052, guid: 2984644366ae6b4bb99660633ddbe161, type: 3}
+  - {fileID: 1924447747592062055, guid: de3c003b70015651f890d60947bf7a4a, type: 3}
+  - {fileID: 8592535359900829762, guid: b0be5563456af97c0b71aac75ccc84ab, type: 3}
+  medieval_light_prefabs:
+  - {fileID: 4515153799870875411, guid: 0e5e1427404d451cb8512134f079a565, type: 3}
+  medieval_enemy_prefabs:
+  - {fileID: 1464473520488222994, guid: 07de65edafc358d55b805c4822be1417, type: 3}
+  maze_width: 3
+  maze_height: 3
   level: 0
   difficulty: 0
 --- !u!114 &1775436964
@@ -378,17 +564,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160ae5458d83751558c2da89db83dabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scale: 4
-  floor_noise_scale: 1.6
+  scale: 3
+  floor_noise_scale: 1
   black_plane: {fileID: 5753351290427783747, guid: 92dfe607fb09e31edb5b4363dc002f03, type: 3}
   medieval_wall_skeleton: {fileID: 7277719298293175102, guid: 8080b8194c3c072dba3f36913f5edf64, type: 3}
   medieval_floor_skeleton: {fileID: 1412554010015604074, guid: d72c97d3527598bf9b8443de2e09ca5a, type: 3}
   medieval_ceiling_skeleton: {fileID: 2434737542694297685, guid: f468cb00eb48814ffaf83f4d676a6b08, type: 3}
-  medieval_level_height: 7
-  medieval_wall_width: 7
+  medieval_level_height: 8
+  medieval_wall_width: 8
   medieval_wall_variance: 1
-  medieval_avg_room_width: 7
-  medieval_avg_room_height: 7
+  medieval_avg_room_width: 8
+  medieval_avg_room_height: 8
   medieval_avg_room_variance: 1
 --- !u!1 &1918983734
 GameObject:
@@ -407,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1918983735
 Light:
   m_ObjectHideFlags: 0
@@ -578,7 +764,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5115576899116915114, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1665907541131615394, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1382741723}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 9097905884296654425, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       insertIndex: -1
@@ -592,6 +781,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 96253939209616878, guid: cc13fa16c0ea5950f971916d8a69bf7b, type: 3}
+      propertyPath: m_RenderShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5221892424470975884, guid: cc13fa16c0ea5950f971916d8a69bf7b, type: 3}
       propertyPath: m_Name
       value: MiniMapCamera
@@ -769,3 +962,4 @@ SceneRoots:
   - {fileID: 3258748113682881335}
   - {fileID: 3940701871229770242}
   - {fileID: 1691406440}
+  - {fileID: 111836266}

@@ -29,10 +29,10 @@ using UnityEngine;
 
 public class PCGScript : MonoBehaviour
 {
-    public List<GameObject> wall_prefabs;
-    public List<GameObject> tile_prefabs;
-    public List<GameObject> deco_prefabs;
-    public GameObject level_prefab;
+    public GameObject level_container_prefab;
+    public List<GameObject> medieval_deco_prefabs;
+    public List<GameObject> medieval_light_prefabs;
+    public List<GameObject> medieval_enemy_prefabs;
 
     public int maze_width, maze_height;
 
@@ -41,7 +41,7 @@ public class PCGScript : MonoBehaviour
     List<GameObject> walls = new List<GameObject>();
     List<GameObject> tiles = new List<GameObject>();
     List<GameObject> decos = new List<GameObject>();
-    GameObject level_go;
+    GameObject level_container;
 
     NavMeshSurface nms;
     GameObject player;
@@ -72,17 +72,84 @@ public class PCGScript : MonoBehaviour
 
     void Clean()
     {
-        Destroy(level_go);
+        Destroy(level_container);
     }
 
-    public Level New()
+    public Level New(LevelType level_type)
     {
         Clean();
-        level_go = Instantiate(level_prefab, Vector3.zero, Quaternion.identity, transform);
+        level_container = Instantiate(level_container_prefab, Vector3.zero, Quaternion.identity, transform);
         maze = new Maze(maze_width, maze_height);
-        Level level = level_builder.Medieval(maze, level_go.GetComponent<Transform>());
-        level_go.GetComponent<NavMeshSurface>().BuildNavMesh();
+        Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>());
+
+        Decorate(level, level_type);
+
+        level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
         return level;
+    }
+
+    void Decorate(Level level, LevelType level_type)
+    {
+        int count = 0;
+        for (int x = 0; x < level.width; x++) {
+            for (int z = 0; z < level.height; z++) {
+                if (level.maze.walls[z, x])
+                    continue;
+
+                Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
+                int n_decos = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
+
+                Vector3 deco_pos = Vector3.zero;
+                RaycastHit hit_info;
+
+
+                if (count < 128 && z < level.height - 1 && level.maze.walls[z + 1, x]) {
+                    Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
+                    pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
+                    if (Physics.Raycast(pos, Vector3.forward, out hit_info, level.row_heights[z] * LevelBuilder.voxel_scale)) {
+                        deco_pos = hit_info.point;
+
+                        GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
+                                deco_pos, Quaternion.Euler(0, 180, 0), level_container.transform);
+
+                        count++;
+                    }
+                }
+
+                if (count < 128 && x < level.width - 1 && level.maze.walls[z, x + 1]) {
+                    Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
+                    pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
+                    if (Physics.Raycast(pos, Vector3.right, out hit_info, level.column_widths[x] * LevelBuilder.voxel_scale)) {
+                        deco_pos = hit_info.point;
+
+                        GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
+                                deco_pos, Quaternion.Euler(0, 270, 0), level_container.transform);
+                        count++;
+                    }
+                }
+
+                if ((x == maze.start.x && z == maze.start.y) || (x == maze.finish.x && z == maze.finish.y))
+                    continue;
+
+                for (int i = 0; i < n_decos; i++) {
+                    int cell_x = Utils.rng.Next() % level.column_widths[x];
+                    int cell_z = Utils.rng.Next() % level.row_heights[z];
+                    if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
+                        continue;
+                    deco_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+
+                    if (Physics.Raycast(deco_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                        deco_pos = hit_info.point;
+
+                        GameObject deco  = medieval_deco_prefabs[Utils.rng.Next() % medieval_deco_prefabs.Count];
+                        GameObject new_deco = Instantiate(deco, deco_pos, Quaternion.identity, level_container.transform);
+
+                        new_deco.transform.localScale = new Vector3(LevelBuilder.voxel_scale, LevelBuilder.voxel_scale, LevelBuilder.voxel_scale);
+                    }
+                }
+
+            }
+        }
     }
 }
 
