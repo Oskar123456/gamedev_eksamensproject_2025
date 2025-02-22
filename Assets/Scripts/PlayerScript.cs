@@ -152,7 +152,8 @@ public class PlayerScript : MonoBehaviour
                 did_attack = true;
                 animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
 
-                GameObject attack_obj = Instantiate(stone_slash_prefab, transform.position + halfway_up_vec, transform.rotation);
+                GameObject attack_obj = Instantiate(stone_slash_prefab, transform.position + halfway_up_vec,
+                        transform.rotation * Quaternion.Euler(0, 0, -45));
                 AttackScript ascr = attack_obj.GetComponent<AttackScript>();
                 ascr.SetStats(stats.attack_stats);
                 ascr.SetAttacker(gameObject);
