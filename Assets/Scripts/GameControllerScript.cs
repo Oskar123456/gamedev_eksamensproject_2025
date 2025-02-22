@@ -137,13 +137,6 @@ public class GameControllerScript : MonoBehaviour
 
         finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);
-
-        for (int i = 0; i < 10; i++) {
-            Vector3 v = current_level.GetRandomUnoccupiedPosition();
-            Vector2Int v_voxel = current_level.MapWorldPosToVoxel(v.x, v.z);
-            enemies.Add(Instantiate(enemy_prefabs[Utils.rng.Next() % enemy_prefabs.Count], v, Quaternion.identity, level_object_container.transform));
-            current_level.MarkOccupiedPosition(v_voxel.x, v_voxel.y);
-        }
     }
 
     void UpdateMiniMapCam()

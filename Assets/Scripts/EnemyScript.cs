@@ -56,7 +56,7 @@ public class EnemyScript : MonoBehaviour
         player_trf = player.GetComponent<Transform>();
         player_cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
         stats = GetComponent<EnemyStats>();
-        healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 0.3f), Quaternion.identity, transform);
+        healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 1.0f), Quaternion.identity, transform);
         healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();
         healthbar.SetActive(false);
     }
@@ -88,7 +88,7 @@ public class EnemyScript : MonoBehaviour
         }
 
         if (nma.enabled && nav_update_t_left <= 0) {
-            nav_update_t_left = nav_update_t + (Utils.rng.Next() % 4) / 3.0f;
+            nav_update_t_left = nav_update_t; // + (Utils.rng.Next() % 4) / 3.0f;
 
             // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
             RaycastHit hit_info;

@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 939e9a2214e37ec4e8eb4fe85d074704, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -119,63 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &111836266
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.3204398
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 13.799248
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395853, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6423403879286395854, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
-      propertyPath: m_Name
-      value: Little_Ghost_ZOMbi (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 68a45b7c7de96f84bb3192731ba3a68c, type: 3}
 --- !u!1 &398444190 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9097905884296654425, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
@@ -515,7 +458,9 @@ MonoBehaviour:
   medieval_light_prefabs:
   - {fileID: 4515153799870875411, guid: 0e5e1427404d451cb8512134f079a565, type: 3}
   medieval_enemy_prefabs:
-  - {fileID: 1464473520488222994, guid: 07de65edafc358d55b805c4822be1417, type: 3}
+  - {fileID: 6393203089805348888, guid: 51990820ceee1e704a3750d777c20da3, type: 3}
+  - {fileID: 1142617328346450365, guid: 20c76437cf011d1ad9490f075b400ad3, type: 3}
+  - {fileID: 656738128642586521, guid: 06fd7c531ec4a4116840bdd7b7d90d3e, type: 3}
   maze_width: 3
   maze_height: 3
   level: 0
@@ -942,6 +887,10 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8591967700168572779, guid: ba3f7302053411cc5bffb0350692e084, type: 3}
+      propertyPath: m_Color.a
+      value: 0.8862745
+      objectReference: {fileID: 0}
     - target: {fileID: 9122905387477169474, guid: ba3f7302053411cc5bffb0350692e084, type: 3}
       propertyPath: m_RaycastTarget
       value: 1
@@ -962,4 +911,3 @@ SceneRoots:
   - {fileID: 3258748113682881335}
   - {fileID: 3940701871229770242}
   - {fileID: 1691406440}
-  - {fileID: 111836266}

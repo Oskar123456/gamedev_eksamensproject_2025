@@ -83,9 +83,47 @@ public class PCGScript : MonoBehaviour
         Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>());
 
         Decorate(level, level_type);
-
         level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
+        AddEnemies(level, level_type);
+
         return level;
+    }
+
+    void AddEnemies(Level level, LevelType level_type)
+    {
+        for (int x = 0; x < level.width; x++) {
+            for (int z = 0; z < level.height; z++) {
+                if (level.maze.walls[z, x])
+                    continue;
+                if ((x == maze.start.x && z == maze.start.y) || (x == maze.finish.x && z == maze.finish.y))
+                    continue;
+
+                Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
+                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
+
+                Vector3 enemy_pos = Vector3.zero;
+                RaycastHit hit_info;
+
+                for (int i = 0; i < n_enemies; i++) {
+                    int cell_x = Utils.rng.Next() % level.column_widths[x];
+                    int cell_z = Utils.rng.Next() % level.row_heights[z];
+                    if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
+                        continue;
+                    level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
+                    enemy_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+
+                    if (Physics.Raycast(enemy_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                        enemy_pos = hit_info.point;
+
+                        GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
+                        GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+
+                        new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f);
+                    }
+                }
+
+            }
+        }
     }
 
     void Decorate(Level level, LevelType level_type)
@@ -136,6 +174,7 @@ public class PCGScript : MonoBehaviour
                     int cell_z = Utils.rng.Next() % level.row_heights[z];
                     if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
                         continue;
+                    level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
                     deco_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
 
                     if (Physics.Raycast(deco_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
