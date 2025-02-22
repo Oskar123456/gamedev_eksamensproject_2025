@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8522127940380228967}
   - component: {fileID: 9028166545193569577}
   - component: {fileID: 7508109090260865364}
+  - component: {fileID: 9118270486497474149}
   m_Layer: 0
   m_Name: Stone_Pillar_Rnd_a(Clone)
   m_TagString: Untagged
@@ -92,6 +93,22 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!208 &9118270486497474149
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177868997750982532}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.27, y: 1.5, z: 0.27}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1836644447721018766
 GameObject:
   m_ObjectHideFlags: 0

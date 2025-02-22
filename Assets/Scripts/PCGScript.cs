@@ -83,9 +83,9 @@ public class PCGScript : MonoBehaviour
         maze = new Maze(maze_width, maze_height);
         Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>());
 
+        level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
         AddPillars(level, level_type);
         Decorate(level, level_type);
-        level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
         AddEnemies(level, level_type);
 
         return level;
