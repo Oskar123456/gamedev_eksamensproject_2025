@@ -303,7 +303,8 @@ public class Level
                     if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.None || voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Air)
                         continue;
                     if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Floor) {
-                        AddCubeQuads(x, y + noise_levels[x + boundary_width, z + boundary_width], z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
+                        AddCubeQuads(x, y + noise_levels[Math.Min(x + boundary_width, voxel_width - 1), Math.Min(z + boundary_width, voxel_height - 1)],
+                                z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
                     }
                     if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Wall) {
                         if (IsCubeVisible(x + boundary_width, y, z + boundary_width))

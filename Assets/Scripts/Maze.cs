@@ -108,6 +108,39 @@ public class Maze
 
         start = new Vector2Int(_start.x * 2 + 1, _start.y * 2 + 1);
         finish = new Vector2Int(_finish.x * 2 + 1, _finish.y * 2 + 1);
+
+        if (_start.x == height - 1) {
+            start.x += 1;
+        }
+        if (_start.x == 0) {
+            start.x -= 1;
+        }
+        if (_finish.x == height - 1) {
+            finish.x += 1;
+        }
+        if (_finish.x == 0) {
+            finish.x -= 1;
+        }
+
+        if (_start.y == width - 1) {
+            start.y += 1;
+        }
+        if (_start.y == 0) {
+            start.y -= 1;
+        }
+        if (_finish.y == width - 1) {
+            finish.y += 1;
+        }
+        if (_finish.y == 0) {
+            finish.y -= 1;
+        }
+
+        walls[start.y, start.x] = false;
+        walls[finish.y, finish.x] = false;
+
+        Debug.Log(_start.ToString() + " --> " + _finish.ToString());
+        Debug.Log(start.ToString() + " --> " + finish.ToString());
+
     }
 }
 

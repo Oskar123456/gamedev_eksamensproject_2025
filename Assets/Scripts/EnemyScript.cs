@@ -87,14 +87,14 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
-        if (nma.enabled && nav_update_t_left <= 0 && player_trf.hasChanged) {
-            nav_update_t_left = nav_update_t + (Utils.rng.Next() % 10) / 10.0f;
+        if (nma.enabled && nav_update_t_left <= 0) {
+            nav_update_t_left = nav_update_t + (Utils.rng.Next() % 4) / 3.0f;
 
             // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
             RaycastHit hit_info;
             if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 1000)) {
                 if (hit_info.collider.gameObject.CompareTag("Player")) {
-                    Debug.Log("in line of sight");
+                    // Debug.Log("in line of sight");
                     nma.SetDestination(player_trf.position);
                 }
             }

@@ -389,7 +389,7 @@ MonoBehaviour:
   medieval_wall_variance: 1
   medieval_avg_room_width: 7
   medieval_avg_room_height: 7
-  medieval_avg_room_variance: 3
+  medieval_avg_room_variance: 1
 --- !u!1 &1918983734
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4117757857070103509, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: camera_dist
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7607729905474824662, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: m_Enabled
