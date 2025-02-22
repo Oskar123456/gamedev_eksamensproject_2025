@@ -121,6 +121,7 @@ public class Level
 
     public Maze maze;
     public Voxel[,,] voxels;
+    public Voxel[,,] voxels_with_boundary;
     public int[] column_widths, row_heights;
     public int voxel_width = 0, voxel_height = 0, level_voxel_height = 0;
     public float world_width = 0, world_height = 0;
@@ -139,6 +140,7 @@ public class Level
     public List<List<int>> ceiling_triangles = new List<List<int>>();
     public List<List<Vector2>> ceiling_uvs = new List<List<Vector2>>();
 
+    int boundary_width = 3;
     int max_vertex_data = (1 << 16) - 1;
     int[] indices = { 0, 1, 2, 0, 2, 3 };
     Vector2[] uv = { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(1, 0) };
@@ -163,26 +165,41 @@ public class Level
         world_height = voxel_height * LevelBuilder.voxel_scale;
 
         voxels = new Voxel[voxel_width, level_voxel_height, voxel_height];
+        voxels_with_boundary = new Voxel[voxel_width + boundary_width * 2, level_voxel_height, voxel_height + boundary_width * 2];
         noise_levels = new float[voxel_width, voxel_height];
         occupied = new bool[voxel_width, voxel_height];
 
-        for (int x = 0; x < voxel_width; x++) {
+        for (int x = -boundary_width; x < voxel_width + boundary_width; x++) {
             for (int y = 0; y < level_voxel_height; y++) {
-                for (int z = 0; z < voxel_height; z++) {
+                for (int z = -boundary_width; z < voxel_height + boundary_width; z++) {
+                    if (x < 0 || x >= voxel_width || z < 0 || z >= voxel_height) {
+                        if (y == level_voxel_height - 1)
+                            voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
+                        else
+                            voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Wall;
+                        continue;
+                    }
+
                     if (noise_levels[x, z] == 0)
                         noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f, z + 0.013f) * LevelBuilder.noise_scale;
 
                     if (!IsWall(x, z) && y == 0) {
                         voxels[x, y, z] = Voxel.Floor;
+                        voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Floor;
                     }
                     else if (IsWall(x, z)) {
                         occupied[x, z] = true;
-                        if (y == level_voxel_height - 1)
+                        if (y == level_voxel_height - 1) {
+                            voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
                             voxels[x, y, z] = Voxel.Ceiling;
-                        else
+                        }
+                        else {
+                            voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Wall;
                             voxels[x, y, z] = Voxel.Wall;
+                        }
                     } else {
                         voxels[x, y, z] = Voxel.Air;
+                        voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Air;
                     }
                 }
             }
@@ -280,19 +297,19 @@ public class Level
 
     public void BuildMesh()
     {
-        for (int z = 0; z < voxel_height; z++) {
+        for (int z = -boundary_width; z < voxel_height + boundary_width; z++) {
             for (int y = 0; y < level_voxel_height; y++) {
-                for (int x = 0; x < voxel_width; x++) {
-                    if (voxels[x, y, z] == Voxel.None || voxels[x, y, z] == Voxel.Air)
+                for (int x = -boundary_width; x < voxel_width + boundary_width; x++) {
+                    if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.None || voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Air)
                         continue;
-                    if (voxels[x, y, z] == Voxel.Floor) {
-                        AddCubeQuads(x, y + noise_levels[x, z], z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
+                    if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Floor) {
+                        AddCubeQuads(x, y + noise_levels[x + boundary_width, z + boundary_width], z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
                     }
-                    if (voxels[x, y, z] == Voxel.Wall) {
-                        if (IsCubeVisible(x, y, z))
+                    if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Wall) {
+                        if (IsCubeVisible(x + boundary_width, y, z + boundary_width))
                             AddCubeQuads(x, y, z, 1, 1, wall_vertices, wall_triangles, wall_uvs, false);
                     }
-                    if (voxels[x, y, z] == Voxel.Ceiling) {
+                    if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Ceiling) {
                         AddCubeQuads(x, y, z, 1, 0.01f / LevelBuilder.voxel_scale, ceiling_vertices, ceiling_triangles, ceiling_uvs, false);
                     }
                 }
@@ -307,10 +324,10 @@ public class Level
         Vector3Int p = new Vector3Int(x, y, z);
         foreach (Direction3D dir in Direction3D.GetValues(typeof(Direction3D))) {
             Vector3Int p_n = p + Utils.DirVec3D(dir);
-            if (p_n.x < 0 || p_n.x >= voxel_width || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < 0 || p_n.z >= voxel_height) {
+            if (p_n.x < 0 || p_n.x >= voxel_width + boundary_width * 2 || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < 0 || p_n.z >= voxel_height + boundary_width * 2) {
                 return true;
             }
-            if (voxels[p_n.x, p_n.y, p_n.z] == Voxel.Air || voxels[p_n.x, p_n.y, p_n.z] == Voxel.None) {
+            if (voxels_with_boundary[p_n.x, p_n.y, p_n.z] == Voxel.Air || voxels_with_boundary[p_n.x, p_n.y, p_n.z] == Voxel.None) {
                 return true;
             }
         }
@@ -321,10 +338,13 @@ public class Level
     {
         Vector3Int p = new Vector3Int(x, y, z);
         Vector3Int p_n = p + Utils.DirVec3D(dir);
-        if (p_n.x < 0 || p_n.x >= voxel_width || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < 0 || p_n.z >= voxel_height) {
+        if (p_n.x < -boundary_width || p_n.x >= voxel_width + 1 * boundary_width || p_n.y < 0 || p_n.y >= level_voxel_height || p_n.z < -boundary_width || p_n.z >= voxel_height + 1 * boundary_width) {
             return true;
         }
-        if (voxels[p_n.x, p_n.y, p_n.z] == Voxel.Air || voxels[p_n.x, p_n.y, p_n.z] == Voxel.None || voxels[p_n.x, p_n.y, p_n.z] == Voxel.Floor) {
+        // Debug.Log(p_n.ToString() + " / " + (voxel_width + 2 * boundary_width).ToString() + "," + (voxel_height + 2 * boundary_width).ToString());
+        if (voxels_with_boundary[p_n.x + boundary_width, p_n.y, p_n.z + boundary_width] == Voxel.Air
+                || voxels_with_boundary[p_n.x + boundary_width, p_n.y, p_n.z + boundary_width] == Voxel.None
+                || voxels_with_boundary[p_n.x + boundary_width, p_n.y, p_n.z + boundary_width] == Voxel.Floor) {
             return true;
         }
         return false;
