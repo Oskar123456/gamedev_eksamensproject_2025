@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2483747329561619569}
   m_Layer: 0
   m_Name: EnemyTemplate
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hit_effect_prefab: {fileID: 5116001316480739459, guid: b57e56938f635a122b8d1fff530e0af8, type: 3}
   death_effect_prefab: {fileID: 8510626178070770473, guid: 080aea53684e48292b3019050ec62823, type: 3}
+  healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
 --- !u!195 &5359753077147691836
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -164,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 5
   hp_max: 5
+  collision_damage: 1
 --- !u!54 &2483747329561619569
 Rigidbody:
   m_ObjectHideFlags: 0

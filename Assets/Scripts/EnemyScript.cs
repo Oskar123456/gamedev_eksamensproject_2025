@@ -26,12 +26,16 @@ public class EnemyScript : MonoBehaviour
 {
     public GameObject hit_effect_prefab;
     public GameObject death_effect_prefab;
+    public GameObject healthbar_prefab;
 
     Rigidbody rb;
     NavMeshAgent nma;
     GameObject player;
     Transform player_trf;
     EnemyStats stats;
+    GameObject healthbar;
+    Slider healthbar_slider;
+    Transform player_cam_trf;
 
     /* effects */
     GameObject hit_effect;
@@ -41,7 +45,7 @@ public class EnemyScript : MonoBehaviour
     GameObject death_effect;
     float death_effect_delete_t = 0.6f;
 
-    float nav_update_t = 0.5f;
+    float nav_update_t = 0.1f;
     float nav_update_t_left;
 
     void Start()
@@ -50,7 +54,11 @@ public class EnemyScript : MonoBehaviour
         nma = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
+        player_cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
         stats = GetComponent<EnemyStats>();
+        healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 0.3f), Quaternion.identity, transform);
+        healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();
+        healthbar.SetActive(false);
     }
 
     void Update()
@@ -70,11 +78,36 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
+        if (player_trf.hasChanged) {
+            if (stats.hp < stats.hp_max) {
+                Vector3 p1 = player_cam_trf.position;
+                Vector3 p2 = healthbar.transform.position;
+                p1.y = 0; p2.y = 0;
+                healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p1 - p2);
+            }
+        }
+
         if (nma.enabled && nav_update_t_left <= 0 && player_trf.hasChanged) {
-            nav_update_t_left = nav_update_t;
-            nma.SetDestination(player_trf.position);
+            nav_update_t_left = nav_update_t + (Utils.rng.Next() % 10) / 10.0f;
+
+            // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
+            RaycastHit hit_info;
+            if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 1000)) {
+                if (hit_info.collider.gameObject.CompareTag("Player")) {
+                    Debug.Log("in line of sight");
+                    nma.SetDestination(player_trf.position);
+                }
+            }
+
         }
         nav_update_t_left -= Time.deltaTime;
+    }
+
+    void TakeDamage(int damage)
+    {
+        stats.hp -= damage;
+        healthbar_slider.value = (float)stats.hp / stats.hp_max;
+        healthbar.SetActive(true);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -83,8 +116,7 @@ public class EnemyScript : MonoBehaviour
             return;
 
         AttackStats attack_stats = collider.gameObject.GetComponent<AttackScript>().GetStats();
-        stats.hp -= attack_stats.damage;
-        Debug.Log("enemy attacked at " + transform.position.ToString() + " for " + attack_stats.damage + " damage (" +  stats.hp + "/" + stats.hp_max + ")");
+        TakeDamage(attack_stats.damage);
 
         hit_effect_delete_t_left = hit_effect_delete_t;
         Destroy(hit_effect);
@@ -94,6 +126,9 @@ public class EnemyScript : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        // if (!collision.gameObject.CompareTag("Player"))
+        //     return;
+        // collision.gameObject.SendMessage("OnEnemyCollision", stats);
     }
 
     void OnHit(AttackInfo ai)

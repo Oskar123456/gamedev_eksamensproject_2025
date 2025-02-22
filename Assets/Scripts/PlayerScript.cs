@@ -27,14 +27,11 @@ public class PlayerScript : MonoBehaviour
     Transform trf;
     System.Random rng = new System.Random();
 
-    // public float camera_angle = 45;
-    // public float camera_rotation = 45;
     public float camera_dist = 0.5f;
-    // public float minimap_camera_dist = 100;
+    public float scroll_speed = 0.5f;
 
     float yaw, pitch;
     Transform cam_trf;
-    // Transform cam_minimap_trf;
     float cam_trf_angle_x, cam_trf_angle_y;
     Vector3 cam_trf_dist = new Vector3(-10, 16.85f, -10);
 
@@ -72,9 +69,7 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
-        stats = new PlayerStats();
-        stats.attack_stats = new AttackStats();
-        stats.attack_stats.damage = 1;
+        stats = GameState.player_stats;
 
         trf = GetComponent<Transform>();
         char_ctrl = GetComponent<CharacterController>();
@@ -143,7 +138,7 @@ public class PlayerScript : MonoBehaviour
     {
         float mwheel = Input.GetAxis("Mouse ScrollWheel");
         if (mwheel != 0) {
-            camera_dist -= 0.1f * mwheel;
+            camera_dist -= scroll_speed * mwheel;
             UpdateCam();
         }
     }
@@ -260,7 +255,6 @@ public class PlayerScript : MonoBehaviour
     {
         Vector3 normal = hit.normal;
         if (normal.y >= 0.9 && is_falling) {
-            // Debug.Log("OnControllerColliderHit");
             did_land = true;
             is_falling = false;
         }
@@ -319,5 +313,33 @@ public class PlayerScript : MonoBehaviour
         AttackStats attack_stats = ai.attack_stats;
 
         Debug.Log("player attacked at " + transform.position.ToString() + " for " + attack_stats.damage + " damage");
+    }
+
+    void OnEnemyCollision(EnemyStats enemy_stats)
+    {
+        TakeDamage(enemy_stats.collision_damage);
+    }
+
+    void TakeDamage(int damage)
+    {
+        stats.hp -= damage;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Attack")) {
+            AttackScript attack_script = collider.GetComponent<AttackScript>();
+            if (attack_script.GetAttacker() == gameObject)
+                return;
+            AttackStats attack_stats = attack_script.GetStats();
+            TakeDamage(attack_stats.damage);
+            char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        }
+
+        if (collider.gameObject.CompareTag("Enemy")) {
+            EnemyStats enemy_stats = collider.GetComponent<EnemyStats>();
+            TakeDamage(enemy_stats.collision_damage);
+            char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        }
     }
 }

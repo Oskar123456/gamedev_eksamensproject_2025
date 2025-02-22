@@ -57,7 +57,7 @@ public class PCGScript : MonoBehaviour
         nms = GetComponent<NavMeshSurface>();
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
-        player_stats = player.GetComponent<PlayerStats>();
+        player_stats = GameState.player_stats;
 
         level_builder = GetComponent<LevelBuilder>();
     }

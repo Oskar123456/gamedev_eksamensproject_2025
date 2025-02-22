@@ -194,15 +194,28 @@ public class Level
 
     public Vector3 GetRandomUnoccupiedPosition()
     {
+        int count = 0;
         while (true) {
             int x = Utils.rng.Next() % voxel_width;
             int z = Utils.rng.Next() % voxel_height;
-            if (!occupied[x, z]) {
-                return new Vector3(x * LevelBuilder.voxel_scale,
-                        noise_levels[x, z] + LevelBuilder.voxel_scale / 2.0f, z * LevelBuilder.voxel_scale);
+            if (count++ > 1000 || !occupied[x, z]) {
+                if (count > 1000)
+                    Debug.Log("GetRandomUnoccupiedPosition over 1000 iterations");
+                return GetVoxelWorldCenter(x, z);
             }
         }
         return Vector3.zero;
+    }
+
+    public Vector3 GetVoxelWorldCenter(int x, int z)
+    {
+        return new Vector3(x * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale / 2.0f,
+                noise_levels[x, z], z * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale / 2.0f);
+    }
+
+    public Vector2Int MapWorldPosToVoxel(float x, float z)
+    {
+        return new Vector2Int((int)Math.Floor(x / LevelBuilder.voxel_scale), (int)Math.Floor(z / LevelBuilder.voxel_scale));
     }
 
     public Vector3 GetStartPosition()
@@ -254,7 +267,7 @@ public class Level
         int x_off = 0, z_off = 0;
         for (int i = 0; i < x; i++) x_off += column_widths[i];
         for (int i = 0; i < z; i++) z_off += row_heights[i];
-        return new Vector2(x_off * LevelBuilder.voxel_scale, z_off * LevelBuilder.voxel_scale);
+        return new Vector2(x_off * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale / 2.0f, z_off * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale / 2.0f);
     }
 
     public Vector3 MapCellVoxelToWorld(int cell_x, int cell_z, int voxel_x, int voxel_z)

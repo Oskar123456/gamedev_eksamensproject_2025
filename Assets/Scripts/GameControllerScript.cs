@@ -59,6 +59,14 @@ public class GameControllerScript : MonoBehaviour
 
     Level current_level;
 
+    void Awake()
+    {
+        if (GameState.player_stats == null)
+            GameState.player_stats = new PlayerStats();
+        player_stats = GameState.player_stats;
+        GameState.level_name = "Level " + GameState.level_num.ToString();
+    }
+
     void Start()
     {
         arena = GameObject.Find("Arena");
@@ -77,9 +85,8 @@ public class GameControllerScript : MonoBehaviour
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
-        player_stats = player.GetComponent<PlayerStats>();
 
-        player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
+        player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), player_trf);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         player_marker_trf = player_marker.GetComponent<Transform>();
         finish_marker_trf = finish_marker.GetComponent<Transform>();
@@ -109,7 +116,7 @@ public class GameControllerScript : MonoBehaviour
         }
 
         if (player_trf.hasChanged) {
-            player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
+            // player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
         }
     }
 
@@ -124,16 +131,19 @@ public class GameControllerScript : MonoBehaviour
         Vector3 start_pos = current_level.GetStartPosition();
         Vector3 finish_pos = current_level.GetFinishPosition();
 
-        Instantiate(portal_entrance_prefab, start_pos, Quaternion.identity, level_object_container.transform);
-        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 5f, Quaternion.identity, level_object_container.transform);
+        Instantiate(portal_entrance_prefab, start_pos + Vector3.up * 0.35f, Quaternion.identity, level_object_container.transform);
+        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 4, Quaternion.identity, level_object_container.transform);
         portal_exit.GetComponent<Transform>().localScale *= 4.0f;
 
-        finish_marker_trf.position = new Vector3(finish_pos.x, 290, finish_pos.z);
-        player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
+        finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
+        player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             Vector3 v = current_level.GetRandomUnoccupiedPosition();
+            Vector2Int v_voxel = current_level.MapWorldPosToVoxel(v.x, v.z);
+            Debug.Log(v.ToString());
             enemies.Add(Instantiate(enemy_prefabs[Utils.rng.Next() % enemy_prefabs.Count], v, Quaternion.identity, level_object_container.transform));
+            current_level.MarkOccupiedPosition(v_voxel.x, v_voxel.y);
         }
     }
 

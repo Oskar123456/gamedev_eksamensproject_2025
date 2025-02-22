@@ -42,6 +42,14 @@ public class GameControllerScriptMenu : MonoBehaviour
     bool minimap_maximized = false;
     Vector2 minimap_img_pos;
 
+    void Awake()
+    {
+        if (GameState.player_stats == null)
+            GameState.player_stats = new PlayerStats();
+        player_stats = GameState.player_stats;
+        GameState.level_name = "Town";
+    }
+
     void Start()
     {
         minimap_img = GameObject.Find("MiniMapImg");
@@ -53,7 +61,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
-        player_stats = player.GetComponent<PlayerStats>();
 
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
