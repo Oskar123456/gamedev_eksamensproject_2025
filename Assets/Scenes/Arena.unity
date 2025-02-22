@@ -450,11 +450,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level_container_prefab: {fileID: 1545280369457043851, guid: bc11b9ea7e7cd7b78a8c86319d11f3cb, type: 3}
+  medieval_pillar_prefabs:
+  - {fileID: 1177868997750982532, guid: e2be56ec569ee3c998e5689d64ff65bd, type: 3}
+  - {fileID: 1752345949207136049, guid: ccb3aede92d60e50f8431a60cb98d5eb, type: 3}
+  - {fileID: 4611271974484790876, guid: 20aed36b93a75d842b921f6a1053cd72, type: 3}
+  - {fileID: 2768277267152961284, guid: 2f8c1e4f53c80822bbfbcf9856e96436, type: 3}
   medieval_deco_prefabs:
-  - {fileID: 16038835297913163, guid: 7c7baabdbc078cb4098d5880fc72c0f3, type: 3}
-  - {fileID: 7337419084678994052, guid: 2984644366ae6b4bb99660633ddbe161, type: 3}
-  - {fileID: 1924447747592062055, guid: de3c003b70015651f890d60947bf7a4a, type: 3}
-  - {fileID: 8592535359900829762, guid: b0be5563456af97c0b71aac75ccc84ab, type: 3}
+  - {fileID: 4787479080591765025, guid: 89b97ddd04b038865aac9aa06eb39e11, type: 3}
+  - {fileID: 1084686326505692289, guid: 05ffc57755cd98226a1b293f4cec56b0, type: 3}
   medieval_light_prefabs:
   - {fileID: 4515153799870875411, guid: 0e5e1427404d451cb8512134f079a565, type: 3}
   medieval_enemy_prefabs:
@@ -696,7 +699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4117757857070103509, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: camera_dist
-      value: 0.8
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7607729905474824662, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: m_Enabled

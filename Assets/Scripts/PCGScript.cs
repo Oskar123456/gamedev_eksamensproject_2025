@@ -30,6 +30,7 @@ using UnityEngine;
 public class PCGScript : MonoBehaviour
 {
     public GameObject level_container_prefab;
+    public List<GameObject> medieval_pillar_prefabs;
     public List<GameObject> medieval_deco_prefabs;
     public List<GameObject> medieval_light_prefabs;
     public List<GameObject> medieval_enemy_prefabs;
@@ -82,11 +83,49 @@ public class PCGScript : MonoBehaviour
         maze = new Maze(maze_width, maze_height);
         Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>());
 
+        AddPillars(level, level_type);
         Decorate(level, level_type);
         level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
         AddEnemies(level, level_type);
 
         return level;
+    }
+
+    void AddPillars(Level level, LevelType level_type)
+    {
+        for (int x = 0; x < level.width; x++) {
+            for (int z = 0; z < level.height; z++) {
+                if (level.maze.walls[z, x])
+                    continue;
+
+                Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
+                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
+
+                Vector3 pos = Vector3.zero;
+                RaycastHit hit_info;
+
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        int cell_x = (level.column_widths[x] / 4) * (1 + 2 * i);
+                        int cell_z = (level.row_heights[z] / 4) * (1 + 2 * j);
+
+                        level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
+                        pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+
+                        if (Physics.Raycast(pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                            pos = hit_info.point;
+
+                            GameObject enemy  = medieval_pillar_prefabs[Utils.rng.Next() % medieval_pillar_prefabs.Count];
+                            GameObject new_enemy = Instantiate(enemy, pos, Quaternion.identity, level_container.transform);
+
+                            new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 1.66f,
+                                    LevelBuilder.voxel_scale * 1.66f, LevelBuilder.voxel_scale * 1.66f);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     void AddEnemies(Level level, LevelType level_type)
@@ -117,6 +156,9 @@ public class PCGScript : MonoBehaviour
 
                         GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
                         GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+                        EnemyStats es = new_enemy.GetComponent<EnemyStats>();
+                        es.hp_max = 2 * GameState.level_num;
+                        es.hp = 2 * GameState.level_num;
 
                         new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f);
                     }

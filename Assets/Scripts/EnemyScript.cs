@@ -87,20 +87,22 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
-        if (nma.enabled && nav_update_t_left <= 0) {
-            nav_update_t_left = nav_update_t; // + (Utils.rng.Next() % 4) / 3.0f;
+        // if (nma.enabled && nav_update_t_left <= 0) {
+            // nav_update_t_left = nav_update_t; // + (Utils.rng.Next() % 4) / 3.0f;
 
             // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
-            RaycastHit hit_info;
-            if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 200)) {
-                if (hit_info.collider.gameObject.CompareTag("Player")) {
-                    // Debug.Log("in line of sight");
-                    nma.SetDestination(player_trf.position);
-                }
-            }
 
+        // NOTE: might want to calc euclidean distance first to save performance.
+        // NOTE: hits effect objects in front of player.
+        // NOTE: use mask to fix.
+        RaycastHit hit_info;
+        if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 200)) {
+            if (hit_info.collider.gameObject.CompareTag("Player")) {
+                nma.SetDestination(player_trf.position);
+            }
         }
-        nav_update_t_left -= Time.deltaTime;
+        // }
+        // nav_update_t_left -= Time.deltaTime;
     }
 
     void TakeDamage(int damage)
@@ -115,13 +117,21 @@ public class EnemyScript : MonoBehaviour
         if (!collider.gameObject.CompareTag("Attack"))
             return;
 
-        AttackStats attack_stats = collider.gameObject.GetComponent<AttackScript>().GetStats();
+        AttackScript attack_script = collider.GetComponent<AttackScript>();
+        if (attack_script.GetAttacker() == gameObject)
+            return;
+        AttackStats attack_stats = attack_script.GetStats();
         TakeDamage(attack_stats.damage);
 
         hit_effect_delete_t_left = hit_effect_delete_t;
         Destroy(hit_effect);
         hit_effect = Instantiate(hit_effect_prefab, new Vector3(transform.position.x,
                     transform.position.y + (transform.localScale.y / 2.0f), transform.position.z), Quaternion.identity, transform);
+
+        nma.ResetPath();
+        nma.enabled = false;
+        transform.position = transform.position + (Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        nma.enabled = true;
     }
 
     void OnCollisionEnter(Collision collision)
