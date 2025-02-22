@@ -6,14 +6,14 @@
 
 ## ThirdParty Asset List
 
-  ▸ [  ]Skyboxes/
-  ▸ [  ]DesertKits64_Sample/
-  ▸ [  ]FloorTiles01/
-  ▸ [  ]Hovl Studio/
-  ▸ [  ]JC_StylizedRocks_Lite/
-  ▸ [  ]LowlyPoly/
-  ▸ [  ]Monster_Ghosts_FREE/
-  ▸ [  ]SkymonIconPackFree/
-  ▸ [  ]stone_floor_texture/
-  ▸ [  ]StylizedHandPaintedDungeon(Free)/
-  ▸ [  ]WizardPolyArt/
+  - Skyboxes/
+  - DesertKits64\_Sample/
+  - FloorTiles01/
+  - Hovl Studio/
+  - JC\_StylizedRocks\_Lite/
+  - LowlyPoly/
+  - Monster\_Ghosts\_FREE/
+  - SkymonIconPackFree/
+  - stone\_floor\_texture/
+  - StylizedHandPaintedDungeon(Free)/
+  - WizardPolyArt/
