@@ -169,14 +169,18 @@ public class Level
         noise_levels = new float[voxel_width, voxel_height];
         occupied = new bool[voxel_width, voxel_height];
 
+        Vector2Int start_pos_voxel_off = MapCellToVoxelOffset(maze.start.x, maze.start.y);
+        Vector2Int finish_pos_voxel_off = MapCellToVoxelOffset(maze.finish.x, maze.finish.y);
+
         for (int x = -boundary_width; x < voxel_width + boundary_width; x++) {
             for (int y = 0; y < level_voxel_height; y++) {
                 for (int z = -boundary_width; z < voxel_height + boundary_width; z++) {
                     if (x < 0 || x >= voxel_width || z < 0 || z >= voxel_height) {
-                        if (y == level_voxel_height - 1)
+                        if (y == level_voxel_height - 1) {
                             voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
-                        else
+                        } else {
                             voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Wall;
+                        }
                         continue;
                     }
 
@@ -186,14 +190,12 @@ public class Level
                     if (!IsWall(x, z) && y == 0) {
                         voxels[x, y, z] = Voxel.Floor;
                         voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Floor;
-                    }
-                    else if (IsWall(x, z)) {
+                    } else if (IsWall(x, z)) {
                         occupied[x, z] = true;
                         if (y == level_voxel_height - 1) {
                             voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
                             voxels[x, y, z] = Voxel.Ceiling;
-                        }
-                        else {
+                        } else {
                             voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Wall;
                             voxels[x, y, z] = Voxel.Wall;
                         }
@@ -213,8 +215,8 @@ public class Level
     {
         int count = 0;
         while (true) {
-            int x = Utils.rng.Next() % voxel_width;
-            int z = Utils.rng.Next() % voxel_height;
+            int x = (Utils.rng.Next() % (voxel_width - column_widths[0] - column_widths[maze.width - 1])) + column_widths[0];
+            int z = (Utils.rng.Next() % (voxel_height - row_heights[0] - row_heights[maze.height - 1])) + row_heights[0];
             if (count++ > 1000 || !occupied[x, z]) {
                 if (count > 1000)
                     Debug.Log("GetRandomUnoccupiedPosition over 1000 iterations");

@@ -138,7 +138,7 @@ public class GameControllerScript : MonoBehaviour
         finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             Vector3 v = current_level.GetRandomUnoccupiedPosition();
             Vector2Int v_voxel = current_level.MapWorldPosToVoxel(v.x, v.z);
             Debug.Log(v.ToString());
