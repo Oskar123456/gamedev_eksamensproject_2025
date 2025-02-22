@@ -4,7 +4,7 @@
 
 ## Instructions
 
-## ThirdParty Asset List
+## Third Party Assets List
 
   - [skyboxes](https://assetstore.unity.com/packages/2d/textures-materials/sky/3-skyboxes-25142)
   - [desert kit](https://assetstore.unity.com/packages/p/desert-kits-64-sample-86482)
