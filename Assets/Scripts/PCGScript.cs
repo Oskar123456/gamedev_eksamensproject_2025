@@ -44,7 +44,7 @@ public class PCGScript : MonoBehaviour
     List<GameObject> decos = new List<GameObject>();
     GameObject level_container;
 
-    NavMeshSurface nms;
+    // NavMeshSurface nms;
     GameObject player;
     Transform player_trf;
     PlayerStats player_stats;
@@ -55,7 +55,7 @@ public class PCGScript : MonoBehaviour
 
     void Awake()
     {
-        nms = GetComponent<NavMeshSurface>();
+        // nms = GetComponent<NavMeshSurface>();
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_stats = GameState.player_stats;
