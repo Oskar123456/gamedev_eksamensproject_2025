@@ -24,7 +24,7 @@
   - [icons](https://assetstore.unity.com/packages/2d/gui/icons/skymon-icon-pack-free-282424)
   - [stone floor texture](https://assetstore.unity.com/packages/2d/textures-materials/roads/stone-floor-texture-tile-18683)
   - [dungeon](https://assetstore.unity.com/packages/3d/environments/stylized-hand-painted-dungeon-free-173934)
-  - [battyle wizard poly art](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/battle-wizard-poly-art-128097)
+  - [battle wizard poly art](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/battle-wizard-poly-art-128097)
   - [stone pillars](https://assetstore.unity.com/packages/3d/environments/occult-stone-pillars-281009)
   - [ancient clay jug](https://assetstore.unity.com/packages/3d/props/interior/ancient-clay-jug-ornate-ceramic-vase-298044)
   - [Water](https://assetstore.unity.com/packages/vfx/shaders/urp-stylized-water-shader-proto-series-187485)
