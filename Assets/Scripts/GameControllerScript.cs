@@ -143,7 +143,7 @@ public class GameControllerScript : MonoBehaviour
     {
         if (current_level == null)
             return;
-        minimap_cam_trf.position = new Vector3(current_level.world_width / 2.0f, 300, current_level.world_height / 2.0f);
+        minimap_cam_trf.position = new Vector3(current_level.world_width / 2.0f, 400, current_level.world_height / 2.0f);
         minimap_cam_trf.eulerAngles = new Vector3(90, 0, 0);
         minimap_cam.orthographicSize = (float)Math.Max(current_level.world_width, current_level.world_height) / 2.0f;
     }

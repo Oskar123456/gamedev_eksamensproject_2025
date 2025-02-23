@@ -19,7 +19,7 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public GameObject stone_slash_prefab;
+    public GameObject basic_attack;
 
     PlayerStats stats;
     CharacterController char_ctrl;
@@ -82,6 +82,9 @@ public class PlayerScript : MonoBehaviour
         trf.eulerAngles = new Vector3(0, pitch, 0);
         UpdateCam();
         halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
+
+        /* test initialization */
+        stats.attack_stats.scale = 2;
     }
 
     void Update()
@@ -148,16 +151,14 @@ public class PlayerScript : MonoBehaviour
         if (!is_attacking) {
             if (Input.GetMouseButton(0)) {
                 attack_num = 1; // rng.Next() % 2;
-                attack_time_left = attack_time;
+                attack_time_left = stats.attack_stats.cooldown;
                 did_attack = true;
-                animator.SetFloat("attack_speed", anim_attack_time[attack_num] / attack_time);
+                animator.SetFloat("attack_speed", 1 / stats.attack_stats.duration);
 
-                GameObject attack_obj = Instantiate(stone_slash_prefab, transform.position + halfway_up_vec,
-                        transform.rotation * Quaternion.Euler(0, 0, -45));
+                GameObject attack_obj = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation);
                 AttackScript ascr = attack_obj.GetComponent<AttackScript>();
                 ascr.SetStats(stats.attack_stats);
                 ascr.SetAttacker(gameObject);
-                attacks.Enqueue(attack_obj);
             } else {
                 return;
             }
@@ -168,7 +169,6 @@ public class PlayerScript : MonoBehaviour
             is_attacking = true;
         } else {
             is_attacking = false;
-            Destroy(attacks.Dequeue());
         }
     }
 
@@ -309,11 +309,10 @@ public class PlayerScript : MonoBehaviour
         cam_trf.eulerAngles = new Vector3(cam_trf_angle_x, cam_trf_angle_y, 0);
     }
 
-    void OnHit(AttackInfo ai)
+    void OnHit(AttackHitInfo hit_info)
     {
-        AttackStats attack_stats = ai.attack_stats;
-
-        Debug.Log("player attacked at " + transform.position.ToString() + " for " + attack_stats.damage + " damage");
+        TakeDamage(hit_info.stats.damage);
+        Debug.Log("player attacked at " + transform.position.ToString() + " for " + hit_info.stats.damage + " damage");
     }
 
     void OnEnemyCollision(EnemyStats enemy_stats)
@@ -328,19 +327,19 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.CompareTag("Attack")) {
-            AttackScript attack_script = collider.GetComponent<AttackScript>();
-            if (attack_script.GetAttacker() == gameObject)
-                return;
-            AttackStats attack_stats = attack_script.GetStats();
-            TakeDamage(attack_stats.damage);
-            char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
-        }
+        // if (collider.gameObject.CompareTag("Attack")) {
+        //     AttackScript attack_script = collider.GetComponent<AttackScript>();
+        //     if (attack_script.GetAttacker() == gameObject)
+        //         return;
+        //     AttackStats attack_stats = attack_script.GetStats();
+        //     TakeDamage(attack_stats.damage);
+        //     char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        // }
 
-        if (collider.gameObject.CompareTag("Enemy")) {
-            EnemyStats enemy_stats = collider.GetComponent<EnemyStats>();
-            TakeDamage(enemy_stats.collision_damage);
-            char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
-        }
+        // if (collider.gameObject.CompareTag("Enemy")) {
+        //     EnemyStats enemy_stats = collider.GetComponent<EnemyStats>();
+        //     TakeDamage(enemy_stats.collision_damage);
+        //     char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        // }
     }
 }

@@ -24,7 +24,7 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    public GameObject hit_effect_prefab;
+    public GameObject basic_attack;
     public GameObject death_effect_prefab;
     public GameObject healthbar_prefab;
 
@@ -38,15 +38,15 @@ public class EnemyScript : MonoBehaviour
     Transform player_cam_trf;
 
     /* effects */
-    GameObject hit_effect;
-    float hit_effect_delete_t = 0.3f;
-    float hit_effect_delete_t_left;
-
     GameObject death_effect;
     float death_effect_delete_t = 0.6f;
 
     float nav_update_t = 0.1f;
     float nav_update_t_left;
+    /* combat */
+    Vector3 halfway_up_vec;
+    float attack_time_left;
+    bool is_attacking;
 
     void Start()
     {
@@ -56,9 +56,11 @@ public class EnemyScript : MonoBehaviour
         player_trf = player.GetComponent<Transform>();
         player_cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
         stats = GetComponent<EnemyStats>();
+        stats.attack_stats = AttackStats.Ghost();
         healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 1.0f), Quaternion.identity, transform);
         healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();
         healthbar.SetActive(false);
+        halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
     }
 
     void Update()
@@ -69,13 +71,6 @@ public class EnemyScript : MonoBehaviour
             Destroy(death_effect, death_effect_delete_t);
             Destroy(gameObject);
             return;
-        }
-
-        if (hit_effect_delete_t_left > 0) {
-            hit_effect_delete_t_left -= Time.deltaTime;
-            if (hit_effect_delete_t_left <= 0) {
-                Destroy(hit_effect);
-            }
         }
 
         if (player_trf.hasChanged) {
@@ -95,14 +90,34 @@ public class EnemyScript : MonoBehaviour
         // NOTE: might want to calc euclidean distance first to save performance.
         // NOTE: hits effect objects in front of player.
         // NOTE: use mask to fix.
-        RaycastHit hit_info;
+
+        float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
+
+        if (attack_time_left > 0) {
+            is_attacking = true;
+            nma.enabled = false;
+            attack_time_left -= Time.deltaTime;
+        } else {
+            nma.enabled = true;
+            is_attacking = false;
+        }
+
+        if (!nma.enabled)
+            return;
+
+        RaycastHit hit_info = new RaycastHit();
         if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 200)) {
             if (hit_info.collider.gameObject.CompareTag("Player")) {
-                nma.SetDestination(player_trf.position);
+                if (dist_to_player <= stats.attack_stats.range) {
+                    nma.ResetPath();
+                    Attack();
+                } else {
+                    nma.SetDestination(player_trf.position);
+                }
             }
+        } else if (dist_to_player < 20) {
+            nma.SetDestination(player_trf.position);
         }
-        // }
-        // nav_update_t_left -= Time.deltaTime;
     }
 
     void TakeDamage(int damage)
@@ -112,36 +127,39 @@ public class EnemyScript : MonoBehaviour
         healthbar.SetActive(true);
     }
 
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter(Collider collider) { }
+    void OnCollisionEnter(Collision collision) { }
+
+    void OnHit(AttackHitInfo hit_info)
     {
-        if (!collider.gameObject.CompareTag("Attack"))
+        if (hit_info.stats.entity_type != EntityType.Player)
             return;
 
-        AttackScript attack_script = collider.GetComponent<AttackScript>();
-        if (attack_script.GetAttacker() == gameObject)
-            return;
-        AttackStats attack_stats = attack_script.GetStats();
-        TakeDamage(attack_stats.damage);
+        TakeDamage(hit_info.stats.damage);
 
-        hit_effect_delete_t_left = hit_effect_delete_t;
-        Destroy(hit_effect);
-        hit_effect = Instantiate(hit_effect_prefab, new Vector3(transform.position.x,
-                    transform.position.y + (transform.localScale.y / 2.0f), transform.position.z), Quaternion.identity, transform);
+        /* TODO: refactor as "pushback()" or something */
+        if (nma.enabled)
+            nma.ResetPath();
 
-        nma.ResetPath();
         nma.enabled = false;
-        transform.position = transform.position + (Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
+        transform.position = transform.position + (hit_info.normal * 0.4f);
         nma.enabled = true;
     }
 
-    void OnCollisionEnter(Collision collision)
+    void Attack()
     {
-        // if (!collision.gameObject.CompareTag("Player"))
-        //     return;
-        // collision.gameObject.SendMessage("OnEnemyCollision", stats);
-    }
+        if (!is_attacking) {
+            nma.enabled = false;
 
-    void OnHit(AttackInfo ai)
-    {
+            attack_time_left = stats.attack_stats.cooldown;
+
+            transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, Vector3.Normalize(player_trf.position - transform.position));
+
+            GameObject attack_obj = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation);
+
+            AttackScript ascr = attack_obj.GetComponent<AttackScript>();
+            ascr.SetStats(stats.attack_stats);
+            ascr.SetAttacker(gameObject);
+        }
     }
 }
