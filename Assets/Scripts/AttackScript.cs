@@ -22,12 +22,7 @@ public class AttackScript : MonoBehaviour
     public GameObject attack_effect_prefab;
     public GameObject hit_effect_prefab;
     public float yaw, pitch, roll;
-    // public float end_yaw, end_pitch, end_roll;
     public float offset_forward, offset_right, offset_up;
-    // public float acceleration;
-
-    // public Vector3 rotation_axis;
-    // public float rotation_degrees;
 
     Vector3 origin, position, end_position;
     Quaternion rotation, end_rotation;
@@ -58,6 +53,7 @@ public class AttackScript : MonoBehaviour
 
         GameObject effect = Instantiate(attack_effect_prefab, transform.position, attacker.transform.rotation * Quaternion.Euler(yaw, pitch, roll));
 
+        origin = attacker.transform.position;
         transform.rotation = attacker.transform.rotation;
         position = transform.position + offset_forward * attacker.transform.forward + offset_up * attacker.transform.up + offset_right * attacker.transform.right;
         transform.position = position;
@@ -86,7 +82,8 @@ public class AttackScript : MonoBehaviour
 
         was_damaged.Add(collider.gameObject);
 
-        Vector3 normal = Vector3.Normalize(collider.transform.position - transform.position);
+        Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
+        normal.y = 0;
         Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
         GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
@@ -117,7 +114,7 @@ public class AttackStats
         ats.cooldown = 1;
         ats.damage_begin_t = 0.50f;
         ats.damage_end_t = 0.70f;
-        ats.range = 6;
+        ats.range = 5f;
         ats.scale = 1;
         return ats;
     }

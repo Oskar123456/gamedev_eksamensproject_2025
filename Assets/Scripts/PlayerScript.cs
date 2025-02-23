@@ -312,7 +312,7 @@ public class PlayerScript : MonoBehaviour
     void OnHit(AttackHitInfo hit_info)
     {
         TakeDamage(hit_info.stats.damage);
-        // Debug.Log("player attacked at " + transform.position.ToString() + " for " + hit_info.stats.damage + " damage");
+        char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 0.5f));
     }
 
     void OnEnemyCollision(EnemyStats enemy_stats)
@@ -327,19 +327,13 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        // if (collider.gameObject.CompareTag("Attack")) {
-        //     AttackScript attack_script = collider.GetComponent<AttackScript>();
-        //     if (attack_script.GetAttacker() == gameObject)
-        //         return;
-        //     AttackStats attack_stats = attack_script.GetStats();
-        //     TakeDamage(attack_stats.damage);
-        //     char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
-        // }
-
-        // if (collider.gameObject.CompareTag("Enemy")) {
-        //     EnemyStats enemy_stats = collider.GetComponent<EnemyStats>();
-        //     TakeDamage(enemy_stats.collision_damage);
-        //     char_ctrl.Move(Vector3.Normalize(transform.position - collider.transform.position) * 0.4f);
-        // }
     }
+}
+
+public class PlayerStats
+{
+    public int hp = 100, hp_max = 100;
+    public AttackStats attack_stats;
+
+    public PlayerStats() { attack_stats = new AttackStats(); attack_stats.entity_type = EntityType.Player; }
 }

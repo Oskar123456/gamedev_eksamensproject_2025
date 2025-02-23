@@ -102,20 +102,19 @@ public class EnemyScript : MonoBehaviour
             is_attacking = false;
         }
 
+        if (dist_to_player > 20)
+            return;
+
         if (!nma.enabled)
             return;
 
         RaycastHit hit_info = new RaycastHit();
         if (Physics.Raycast(transform.position + halfway_up_vec, player_trf.position - transform.position, out hit_info, 200)) {
-            if (hit_info.collider.gameObject.CompareTag("Player")) {
-                if (dist_to_player <= stats.attack_stats.range) {
-                    nma.ResetPath();
-                    Attack();
-                } else {
-                    nma.SetDestination(player_trf.position);
-                }
-            } else if (dist_to_player < 50) {
-                    nma.SetDestination(player_trf.position);
+            if (hit_info.collider.gameObject.CompareTag("Player") && dist_to_player <= stats.attack_stats.range) {
+                nma.ResetPath();
+                Attack();
+            } else {
+                nma.SetDestination(player_trf.position);
             }
         }
     }
@@ -153,7 +152,9 @@ public class EnemyScript : MonoBehaviour
 
             attack_time_left = stats.attack_stats.cooldown;
 
-            transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, Vector3.Normalize(player_trf.position - transform.position));
+            Vector3 normal = Vector3.Normalize(player_trf.position - transform.position);
+            normal.y = 0;
+            transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, normal);
 
             GameObject attack_obj = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation);
 
