@@ -106,7 +106,7 @@ public class EnemyScript : MonoBehaviour
             return;
 
         RaycastHit hit_info = new RaycastHit();
-        if (Physics.Raycast(transform.position + Vector3.up * (transform.lossyScale.y / 2), player_trf.position - transform.position, out hit_info, 200)) {
+        if (Physics.Raycast(transform.position + halfway_up_vec, player_trf.position - transform.position, out hit_info, 200)) {
             if (hit_info.collider.gameObject.CompareTag("Player")) {
                 if (dist_to_player <= stats.attack_stats.range) {
                     nma.ResetPath();
@@ -114,9 +114,9 @@ public class EnemyScript : MonoBehaviour
                 } else {
                     nma.SetDestination(player_trf.position);
                 }
+            } else if (dist_to_player < 50) {
+                    nma.SetDestination(player_trf.position);
             }
-        } else if (dist_to_player < 20) {
-            nma.SetDestination(player_trf.position);
         }
     }
 

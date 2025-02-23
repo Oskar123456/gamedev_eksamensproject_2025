@@ -312,7 +312,7 @@ public class PlayerScript : MonoBehaviour
     void OnHit(AttackHitInfo hit_info)
     {
         TakeDamage(hit_info.stats.damage);
-        Debug.Log("player attacked at " + transform.position.ToString() + " for " + hit_info.stats.damage + " damage");
+        // Debug.Log("player attacked at " + transform.position.ToString() + " for " + hit_info.stats.damage + " damage");
     }
 
     void OnEnemyCollision(EnemyStats enemy_stats)
