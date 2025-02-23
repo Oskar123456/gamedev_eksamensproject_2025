@@ -59,9 +59,9 @@ public class LevelBuilder : MonoBehaviour
         Level level = new Level(maze, medieval_level_height, parent);
 
         for (int x = 0; x < maze.width; x++)
-            level.column_widths[x] = medieval_avg_room_width + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
+            level.column_widths[x] = medieval_avg_room_width + (rng.Next() % (medieval_avg_room_variance + 1)) * (rng.Next() % 2 == 0 ? 1 : -1);
         for (int y = 0; y < maze.height; y++)
-            level.row_heights[y]  = medieval_avg_room_height  + (rng.Next() % medieval_avg_room_variance) * (rng.Next() % 2 == 0 ? 1 : -1);
+            level.row_heights[y]  = medieval_avg_room_height  + (rng.Next() % (medieval_avg_room_variance + 1)) * (rng.Next() % 2 == 0 ? 1 : -1);
 
         level.InitVoxels();
         level.BuildMesh();
