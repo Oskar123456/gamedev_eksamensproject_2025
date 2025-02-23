@@ -82,15 +82,6 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
-        // if (nma.enabled && nav_update_t_left <= 0) {
-            // nav_update_t_left = nav_update_t; // + (Utils.rng.Next() % 4) / 3.0f;
-
-            // Debug.DrawRay(transform.position + Vector3.up * (transform.lossyScale.y / 2), (player_trf.position - transform.position) * 100, Color.red, 20);
-
-        // NOTE: might want to calc euclidean distance first to save performance.
-        // NOTE: hits effect objects in front of player.
-        // NOTE: use mask to fix.
-
         float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
 
         if (dist_to_player > 25)
