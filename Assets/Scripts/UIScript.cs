@@ -44,8 +44,13 @@ public class UIScript : MonoBehaviour
     public float fade_in = 1;
     float fade_in_left;
 
+    float[] fps_hist;
+    int fps_hist_i;
+
     void Start()
     {
+        /* debug */
+        fps_hist = new float[60];
         /* level intro */
         screen_color = GameObject.Find("ScreenPanel");
         screen_color_img = screen_color.GetComponent<Image>();
@@ -66,9 +71,12 @@ public class UIScript : MonoBehaviour
 
     void Update()
     {
+        fps_hist[fps_hist_i % 60] = 1 / Time.deltaTime; float fps_avg = 0; fps_hist_i = (fps_hist_i + 1) % 60;
+        for (int i = 0; i < 60; i++) { fps_avg += fps_hist[i]; }
+
         if (player_trf.hasChanged) {
             debug_info.text = string.Format("player_pos: {0} | fps: {1: .00}",
-                    player_trf.position.ToString(), 1 / Time.deltaTime);
+                    player_trf.position.ToString(), fps_avg / 60.0f);
         }
         player_hp_bar.value = (float)player_stats.hp / player_stats.hp_max;
 

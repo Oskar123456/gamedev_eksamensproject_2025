@@ -93,6 +93,9 @@ public class EnemyScript : MonoBehaviour
 
         float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
 
+        if (dist_to_player > 25)
+            return;
+
         if (attack_time_left > 0) {
             is_attacking = true;
             nma.enabled = false;
@@ -101,9 +104,6 @@ public class EnemyScript : MonoBehaviour
             nma.enabled = true;
             is_attacking = false;
         }
-
-        if (dist_to_player > 20)
-            return;
 
         if (!nma.enabled)
             return;
@@ -114,7 +114,9 @@ public class EnemyScript : MonoBehaviour
                 nma.ResetPath();
                 Attack();
             } else {
-                nma.SetDestination(player_trf.position);
+                float dest_to_player_dist = Vector3.Distance(nma.destination, player_trf.position);
+                if (dest_to_player_dist > stats.attack_stats.range / 2.0f)
+                    nma.SetDestination(player_trf.position);
             }
         }
     }

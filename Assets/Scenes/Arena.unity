@@ -708,10 +708,10 @@ MonoBehaviour:
   medieval_floor_skeleton: {fileID: 1412554010015604074, guid: d72c97d3527598bf9b8443de2e09ca5a, type: 3}
   medieval_ceiling_skeleton: {fileID: 2434737542694297685, guid: f468cb00eb48814ffaf83f4d676a6b08, type: 3}
   medieval_level_height: 8
-  medieval_wall_width: 8
+  medieval_wall_width: 4
   medieval_wall_variance: 1
-  medieval_avg_room_width: 8
-  medieval_avg_room_height: 8
+  medieval_avg_room_width: 9
+  medieval_avg_room_height: 9
   medieval_avg_room_variance: 1
 --- !u!1 &1918983734
 GameObject:
@@ -893,7 +893,7 @@ PrefabInstance:
     - target: {fileID: 4117757857070103509, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: basic_attack
       value: 
-      objectReference: {fileID: 2313690136622741479, guid: f230adafc715567a1ab39d0e7641e959, type: 3}
+      objectReference: {fileID: 7914326041902401196, guid: db6b93ffbc81de7388aa89137b168642, type: 3}
     - target: {fileID: 7607729905474824662, guid: 7dac2bdbbfa61618a830bcf65b938b4a, type: 3}
       propertyPath: m_Enabled
       value: 1
