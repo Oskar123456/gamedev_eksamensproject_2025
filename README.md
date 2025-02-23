@@ -10,6 +10,7 @@
   - WASD : Movement
   - Shift : Sprint
   - Space : Jump
+  - Tab : [Maximize] Minimap
 
 ## Third Party Assets List
 
