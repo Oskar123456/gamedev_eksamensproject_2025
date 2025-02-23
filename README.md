@@ -20,7 +20,10 @@
   - [stone pillars](https://assetstore.unity.com/packages/3d/environments/occult-stone-pillars-281009)
   - [ancient clay jug](https://assetstore.unity.com/packages/3d/props/interior/ancient-clay-jug-ornate-ceramic-vase-298044)
 
+## TODO:
 
+  - refactor attack system; attack prefabs should contain scriptable base stats.
+  - ... rest of the game...
 
 
 
