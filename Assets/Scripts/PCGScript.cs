@@ -34,6 +34,8 @@ public class PCGScript : MonoBehaviour
     public List<GameObject> medieval_deco_prefabs;
     public List<GameObject> medieval_light_prefabs;
     public List<GameObject> medieval_enemy_prefabs;
+    public GameObject water_volume;
+    public GameObject water_tile;
 
     public int maze_width, maze_height;
 
@@ -48,6 +50,7 @@ public class PCGScript : MonoBehaviour
     GameObject player;
     Transform player_trf;
     PlayerStats player_stats;
+    int max_lights = 128, light_count = 0;
 
     System.Random rng = new System.Random();
     public int level, difficulty;
@@ -81,9 +84,36 @@ public class PCGScript : MonoBehaviour
         Clean();
         level_container = Instantiate(level_container_prefab, Vector3.zero, Quaternion.identity, transform);
         maze = new Maze(maze_width, maze_height);
-        Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>());
+        Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>(), level_type);
 
         level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        // for (int x = 0; x < maze.width; x++) {
+        //     for (int z = 0; z < maze.height; z++) {
+        //         if (!maze.walls[z, x])
+        //             continue;
+        //         Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
+        //         Vector3 pos = new Vector3((voxel_offs.x) * LevelBuilder.voxel_scale, -1, (voxel_offs.y) * LevelBuilder.voxel_scale);
+        //         Debug.Log(pos.ToString());
+        //         GameObject wv = Instantiate(water_volume, pos, Quaternion.identity, level_container.GetComponent<Transform>());
+        //         GameObject wt = Instantiate(water_tile, Vector3.zero, Quaternion.identity, wv.transform);
+        //         wv.transform.localScale = new Vector3(level.column_widths[x] * LevelBuilder.voxel_scale, 1, level.row_heights[z] * LevelBuilder.voxel_scale);
+        //     }
+        // }
+
+        // TODO: refactor
+        if (level_type == LevelType.Water) {
+            for (int x = -1; x < (level.voxel_width / 50 + 1) * LevelBuilder.voxel_scale; x++) {
+                for (int z = -1; z < (level.voxel_height / 50 + 1) * LevelBuilder.voxel_scale; z++) {
+                    GameObject wv = Instantiate(water_volume, new Vector3(x * 50, LevelBuilder.voxel_scale - 1, z * 50), Quaternion.identity, level_container.GetComponent<Transform>());
+                }
+            }
+        }
+
+
+        // GameObject wv = Instantiate(water_volume, new Vector3(0, -1, 0), Quaternion.identity, level_container.GetComponent<Transform>());
+        // wv.transform.localScale = new Vector3(level.maze.width * LevelBuilder.voxel_scale, 1, level.maze.height * LevelBuilder.voxel_scale);
+
         AddPillars(level, level_type);
         Decorate(level, level_type);
         AddEnemies(level, level_type);
@@ -95,14 +125,43 @@ public class PCGScript : MonoBehaviour
     {
         for (int x = 0; x < level.width; x++) {
             for (int z = 0; z < level.height; z++) {
-                if (level.maze.walls[z, x])
-                    continue;
-
                 Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
                 int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
 
                 Vector3 pos = Vector3.zero;
                 RaycastHit hit_info;
+
+                if (level_type == LevelType.Water && level.maze.walls[z, x]) {
+                    int cell_x = (level.column_widths[x] / 2);
+                    int cell_z = (level.row_heights[z] / 2);
+
+                    level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
+                    pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+                    pos.y -= LevelBuilder.voxel_scale;
+
+                    GameObject pillar  = medieval_pillar_prefabs[Utils.rng.Next() % medieval_pillar_prefabs.Count];
+                    GameObject new_pillar = Instantiate(pillar, pos, Quaternion.identity, level_container.transform);
+
+                    new_pillar.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 1.66f,
+                            LevelBuilder.voxel_scale * 1.66f, LevelBuilder.voxel_scale * 1.66f);
+
+                    Vector3 poss = new Vector3(pos.x - 1, pos.y + (level.level_voxel_height - 1) * LevelBuilder.voxel_scale / 2, pos.z + new_pillar.transform.localScale.z / 2);
+                    Vector3 posw = new Vector3(pos.x, pos.y + (level.level_voxel_height - 1) * LevelBuilder.voxel_scale / 2, pos.z - 1);
+
+                    if (light_count < max_lights && Utils.rng.Next() % 2 == 0) {
+                        light_count++;
+                        if (Utils.rng.Next() % 2 == 0) {
+                            Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
+                                    posw, Quaternion.Euler(0, 180, 0), level_container.transform);
+                        } else {
+                            Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
+                                    poss, Quaternion.Euler(0, 270, 0), level_container.transform);
+                        }
+                    }
+                }
+
+                if (level.maze.walls[z, x])
+                    continue;
 
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < 2; j++) {
@@ -115,10 +174,10 @@ public class PCGScript : MonoBehaviour
                         if (Physics.Raycast(pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
                             pos = hit_info.point;
 
-                            GameObject enemy  = medieval_pillar_prefabs[Utils.rng.Next() % medieval_pillar_prefabs.Count];
-                            GameObject new_enemy = Instantiate(enemy, pos, Quaternion.identity, level_container.transform);
+                            GameObject pillar  = medieval_pillar_prefabs[Utils.rng.Next() % medieval_pillar_prefabs.Count];
+                            GameObject new_pillar = Instantiate(pillar, pos, Quaternion.identity, level_container.transform);
 
-                            new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 1.66f,
+                            new_pillar.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 1.66f,
                                     LevelBuilder.voxel_scale * 1.66f, LevelBuilder.voxel_scale * 1.66f);
                         }
                     }
@@ -170,7 +229,6 @@ public class PCGScript : MonoBehaviour
 
     void Decorate(Level level, LevelType level_type)
     {
-        int count = 0;
         for (int x = 0; x < level.width; x++) {
             for (int z = 0; z < level.height; z++) {
                 if (level.maze.walls[z, x])
@@ -183,28 +241,30 @@ public class PCGScript : MonoBehaviour
                 RaycastHit hit_info;
 
 
-                if (count < 128 && z < level.height - 1 && level.maze.walls[z + 1, x]) {
+                if (light_count < max_lights && Utils.rng.Next() % 2 == 0 && z < level.height - 1 && level.maze.walls[z + 1, x]) {
                     Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
                     pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
-                    if (Physics.Raycast(pos, Vector3.forward, out hit_info, level.row_heights[z] * LevelBuilder.voxel_scale)) {
+                    // Debug.DrawRay(pos, Vector3.forward * 3f * level.row_heights[z] * LevelBuilder.voxel_scale, Color.red, 1000);
+                    // Debug.DrawRay(pos, Vector3.right * 3f * level.column_widths[x] * LevelBuilder.voxel_scale, Color.red, 1000);
+                    if (Physics.Raycast(pos, Vector3.forward, out hit_info, 10f * level.row_heights[z] * LevelBuilder.voxel_scale)) {
                         deco_pos = hit_info.point;
 
                         GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
                                 deco_pos, Quaternion.Euler(0, 180, 0), level_container.transform);
 
-                        count++;
+                        light_count++;
                     }
                 }
 
-                if (count < 128 && x < level.width - 1 && level.maze.walls[z, x + 1]) {
+                if (light_count < max_lights && Utils.rng.Next() % 2 == 0 && x < level.width - 1 && level.maze.walls[z, x + 1]) {
                     Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
                     pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
-                    if (Physics.Raycast(pos, Vector3.right, out hit_info, level.column_widths[x] * LevelBuilder.voxel_scale)) {
+                    if (Physics.Raycast(pos, Vector3.right, out hit_info, 10f * level.column_widths[x] * LevelBuilder.voxel_scale)) {
                         deco_pos = hit_info.point;
 
                         GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
                                 deco_pos, Quaternion.Euler(0, 270, 0), level_container.transform);
-                        count++;
+                        light_count++;
                     }
                 }
 
@@ -231,6 +291,7 @@ public class PCGScript : MonoBehaviour
 
             }
         }
+        Debug.Log(light_count + " lights added");
     }
 }
 

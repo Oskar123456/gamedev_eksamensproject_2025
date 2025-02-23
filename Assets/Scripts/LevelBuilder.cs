@@ -39,6 +39,8 @@ public class LevelBuilder : MonoBehaviour
     public GameObject medieval_wall_skeleton;
     public GameObject medieval_floor_skeleton;
     public GameObject medieval_ceiling_skeleton;
+    public GameObject water_volume;
+    public GameObject water_tile;
 
     public int medieval_level_height = 5;
     public int medieval_wall_width = 5;
@@ -52,11 +54,12 @@ public class LevelBuilder : MonoBehaviour
     public void Init()
     {
         voxel_scale = scale;
+        // water_volume = GameObject.Find("WaterVolume");
     }
 
-    public Level Medieval(Maze maze, Transform parent)
+    public Level Medieval(Maze maze, Transform parent, LevelType level_type)
     {
-        Level level = new Level(maze, medieval_level_height, parent);
+        Level level = new Level(level_type, maze, medieval_level_height, parent);
 
         for (int x = 0; x < maze.width; x++)
             level.column_widths[x] = medieval_avg_room_width + (rng.Next() % (medieval_avg_room_variance + 1)) * (rng.Next() % 2 == 0 ? 1 : -1);
@@ -75,11 +78,13 @@ public class LevelBuilder : MonoBehaviour
             SetMesh(floor, level.floor_vertices[i], level.floor_triangles[i], level.floor_uvs[i]);
             floors.Add(floor);
         }
+
         for (int i = 0; i < level.wall_vertices.Count; i++) {
             GameObject wall = Instantiate(medieval_wall_skeleton, Vector3.zero, Quaternion.identity, parent);
             SetMesh(wall, level.wall_vertices[i], level.wall_triangles[i], level.wall_uvs[i]);
             walls.Add(wall);
         }
+
         for (int i = 0; i < level.ceiling_vertices.Count; i++) {
             GameObject ceiling = Instantiate(medieval_ceiling_skeleton, Vector3.zero, Quaternion.identity, parent);
             SetMesh(ceiling, level.ceiling_vertices[i], level.ceiling_triangles[i], level.ceiling_uvs[i]);
@@ -114,13 +119,14 @@ public class LevelBuilder : MonoBehaviour
 }
 
 public enum Voxel { None, Air, Wall, Floor, Ceiling }
-public enum LevelType { Medieval }
+public enum LevelType { Medieval, Water }
 
 public class Level
 {
     public Transform parent_trf;
 
     public Maze maze;
+    public LevelType level_type;
     public Voxel[,,] voxels;
     public Voxel[,,] voxels_with_boundary;
     public int[] column_widths, row_heights;
@@ -147,10 +153,11 @@ public class Level
     int[] indices = { 0, 1, 2, 0, 2, 3 };
     Vector2[] uv = { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(1, 0) };
 
-    public Level(Maze maze, int level_voxel_height, Transform parent)
+    public Level(LevelType level_type, Maze maze, int level_voxel_height, Transform parent)
     {
         parent_trf = parent;
         this.maze = maze;
+        this.level_type = level_type;
         row_heights   = new int[maze.height];
         column_widths = new int[maze.width];
         height = maze.height;
@@ -196,7 +203,15 @@ public class Level
                         voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Floor;
                     } else if (IsWall(x, z)) {
                         occupied[x, z] = true;
-                        if (y == level_voxel_height - 1) {
+                        if (level_type == LevelType.Water) {
+                            if (y == level_voxel_height - 1) {
+                                // voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
+                                // voxels[x, y, z] = Voxel.Ceiling;
+                            } else {
+                                voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Air;
+                                voxels[x, y, z] = Voxel.Air;
+                            }
+                        } else if (y == level_voxel_height - 1) {
                             voxels_with_boundary[x + boundary_width, y, z + boundary_width] = Voxel.Ceiling;
                             voxels[x, y, z] = Voxel.Ceiling;
                         } else {
@@ -297,7 +312,7 @@ public class Level
     {
         Vector2 cell_pos = MapCellToWorldOffset(cell_x, cell_z);
         return new Vector3(cell_pos.x + voxel_x * LevelBuilder.voxel_scale,
-                noise_levels[cell_x + voxel_x, cell_z + voxel_z] + LevelBuilder.voxel_scale / 2.0f,
+                noise_levels[cell_x + voxel_x, cell_z + voxel_z] + LevelBuilder.voxel_scale,
                 cell_pos.y + voxel_z * LevelBuilder.voxel_scale);
     }
 
@@ -310,7 +325,7 @@ public class Level
                         continue;
                     if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Floor) {
                         AddCubeQuads(x, y + noise_levels[Math.Min(x + boundary_width, voxel_width - 1), Math.Min(z + boundary_width, voxel_height - 1)],
-                                z, 1, 1 / LevelBuilder.voxel_scale, floor_vertices, floor_triangles, floor_uvs, true);
+                                z, 1, 1, floor_vertices, floor_triangles, floor_uvs, true);
                     }
                     if (voxels_with_boundary[x + boundary_width, y, z + boundary_width] == Voxel.Wall) {
                         if (IsCubeVisible(x + boundary_width, y, z + boundary_width))

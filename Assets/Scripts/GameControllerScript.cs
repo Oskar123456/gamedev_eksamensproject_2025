@@ -57,6 +57,7 @@ public class GameControllerScript : MonoBehaviour
     bool minimap_maximized = false;
     Vector2 minimap_img_pos;
 
+    LevelType current_level_type;
     Level current_level;
 
     void Awake()
@@ -65,8 +66,10 @@ public class GameControllerScript : MonoBehaviour
             GameState.player_stats = new PlayerStats();
         player_stats = GameState.player_stats;
 
+        current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
         GameState.level_num++;
-        GameState.level_name = "Level " + GameState.level_num.ToString();
+        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level_num.ToString() + ")"
+            : "Cistern (" + GameState.level_num.ToString() + ")";
     }
 
     void Start()
@@ -103,7 +106,7 @@ public class GameControllerScript : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R)) {
-            StartNew();
+            SceneManager.LoadScene("Town");
         }
 
         if (Input.GetKeyDown(KeyCode.Tab)) {
@@ -126,7 +129,8 @@ public class GameControllerScript : MonoBehaviour
     {
         Clean();
 
-        current_level = PCG.New(LevelType.Medieval);
+        current_level = PCG.New(current_level_type);
+
         UpdateMiniMapCam();
         WarpPlayerToStart();
 

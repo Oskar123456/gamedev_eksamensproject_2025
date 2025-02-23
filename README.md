@@ -4,6 +4,13 @@
 
 ## Instructions
 
+### Controls
+
+  - R : [R]estart
+  - WASD : Movement
+  - Shift : Sprint
+  - Space : Jump
+
 ## Third Party Assets List
 
   - [skyboxes](https://assetstore.unity.com/packages/2d/textures-materials/sky/3-skyboxes-25142)
