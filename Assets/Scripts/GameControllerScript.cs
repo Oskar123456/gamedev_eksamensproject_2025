@@ -64,6 +64,8 @@ public class GameControllerScript : MonoBehaviour
         if (GameState.player_stats == null)
             GameState.player_stats = new PlayerStats();
         player_stats = GameState.player_stats;
+
+        GameState.level_num++;
         GameState.level_name = "Level " + GameState.level_num.ToString();
     }
 

@@ -138,7 +138,7 @@ public class PCGScript : MonoBehaviour
                     continue;
 
                 Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
-                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
+                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]) * GameState.level_num);
 
                 Vector3 enemy_pos = Vector3.zero;
                 RaycastHit hit_info;

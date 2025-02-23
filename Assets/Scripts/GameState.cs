@@ -31,6 +31,6 @@ public class GameState
 {
     public static PlayerStats player_stats;
     public static string level_name;
-    public static int level_num = 1;
+    public static int level_num = 0;
     public static int difficulty = 0;
 }
