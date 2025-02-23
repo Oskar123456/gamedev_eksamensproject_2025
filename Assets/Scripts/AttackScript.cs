@@ -52,6 +52,10 @@ public class AttackScript : MonoBehaviour
         left_t_fraction = 1;
 
         GameObject effect = Instantiate(attack_effect_prefab, transform.position, attacker.transform.rotation * Quaternion.Euler(yaw, pitch, roll));
+        effect.transform.localScale = effect.transform.localScale * stats.scale;
+        ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+        var main = ps.main;
+        main.simulationSpeed = stats.base_duration / stats.duration;
 
         origin = attacker.transform.position;
         transform.rotation = attacker.transform.rotation;
@@ -97,10 +101,11 @@ public class AttackStats
 {
     public EntityType entity_type = EntityType.None;
     public int damage = 1;
-    public float duration = 0.25f;
-    public float hit_effect_duration = 0.25f;
-    public float cooldown = 0.25f;
-    public float created_t, damage_begin_t = 0.05f, damage_end_t = 0.25f;
+    public float base_duration = 0.25f;
+    public float duration = 0.4f;
+    public float hit_effect_duration = 0.4f;
+    public float cooldown = 0.4f;
+    public float created_t, damage_begin_t = 0.08f, damage_end_t = 0.4f;
     public float scale = 1;
     public float range = 1;
 
@@ -108,8 +113,9 @@ public class AttackStats
     {
         AttackStats ats = new AttackStats();
         ats.entity_type = EntityType.Enemy;
-        ats.damage = 1;
+        ats.damage = 2;
         ats.duration = 1;
+        ats.base_duration = 1;
         ats.hit_effect_duration = 0.25f;
         ats.cooldown = 1;
         ats.damage_begin_t = 0.50f;

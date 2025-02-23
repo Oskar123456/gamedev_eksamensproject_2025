@@ -84,7 +84,6 @@ public class PlayerScript : MonoBehaviour
         halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
         /* test initialization */
-        stats.attack_stats.scale = 2;
     }
 
     void Update()
@@ -117,25 +116,9 @@ public class PlayerScript : MonoBehaviour
             char_ctrl.Move(trf.forward * move_speed * Time.deltaTime * incl_forward);
         }
         char_ctrl.Move(Vector3.down * fall_speed * Time.deltaTime);
-
-        // cam.Update(trf.position + new Vector3(0, trf.localScale.y / 2, 0), trf.hasChanged);
-        // cam_minimap.Update(cam.rotation, trf.position, trf.hasChanged);
     }
 
-    void PollKeys()
-    {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            // cam.rot_targ += 90;
-        }
-
-        if (Input.GetKey(KeyCode.PageUp)) {
-            // cam.angle += 0.1f;
-        }
-
-        if (Input.GetKey(KeyCode.PageDown)) {
-            // cam.angle -= 0.1f;
-        }
-    }
+    void PollKeys() { }
 
     void PollMouse()
     {
