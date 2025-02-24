@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Version: 3
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_LightLayerMask: 1
   m_RenderingLayers: 1
   m_CustomShadowLayers: 0
@@ -465,6 +465,8 @@ MonoBehaviour:
   - {fileID: 656738128642586521, guid: 06fd7c531ec4a4116840bdd7b7d90d3e, type: 3}
   water_volume: {fileID: 5886901375169290645, guid: a9b23ed8e1019e162943ddbce4ef277d, type: 3}
   water_tile: {fileID: 7441012078150593743, guid: 6dceaee8f3a06fec2be2020efd8d937b, type: 3}
+  water_arch: {fileID: 4463566038210007903, guid: 49a5f24a081cbbc44bd23d76c2869723, type: 3}
+  water_wall: {fileID: 6229247520373792897, guid: 3ad7a1cffb2556547a8b7e60fd320431, type: 3}
   maze_width: 3
   maze_height: 3
   level: 0
@@ -512,7 +514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &1918983735
 Light:
   m_ObjectHideFlags: 0

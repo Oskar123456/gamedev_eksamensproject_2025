@@ -29,6 +29,7 @@ public class AttackScript : MonoBehaviour
 
     AttackStats stats;
     GameObject attacker;
+    string attacker_tag;
 
     float alive_t, left_t, left_t_fraction;
 
@@ -50,6 +51,8 @@ public class AttackScript : MonoBehaviour
         stats.created_t = Time.time;
         left_t = stats.duration;
         left_t_fraction = 1;
+
+        attacker_tag = attacker.tag;
 
         GameObject effect = Instantiate(attack_effect_prefab, transform.position, attacker.transform.rotation * Quaternion.Euler(yaw, pitch, roll));
         effect.transform.localScale = effect.transform.localScale * stats.scale;
@@ -77,7 +80,7 @@ public class AttackScript : MonoBehaviour
         if (alive_t < stats.damage_begin_t || alive_t > stats.damage_end_t)
             return;
 
-        if (collider.gameObject == attacker) {
+        if (collider.gameObject?.tag == attacker_tag) {
             return;
         }
 

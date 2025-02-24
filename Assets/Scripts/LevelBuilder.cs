@@ -312,7 +312,7 @@ public class Level
     {
         Vector2 cell_pos = MapCellToWorldOffset(cell_x, cell_z);
         return new Vector3(cell_pos.x + voxel_x * LevelBuilder.voxel_scale,
-                noise_levels[cell_x + voxel_x, cell_z + voxel_z] + LevelBuilder.voxel_scale,
+                noise_levels[cell_x + voxel_x, cell_z + voxel_z] + LevelBuilder.voxel_scale * 1.5f,
                 cell_pos.y + voxel_z * LevelBuilder.voxel_scale);
     }
 

@@ -36,6 +36,8 @@ public class PCGScript : MonoBehaviour
     public List<GameObject> medieval_enemy_prefabs;
     public GameObject water_volume;
     public GameObject water_tile;
+    public GameObject water_arch;
+    public GameObject water_wall;
 
     public int maze_width, maze_height;
 
@@ -46,19 +48,17 @@ public class PCGScript : MonoBehaviour
     List<GameObject> decos = new List<GameObject>();
     GameObject level_container;
 
-    // NavMeshSurface nms;
     GameObject player;
     Transform player_trf;
     PlayerStats player_stats;
-    int max_lights = 128, light_count = 0;
 
+    int max_lights = 128, light_count = 0;
     System.Random rng = new System.Random();
     public int level, difficulty;
     Maze maze;
 
     void Awake()
     {
-        // nms = GetComponent<NavMeshSurface>();
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_stats = GameState.player_stats;
@@ -88,37 +88,31 @@ public class PCGScript : MonoBehaviour
 
         level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
 
-        // for (int x = 0; x < maze.width; x++) {
-        //     for (int z = 0; z < maze.height; z++) {
-        //         if (!maze.walls[z, x])
-        //             continue;
-        //         Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
-        //         Vector3 pos = new Vector3((voxel_offs.x) * LevelBuilder.voxel_scale, -1, (voxel_offs.y) * LevelBuilder.voxel_scale);
-        //         Debug.Log(pos.ToString());
-        //         GameObject wv = Instantiate(water_volume, pos, Quaternion.identity, level_container.GetComponent<Transform>());
-        //         GameObject wt = Instantiate(water_tile, Vector3.zero, Quaternion.identity, wv.transform);
-        //         wv.transform.localScale = new Vector3(level.column_widths[x] * LevelBuilder.voxel_scale, 1, level.row_heights[z] * LevelBuilder.voxel_scale);
-        //     }
-        // }
-
-        // TODO: refactor
         if (level_type == LevelType.Water) {
-            for (int x = -1; x < (level.voxel_width / 50 + 1) * LevelBuilder.voxel_scale; x++) {
-                for (int z = -1; z < (level.voxel_height / 50 + 1) * LevelBuilder.voxel_scale; z++) {
-                    GameObject wv = Instantiate(water_volume, new Vector3(x * 50, LevelBuilder.voxel_scale - 1, z * 50), Quaternion.identity, level_container.GetComponent<Transform>());
-                }
-            }
+            AddWater(level, level_type);
         }
-
-
-        // GameObject wv = Instantiate(water_volume, new Vector3(0, -1, 0), Quaternion.identity, level_container.GetComponent<Transform>());
-        // wv.transform.localScale = new Vector3(level.maze.width * LevelBuilder.voxel_scale, 1, level.maze.height * LevelBuilder.voxel_scale);
-
         AddPillars(level, level_type);
         Decorate(level, level_type);
         AddEnemies(level, level_type);
 
         return level;
+    }
+
+    void AddWater(Level level, LevelType level_type)
+    {
+        for (int x = -1; x < (level.voxel_width / 50 + 1) * LevelBuilder.voxel_scale; x++) {
+            for (int z = -1; z < (level.voxel_height / 50 + 1) * LevelBuilder.voxel_scale; z++) {
+                GameObject wv = Instantiate(water_volume, new Vector3(x * 50, LevelBuilder.voxel_scale - 1, z * 50),
+                        Quaternion.identity, level_container.GetComponent<Transform>());
+
+                for (int i = 0; i < 25; i++) {
+                    wv = Instantiate(water_arch, new Vector3((x + 1) * 50 - 0.5f, LevelBuilder.voxel_scale - 3, z * 50 + 2 * i),
+                            Quaternion.Euler(0, 90, 0), level_container.GetComponent<Transform>());
+                    wv = Instantiate(water_arch, new Vector3(x * 50 + 2 * i, LevelBuilder.voxel_scale - 3, (z + 1) * 50 - 0.5f),
+                            Quaternion.identity, level_container.GetComponent<Transform>());
+                }
+            }
+        }
     }
 
     void AddPillars(Level level, LevelType level_type)
@@ -137,7 +131,7 @@ public class PCGScript : MonoBehaviour
 
                     level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
                     pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
-                    pos.y -= LevelBuilder.voxel_scale;
+                    pos.y -= LevelBuilder.voxel_scale * 2;
 
                     GameObject pillar  = medieval_pillar_prefabs[Utils.rng.Next() % medieval_pillar_prefabs.Count];
                     GameObject new_pillar = Instantiate(pillar, pos, Quaternion.identity, level_container.transform);
@@ -145,7 +139,7 @@ public class PCGScript : MonoBehaviour
                     new_pillar.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 1.66f,
                             LevelBuilder.voxel_scale * 1.66f, LevelBuilder.voxel_scale * 1.66f);
 
-                    Vector3 poss = new Vector3(pos.x - 1, pos.y + (level.level_voxel_height - 1) * LevelBuilder.voxel_scale / 2, pos.z + new_pillar.transform.localScale.z / 2);
+                    Vector3 poss = new Vector3(pos.x - 1, pos.y + (level.level_voxel_height - 1) * LevelBuilder.voxel_scale / 2, pos.z);
                     Vector3 posw = new Vector3(pos.x, pos.y + (level.level_voxel_height - 1) * LevelBuilder.voxel_scale / 2, pos.z - 1);
 
                     if (light_count < max_lights && Utils.rng.Next() % 2 == 0) {
