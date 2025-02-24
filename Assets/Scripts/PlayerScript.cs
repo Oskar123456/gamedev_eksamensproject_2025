@@ -327,5 +327,9 @@ public class PlayerStats
     public int hp = 100, hp_max = 100;
     public AttackStats attack_stats;
 
+    public float fall_init = -0.5f;
+    public float fall_gravity = 30f;
+    public float fall_max = 1f;
+
     public PlayerStats() { attack_stats = new AttackStats(); attack_stats.entity_type = EntityType.Player; }
 }
