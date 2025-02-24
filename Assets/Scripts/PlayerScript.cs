@@ -50,13 +50,13 @@ public class PlayerScript : MonoBehaviour
     public float move_speed_normal = 10.0f;
     public float move_speed_sprint = 30.0f;
 
-    public float fall_init = -35;
-    public float fall_acc = 3.0f;
-    public float fall_forward_acc = 0.03f;
-    public float fall_speed = 0;
+    public float fall_init = -0.5f;
+    public float fall_gravity = 30f;
+    public float fall_max = 1f;
+    float fall_speed = 0f;
+    float fall_begin_t;
 
     public float attack_time = 0.25f;
-    public float attack_time_dmg_lo = 0.3f, attack_time_dmg_hi = 0.5f;
     float attack_time_left = 0;
     int attack_num = 0;
     /* animator parameters */
@@ -115,7 +115,8 @@ public class PlayerScript : MonoBehaviour
             float incl_forward = (did_move_when_jump) ? 1 : 0;
             char_ctrl.Move(trf.forward * move_speed * Time.deltaTime * incl_forward);
         }
-        char_ctrl.Move(Vector3.down * fall_speed * Time.deltaTime);
+
+        char_ctrl.Move(Vector3.down * fall_speed);
     }
 
     void PollKeys() { }
@@ -221,18 +222,27 @@ public class PlayerScript : MonoBehaviour
 
     void UpdateFall()
     {
-        if (char_ctrl.isGrounded) {
-            is_falling = false;
-            fall_speed = fall_acc;
-            animator.SetFloat("fall_speed", fall_speed * anim_mul_fall_speed);
-            return;
+        if (!is_falling) {
+            char_ctrl.Move(Vector3.down * 0.01f);
+            if (!char_ctrl.isGrounded) {
+                is_falling = true;
+                fall_begin_t = Time.time;
+                return;
+            } else {
+                char_ctrl.Move(Vector3.up * 0.01f);
+            }
+        } else {
+            float fall_total_t = Time.time - fall_begin_t;
+            float fall_done_t = fall_total_t - Time.deltaTime;
+            float fall_since_last_frame = fall_gravity * (fall_total_t * fall_total_t * fall_total_t - fall_done_t * fall_done_t * fall_done_t);
+            fall_speed += fall_since_last_frame;
+            fall_speed = MathF.Min(fall_speed, fall_max);
         }
 
-        is_falling = true;
-
-        fall_speed += fall_acc;
-        animator.SetFloat("fall_speed", fall_speed * anim_mul_fall_speed);
-        move_speed = Math.Max(move_speed - fall_forward_acc, 0);
+        if (char_ctrl.isGrounded) {
+            is_falling = false;
+            fall_speed = 0.01f;
+        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
@@ -266,9 +276,8 @@ public class PlayerScript : MonoBehaviour
         }
 
         else if (is_falling) {
-            animator.SetFloat("fall_speed", anim_mul_fall_speed * fall_speed);
-            if (fall_speed > 20.0f) { animator.Play("JumpAir"); }
-            else if (fall_speed < -30.0f) { animator.Play("JumpStart"); }
+            if (fall_speed > 0.1f) { animator.Play("JumpAir"); }
+            else if (fall_speed < fall_init / 5) { animator.Play("JumpStart"); }
             else if (fall_speed < 0.0f) { animator.Play("JumpUp"); }
         }
 
