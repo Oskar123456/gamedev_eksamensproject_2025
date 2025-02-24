@@ -100,8 +100,8 @@ public class PCGScript : MonoBehaviour
 
     void AddWater(Level level, LevelType level_type)
     {
-        for (int x = -1; x < (level.voxel_width / 50 + 1) * LevelBuilder.voxel_scale; x++) {
-            for (int z = -1; z < (level.voxel_height / 50 + 1) * LevelBuilder.voxel_scale; z++) {
+        for (int x = 0; x < (level.voxel_width * LevelBuilder.voxel_scale + 49) / 50; x++) {
+            for (int z = 0; z < (level.voxel_height * LevelBuilder.voxel_scale + 49) / 50; z++) {
                 GameObject wv = Instantiate(water_volume, new Vector3(x * 50, LevelBuilder.voxel_scale - 1, z * 50),
                         Quaternion.identity, level_container.GetComponent<Transform>());
 
