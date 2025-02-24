@@ -62,15 +62,17 @@ public class GameControllerScript : MonoBehaviour
 
     void Awake()
     {
-        if (GameState.player_stats == null)
-            GameState.player_stats = new PlayerStats();
+        player = GameObject.Find("Player");
+        player_trf = player.GetComponent<Transform>();
+        player_char_ctrl = player.GetComponent<CharacterController>();
+
         player_stats = GameState.player_stats;
 
         current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
-        // current_level_type = LevelType.Medieval;
-        GameState.level_num++;
-        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level_num.ToString() + ")"
-            : "Cistern (" + GameState.level_num.ToString() + ")";
+
+        GameState.level++;
+        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
+            : "Cistern (" + GameState.level.ToString() + ")";
     }
 
     void Start()
@@ -88,10 +90,6 @@ public class GameControllerScript : MonoBehaviour
         minimap_cam.orthographic = true;
         minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
-        player = GameObject.Find("Player");
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
-
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), player_trf);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         player_marker_trf = player_marker.GetComponent<Transform>();
@@ -101,13 +99,13 @@ public class GameControllerScript : MonoBehaviour
 
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
         Debug.Log("finish: " + current_level.GetFinishPosition().ToString());
-
+        Debug.Log("player stats: " + player_stats.hp);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R)) {
-            SceneManager.LoadScene("Town");
+            OnContinue();
         }
 
         if (Input.GetKeyDown(KeyCode.Tab)) {
@@ -170,6 +168,19 @@ public class GameControllerScript : MonoBehaviour
     }
 
     void OnPortal(Portal p)
+    {
+        if (p == Portal.Exit)
+            OnContinue();
+    }
+
+    void OnDeath()
+    {
+        Debug.Log("DEAD DEAD DEAD");
+        GameState.Reset();
+        SceneManager.LoadScene("Town");
+    }
+
+    void OnContinue()
     {
         SceneManager.LoadScene("Town");
     }

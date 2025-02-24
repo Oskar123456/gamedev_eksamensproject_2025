@@ -116,13 +116,13 @@ public class AttackStats
     {
         AttackStats ats = new AttackStats();
         ats.entity_type = EntityType.Enemy;
-        ats.damage = 2;
-        ats.duration = 1;
+        ats.damage = 1 * GameState.level;
+        ats.duration = 1 - (MathF.Min(0.8f, MathF.Sqrt(GameState.level) * 0.1f));
         ats.base_duration = 1;
-        ats.hit_effect_duration = 0.25f;
-        ats.cooldown = 1;
-        ats.damage_begin_t = 0.50f;
-        ats.damage_end_t = 0.70f;
+        ats.hit_effect_duration = ats.duration / 4.0f;
+        ats.cooldown = ats.duration;
+        ats.damage_begin_t = ats.duration * 0.7f;
+        ats.damage_end_t = ats.duration;
         ats.range = 5f;
         ats.scale = 1;
         return ats;

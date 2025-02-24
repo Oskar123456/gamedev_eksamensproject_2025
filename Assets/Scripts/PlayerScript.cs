@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
 {
     public GameObject basic_attack;
 
+    GameObject game_controller;
     PlayerStats stats;
     CharacterController char_ctrl;
     Animator animator;
@@ -67,10 +68,12 @@ public class PlayerScript : MonoBehaviour
     Vector3 halfway_up_vec;
     Queue<GameObject> attacks = new Queue<GameObject>();
 
+    void Awake()
+    {
+    }
+
     void Start()
     {
-        stats = GameState.player_stats;
-
         trf = GetComponent<Transform>();
         char_ctrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -83,11 +86,19 @@ public class PlayerScript : MonoBehaviour
         UpdateCam();
         halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
+        stats = GameState.player_stats;
+        game_controller = GameObject.Find("GameController");
+
         /* test initialization */
     }
 
     void Update()
     {
+        if (stats.hp < 1) {
+            game_controller.SendMessage("OnDeath");
+            return;
+        }
+
         UpdateFall();
         PollKeys();
         PollMouse();
@@ -304,7 +315,7 @@ public class PlayerScript : MonoBehaviour
     void OnHit(AttackHitInfo hit_info)
     {
         TakeDamage(hit_info.stats.damage);
-        char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 0.5f));
+        char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 1.0f));
     }
 
     void OnEnemyCollision(EnemyStats enemy_stats)
@@ -320,16 +331,4 @@ public class PlayerScript : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
     }
-}
-
-public class PlayerStats
-{
-    public int hp = 100, hp_max = 100;
-    public AttackStats attack_stats;
-
-    public float fall_init = -0.5f;
-    public float fall_gravity = 30f;
-    public float fall_max = 1f;
-
-    public PlayerStats() { attack_stats = new AttackStats(); attack_stats.entity_type = EntityType.Player; }
 }

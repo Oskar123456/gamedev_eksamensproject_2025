@@ -66,6 +66,7 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         if (stats.hp < 1) {
+            GameState.player_stats.AddXp(GameState.level);
             death_effect = Instantiate(death_effect_prefab, new Vector3(transform.position.x,
                         transform.position.y + (transform.localScale.y / 2.0f), transform.position.z), Quaternion.identity, transform);
             Destroy(death_effect, death_effect_delete_t);
@@ -134,7 +135,7 @@ public class EnemyScript : MonoBehaviour
             nma.ResetPath();
 
         nma.enabled = false;
-        transform.position = transform.position + (hit_info.normal * 0.4f);
+        transform.position = transform.position + (hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 1.0f));
         nma.enabled = true;
     }
 

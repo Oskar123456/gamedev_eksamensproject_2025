@@ -44,9 +44,12 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void Awake()
     {
-        if (GameState.player_stats == null)
-            GameState.player_stats = new PlayerStats();
+        player = GameObject.Find("Player");
+        player_trf = player.GetComponent<Transform>();
+        player_char_ctrl = player.GetComponent<CharacterController>();
+
         player_stats = GameState.player_stats;
+
         GameState.level_name = "Town";
     }
 
@@ -117,7 +120,14 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void OnPortal(Portal p)
     {
-        if (p == Portal.Exit)
+        if (p == Portal.Exit) {
             SceneManager.LoadScene("Arena");
+        }
+    }
+
+    void OnDeath()
+    {
+        GameState.Reset();
+        SceneManager.LoadScene("Town");
     }
 }

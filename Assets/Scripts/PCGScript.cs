@@ -191,7 +191,7 @@ public class PCGScript : MonoBehaviour
                     continue;
 
                 Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
-                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z])) + GameState.level_num;
+                int n_enemies = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z])) + GameState.level;
 
                 Vector3 enemy_pos = Vector3.zero;
                 RaycastHit hit_info;
@@ -210,8 +210,8 @@ public class PCGScript : MonoBehaviour
                         GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
                         GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
                         EnemyStats es = new_enemy.GetComponent<EnemyStats>();
-                        es.hp_max = 2 * GameState.level_num;
-                        es.hp = 2 * GameState.level_num;
+                        es.hp_max = 2 * GameState.level;
+                        es.hp = 2 * GameState.level;
 
                         // new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f);
                     }

@@ -3,20 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class WaterScript : MonoBehaviour
 {
+    GameObject game_controller;
+
     void Start()
     {
-
-    }
-
-    void Update()
-    {
-
+        game_controller = GameObject.Find("GameController");
     }
 
     void OnTriggerEnter(Collider coll)
     {
         if (coll.gameObject.CompareTag("Player")) {
-            SceneManager.LoadScene("Town");
+            game_controller.SendMessage("OnDeath");
         }
     }
 }

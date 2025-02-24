@@ -552,9 +552,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5906814200418423915}
+  - component: {fileID: 5564385363061296924}
+  - component: {fileID: -3650785397806734304}
   - component: {fileID: 5336615579196186634}
   - component: {fileID: 2624797399502729401}
-  - component: {fileID: 5564385363061296924}
   - component: {fileID: 5997726135023729026}
   - component: {fileID: 8233342517843872286}
   m_Layer: 0
@@ -583,6 +584,45 @@ Transform:
   - {fileID: 1154869571840155806}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5564385363061296924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994390678672761593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa345ff63aaaaac8a651da222ef4806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basic_attack: {fileID: 7914326041902401196, guid: db6b93ffbc81de7388aa89137b168642, type: 3}
+  stats: {fileID: 0}
+  camera_dist: 0.6
+  scroll_speed: 0.5
+  move_speed_normal: 10
+  move_speed_sprint: 30
+  fall_init: -0.6
+  fall_gravity: 75
+  fall_max: 5
+  attack_time: 0.35
+--- !u!114 &-3650785397806734304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994390678672761593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a7482fddcf47e5cbb7af9d1f787e740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 100
+  hp_max: 100
+  fall_init: -0.75
+  fall_gravity: 75
+  fall_max: 5
 --- !u!95 &5336615579196186634
 Animator:
   serializedVersion: 7
@@ -630,27 +670,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.98, z: 0}
---- !u!114 &5564385363061296924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994390678672761593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa345ff63aaaaac8a651da222ef4806, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basic_attack: {fileID: 7914326041902401196, guid: db6b93ffbc81de7388aa89137b168642, type: 3}
-  camera_dist: 0.6
-  scroll_speed: 0.5
-  move_speed_normal: 10
-  move_speed_sprint: 30
-  fall_init: -0.5
-  fall_gravity: 75
-  fall_max: 1
-  attack_time: 0.35
 --- !u!82 &5997726135023729026
 AudioSource:
   m_ObjectHideFlags: 0
