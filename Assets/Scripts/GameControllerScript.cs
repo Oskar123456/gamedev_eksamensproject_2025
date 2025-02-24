@@ -66,8 +66,8 @@ public class GameControllerScript : MonoBehaviour
             GameState.player_stats = new PlayerStats();
         player_stats = GameState.player_stats;
 
-        // current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
-        current_level_type = LevelType.Medieval;
+        current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
+        // current_level_type = LevelType.Medieval;
         GameState.level_num++;
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level_num.ToString() + ")"
             : "Cistern (" + GameState.level_num.ToString() + ")";
