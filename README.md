@@ -10,6 +10,7 @@
   - WASD : Movement
   - Shift : Sprint
   - Space : Jump
+  - Mouse Buttons: Attack / Cast Spell
   - Tab : [Maximize] Minimap
 
 ## Third Party Assets List
