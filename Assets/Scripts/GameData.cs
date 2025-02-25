@@ -37,3 +37,4 @@ public class GameData : MonoBehaviour
 
 public enum EntityType { None, Player, Enemy }
 public enum EnemyType { Ghost }
+public enum Spell { ForceField, Blizzard }

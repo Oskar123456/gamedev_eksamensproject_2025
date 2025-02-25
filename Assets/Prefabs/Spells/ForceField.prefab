@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 4
+  cooldown: 4
 --- !u!1001 &6881790258032427098
 PrefabInstance:
   m_ObjectHideFlags: 0

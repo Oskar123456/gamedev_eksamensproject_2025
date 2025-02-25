@@ -78,7 +78,9 @@ public class PlayerScript : MonoBehaviour
     float fall_begin_t;
 
     float attack_time_left = 0;
+    float cast_time_t = 2.33f;
     float cast_time_left = 0;
+    float cast_cooldown_left = 0;
     float hit_time_left = 0;
     /* animator parameters */
     float anim_mul_move_speed = 0.25f;
@@ -185,7 +187,7 @@ public class PlayerScript : MonoBehaviour
 
     void PollAttack()
     {
-        if (!is_attacking) {
+        if (!is_attacking && !is_casting) {
             if (Input.GetMouseButton(0)) {
                 attack_time_left = current_attack_stats.duration / attack_stats.speed;
                 did_attack = true;
@@ -211,18 +213,24 @@ public class PlayerScript : MonoBehaviour
 
     void PollSpell()
     {
-        if (!is_casting) {
+        if (!is_casting && cast_cooldown_left <= 0) {
             if (Input.GetMouseButton(1)) {
-                cast_time_left = 4;
+                cast_time_left = cast_time_t / spell_stats.speed;
+                cast_cooldown_left = current_spell_stats.cooldown;
+                animator.SetFloat("cast_speed", spell_stats.speed);
+
+                CastSpell();
+
                 did_cast = true;
-                animator.SetFloat("cast_speed", 1 / (current_spell_stats.duration / spell_stats.speed));
-                GameObject spell_obj = Instantiate(current_spell, transform.position + halfway_up_vec, transform.rotation, transform);
+                is_casting = true;
+                return;
             } else {
                 return;
             }
         }
 
         cast_time_left -= Time.deltaTime;
+        cast_cooldown_left -= Time.deltaTime;
         if (cast_time_left > 0) {
             is_casting = true;
         } else {
@@ -234,7 +242,7 @@ public class PlayerScript : MonoBehaviour
 
     void PollMovement()
     {
-        if (!did_fall && (is_falling || is_attacking)) {
+        if (!did_fall && (is_falling || is_attacking || is_casting)) {
             return;
         }
 
@@ -432,5 +440,14 @@ public class PlayerScript : MonoBehaviour
         attack_stats.damage += 1;
         attack_stats.speed += 0.05f;
         attack_stats.scale += 0.05f;
+    }
+
+    void CastSpell()
+    {
+        GameObject spell_obj = Instantiate(current_spell, transform.position + halfway_up_vec, transform.rotation);
+        SpellBaseStats bsrc = spell_obj.GetComponent<SpellBaseStats>();
+        bsrc.SetStats(spell_stats);
+        bsrc.SetCaster(gameObject);
+        bsrc.SetCasterEntityType(EntityType.Player);
     }
 }
