@@ -19,10 +19,16 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public GameObject basic_attack;
+    public GameObject current_attack;
+    public GameObject current_spell;
+
+    AttackBaseStats current_attack_stats;
+    AttackBaseStats current_spell_stats;
+
+    PlayerStats stats;
+    AttackStats attack_stats;
 
     GameObject game_controller;
-    PlayerStats stats;
     CharacterController char_ctrl;
     Animator animator;
     Transform trf;
@@ -97,10 +103,13 @@ public class PlayerScript : MonoBehaviour
         UpdateCam();
         halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
-        stats = GameState.player_stats;
         game_controller = GameObject.Find("GameController");
 
         audio_source = GetComponent<AudioSource>();
+
+        stats = GetComponent<PlayerStats>();
+        attack_stats = GetComponent<AttackStats>();
+        current_attack_stats = current_attack.GetComponent<AttackBaseStats>();
 
         /* test initialization */
     }
@@ -159,14 +168,15 @@ public class PlayerScript : MonoBehaviour
         if (!is_attacking) {
             if (Input.GetMouseButton(0)) {
                 attack_num = 1; // rng.Next() % 2;
-                attack_time_left = stats.attack_stats.cooldown;
+                attack_time_left = current_attack_stats.duration / attack_stats.speed;
                 did_attack = true;
-                animator.SetFloat("attack_speed", 1 / stats.attack_stats.duration);
+                animator.SetFloat("attack_speed", 1 / (current_attack_stats.duration / attack_stats.speed));
 
-                GameObject attack_obj = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation);
+                GameObject attack_obj = Instantiate(current_attack, transform.position + halfway_up_vec, transform.rotation);
                 AttackScript ascr = attack_obj.GetComponent<AttackScript>();
-                ascr.SetStats(stats.attack_stats);
+                ascr.SetStats(attack_stats);
                 ascr.SetAttacker(gameObject);
+                ascr.SetAttackerEntityType(EntityType.Player);
             } else {
                 return;
             }
@@ -354,7 +364,7 @@ public class PlayerScript : MonoBehaviour
 
     void AddXp(int n)
     {
-        if (GameState.player_stats.AddXp(n)) {
+        if (stats.AddXp(n)) {
             OnLevelUp();
         }
     }
@@ -365,8 +375,10 @@ public class PlayerScript : MonoBehaviour
         level_up_effect = Instantiate(level_up_prefab, transform.position + halfway_up_vec, Quaternion.identity);
         level_up_effect.transform.localScale = level_up_effect.transform.localScale * level_up_anim_scale;
         Destroy(level_up_effect, level_up_anim_t);
-        // level_up_audio_source.clip = sounds[0];
-        // level_up_audio_source.Play();
         Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+
+        attack_stats.damage += 1;
+        attack_stats.speed += 0.05f;
+        attack_stats.scale += 0.05f;
     }
 }

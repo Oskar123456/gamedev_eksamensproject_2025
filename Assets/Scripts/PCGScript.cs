@@ -61,7 +61,6 @@ public class PCGScript : MonoBehaviour
     {
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
-        player_stats = GameState.player_stats;
 
         level_builder = GetComponent<LevelBuilder>();
     }

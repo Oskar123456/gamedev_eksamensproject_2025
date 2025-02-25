@@ -31,7 +31,6 @@ public class GameControllerScriptMenu : MonoBehaviour
     GameObject player;
     Transform player_trf;
     CharacterController player_char_ctrl;
-    PlayerStats player_stats;
 
     GameObject player_marker;
     Transform player_marker_trf;
@@ -49,9 +48,8 @@ public class GameControllerScriptMenu : MonoBehaviour
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
 
-        player_stats = GameState.player_stats;
-
         GameState.level_name = "Town";
+        GameState.SetPlayerStats();
     }
 
     void Start()
@@ -122,13 +120,13 @@ public class GameControllerScriptMenu : MonoBehaviour
     void OnPortal(Portal p)
     {
         if (p == Portal.Exit) {
+            GameState.SavePlayerStats();
             SceneManager.LoadScene("Arena");
         }
     }
 
     void OnDeath()
     {
-        GameState.Reset();
         SceneManager.LoadScene("Town");
     }
 }

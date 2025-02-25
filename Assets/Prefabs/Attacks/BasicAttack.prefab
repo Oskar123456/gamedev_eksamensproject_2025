@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6992321206059785670}
   - component: {fileID: 5853085401920734028}
   - component: {fileID: 5845446798962500844}
+  - component: {fileID: -8414411899959863520}
   - component: {fileID: 2103595294580563174}
   m_Layer: 0
-  m_Name: BasicAttack 2 1
+  m_Name: BasicAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,10 +132,37 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
   yaw: 0
   pitch: 0
-  roll: -10
+  roll: 0
+  yaw_effect: 0
+  pitch_effect: 0
+  roll_effect: -10
   offset_forward: 0
   offset_right: 0
   offset_up: 0
+  offset_forward_effect: 0
+  offset_right_effect: 0
+  offset_up_effect: 0
+--- !u!114 &-8414411899959863520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914326041902401196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f1719daa7542687a8f05e37d7ecb94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  base_duration: 0.25
+  cooldown: 0.4
+  duration: 0.4
+  hit_effect_duration: 0.4
+  damage_begin_t: 0.08
+  damage_end_t: 0.4
+  scale: 1
+  range: 1
 --- !u!82 &2103595294580563174
 AudioSource:
   m_ObjectHideFlags: 0

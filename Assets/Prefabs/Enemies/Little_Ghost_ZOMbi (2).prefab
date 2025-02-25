@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 1865648906448759017}
   - component: {fileID: 2857821448628084827}
   - component: {fileID: 7875499744540649002}
+  - component: {fileID: 6555051303628351523}
   m_Layer: 0
   m_Name: Little_Ghost_ZOMbi (2)
   m_TagString: Enemy
@@ -207,9 +208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12297fd0ef2072fab06daafb576c00f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basic_attack: {fileID: 7920122493874507242, guid: eafc8c9255fe8f352951ebc55cadf942, type: 3}
+  basic_attack: {fileID: 2140377860948176698, guid: 868720e33316577fd93d07513abfeffa, type: 3}
   death_effect_prefab: {fileID: 8510626178070770473, guid: 080aea53684e48292b3019050ec62823, type: 3}
   healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
+  enemy_type: 0
+  death_effect_delete_t: 1
+  death_effect_scale: 1
 --- !u!114 &7875499744540649002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +229,22 @@ MonoBehaviour:
   hp: 5
   hp_max: 5
   collision_damage: 1
+--- !u!114 &6555051303628351523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142617328346450365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985aa542a6c74222da26379b5fd5a906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity_type: 2
+  damage: 1
+  speed: 1
+  scale: 1
 --- !u!1 &2581113889530394746
 GameObject:
   m_ObjectHideFlags: 0

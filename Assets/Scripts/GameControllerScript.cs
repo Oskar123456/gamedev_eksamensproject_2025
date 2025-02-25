@@ -43,7 +43,6 @@ public class GameControllerScript : MonoBehaviour
     GameObject player;
     Transform player_trf;
     CharacterController player_char_ctrl;
-    PlayerStats player_stats;
 
     GameObject player_marker;
     Transform player_marker_trf;
@@ -67,13 +66,12 @@ public class GameControllerScript : MonoBehaviour
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
 
-        player_stats = GameState.player_stats;
-
         current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
 
         GameState.level++;
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
             : "Cistern (" + GameState.level.ToString() + ")";
+        GameState.SetPlayerStats();
     }
 
     void Start()
@@ -176,12 +174,12 @@ public class GameControllerScript : MonoBehaviour
     void OnDeath()
     {
         Debug.Log("DEAD DEAD DEAD");
-        GameState.Reset();
         SceneManager.LoadScene("Town");
     }
 
     void OnContinue()
     {
+        GameState.SavePlayerStats();
         SceneManager.LoadScene("Town");
     }
 }
