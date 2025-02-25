@@ -306,7 +306,7 @@ public class PlayerScript : MonoBehaviour
         else if (is_falling) {
             if (fall_speed > 0.1f) { animator.Play("JumpAir"); }
             else if (fall_speed < fall_init / 5) { animator.Play("JumpStart"); }
-            else if (fall_speed < 0.0f) { animator.Play("JumpUp"); }
+            else if (fall_speed < -0.2f) { animator.Play("JumpUp"); }
         }
 
         else {
