@@ -20,6 +20,8 @@ public class PlayerStats : MonoBehaviour
     public int hp = 100, hp_max = 100;
     public int xp = 0, xp_max = 1;
     public int level = 1;
+    public bool invulnerable;
+    public float stun_lock = 0.15f;
 
     public bool AddXp(int xp)
     {

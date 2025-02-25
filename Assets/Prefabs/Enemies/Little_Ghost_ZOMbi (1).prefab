@@ -475,7 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity_type: 2
   damage: 1
-  speed: 0.8
+  speed: 0.6
   scale: 1
 --- !u!195 &5389526629514160262
 NavMeshAgent:

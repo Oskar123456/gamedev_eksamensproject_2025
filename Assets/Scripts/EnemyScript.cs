@@ -55,6 +55,7 @@ public class EnemyScript : MonoBehaviour
     Vector3 halfway_up_vec;
     float attack_time_left;
     bool is_attacking;
+    float hit_time_left;
 
     void Start()
     {
@@ -79,6 +80,11 @@ public class EnemyScript : MonoBehaviour
 
     void Update()
     {
+        if (hit_time_left >= 0) {
+            hit_time_left -= Time.deltaTime;
+            return;
+        }
+
         float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
 
         if (dist_to_player > 20)
@@ -120,6 +126,7 @@ public class EnemyScript : MonoBehaviour
         stats.hp -= damage;
         healthbar_slider.value = (float)stats.hp / stats.hp_max;
         healthbar.SetActive(true);
+        float hit_time_left = stats.stun_lock;
     }
 
     void FixHealthBar()
@@ -132,6 +139,16 @@ public class EnemyScript : MonoBehaviour
 
     void OnTriggerEnter(Collider collider) { }
     void OnCollisionEnter(Collision collision) { }
+
+    void OnPush(Vector3 normal)
+    {
+        if (nma.enabled)
+            nma.ResetPath();
+
+        nma.enabled = false;
+        transform.position = transform.position + normal;
+        nma.enabled = true;
+    }
 
     void OnHit(AttackHitInfo hit_info)
     {

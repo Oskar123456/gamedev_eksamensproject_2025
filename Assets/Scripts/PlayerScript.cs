@@ -23,10 +23,11 @@ public class PlayerScript : MonoBehaviour
     public GameObject current_spell;
 
     AttackBaseStats current_attack_stats;
-    AttackBaseStats current_spell_stats;
+    SpellBaseStats current_spell_stats;
 
     PlayerStats stats;
     AttackStats attack_stats;
+    SpellStats spell_stats;
 
     GameObject game_controller;
     CharacterController char_ctrl;
@@ -60,13 +61,15 @@ public class PlayerScript : MonoBehaviour
     bool did_sprint = false;
     bool did_land = false;
     bool did_attack = false;
+    bool did_cast = false;
     bool is_attacking = false;
+    bool is_casting = false;
     bool was_hit = false;
     bool is_falling = false;
     /* state parameters */
     float move_speed;
-    public float move_speed_normal = 10.0f;
-    public float move_speed_sprint = 30.0f;
+    public float move_speed_normal = 8.0f;
+    public float move_speed_sprint = 20.0f;
 
     public float fall_init = -0.5f;
     public float fall_gravity = 30f;
@@ -74,9 +77,9 @@ public class PlayerScript : MonoBehaviour
     float fall_speed = 0f;
     float fall_begin_t;
 
-    public float attack_time = 0.25f;
     float attack_time_left = 0;
-    int attack_num = 0;
+    float cast_time_left = 0;
+    float hit_time_left = 0;
     /* animator parameters */
     float anim_mul_move_speed = 0.25f;
     float anim_mul_fall_speed = 0.15f;
@@ -117,6 +120,9 @@ public class PlayerScript : MonoBehaviour
         attack_stats = GetComponent<AttackStats>();
         current_attack_stats = current_attack.GetComponent<AttackBaseStats>();
 
+        spell_stats = GetComponent<SpellStats>();
+        current_spell_stats = current_spell.GetComponent<SpellBaseStats>();
+
         /* test initialization */
     }
 
@@ -128,11 +134,14 @@ public class PlayerScript : MonoBehaviour
         }
 
         UpdateFall();
-        PollKeys();
-        PollMouse();
-        PollMovement();
-        PollAttack();
-        PollMisc();
+        if (hit_time_left <= 0) {
+            PollKeys();
+            PollMouse();
+            PollMovement();
+            PollAttack();
+            PollSpell();
+            PollMisc();
+        }
 
         if (effect_blink_left_t > 0) {
             effect_blink_left_t -= Time.deltaTime;
@@ -178,7 +187,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (!is_attacking) {
             if (Input.GetMouseButton(0)) {
-                attack_num = 1; // rng.Next() % 2;
                 attack_time_left = current_attack_stats.duration / attack_stats.speed;
                 did_attack = true;
                 animator.SetFloat("attack_speed", 1 / (current_attack_stats.duration / attack_stats.speed));
@@ -198,6 +206,27 @@ public class PlayerScript : MonoBehaviour
             is_attacking = true;
         } else {
             is_attacking = false;
+        }
+    }
+
+    void PollSpell()
+    {
+        if (!is_casting) {
+            if (Input.GetMouseButton(1)) {
+                cast_time_left = 4;
+                did_cast = true;
+                animator.SetFloat("cast_speed", 1 / (current_spell_stats.duration / spell_stats.speed));
+                GameObject spell_obj = Instantiate(current_spell, transform.position + halfway_up_vec, transform.rotation, transform);
+            } else {
+                return;
+            }
+        }
+
+        cast_time_left -= Time.deltaTime;
+        if (cast_time_left > 0) {
+            is_casting = true;
+        } else {
+            is_casting = false;
         }
     }
 
@@ -307,11 +336,17 @@ public class PlayerScript : MonoBehaviour
     {
         // AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (is_attacking) {
-            if (attack_num == 0)
-                animator.Play("Attack01");
-            if (attack_num == 1)
-                animator.Play("Attack04");
+        if (hit_time_left > 0) {
+            hit_time_left -= Time.deltaTime;
+            animator.Play("GetHit");
+        }
+
+        else if (is_attacking) {
+            animator.Play("Attack04");
+        }
+
+        else if (is_casting) {
+            animator.Play("VictoryStart");
         }
 
         else if (did_move) {
@@ -343,6 +378,7 @@ public class PlayerScript : MonoBehaviour
         did_land = false;
         did_attack = false;
         did_sprint = false;
+        was_hit = false;
     }
 
     void UpdateCam()
@@ -364,10 +400,14 @@ public class PlayerScript : MonoBehaviour
 
     void TakeDamage(int damage)
     {
+        if (stats.invulnerable)
+            return;
         audio_source.clip = sounds[3];
         audio_source.Play();
         stats.hp -= damage;
         effect_blink_left_t = effect_blink_t;
+        was_hit = true;
+        hit_time_left = stats.stun_lock;
     }
 
     void OnTriggerEnter(Collider collider)
