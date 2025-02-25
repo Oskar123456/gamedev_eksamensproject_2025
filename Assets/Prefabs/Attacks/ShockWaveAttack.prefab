@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5, y: 5, z: 6.97}
-  m_LocalScale: {x: 1, y: 0.01, z: 4}
+  m_LocalScale: {x: 0.75, y: 0.01, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -113,10 +113,10 @@ MonoBehaviour:
   yaw_effect: 0
   pitch_effect: 0
   roll_effect: 90
-  offset_forward: 2.5
+  offset_forward: 3.3
   offset_right: 0
   offset_up: 0
-  offset_forward_effect: -1.2
+  offset_forward_effect: -2
   offset_right_effect: 0
   offset_up_effect: 0
 --- !u!114 &-8717756154877254582
