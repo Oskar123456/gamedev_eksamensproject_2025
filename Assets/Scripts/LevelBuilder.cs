@@ -39,8 +39,6 @@ public class LevelBuilder : MonoBehaviour
     public GameObject medieval_wall_skeleton;
     public GameObject medieval_floor_skeleton;
     public GameObject medieval_ceiling_skeleton;
-    public GameObject water_volume;
-    public GameObject water_tile;
 
     public int medieval_level_height = 5;
     public int medieval_wall_width = 5;
@@ -54,7 +52,6 @@ public class LevelBuilder : MonoBehaviour
     public void Init()
     {
         voxel_scale = scale;
-        // water_volume = GameObject.Find("WaterVolume");
     }
 
     public Level Medieval(Maze maze, Transform parent, LevelType level_type)

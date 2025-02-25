@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d283fd04d036625aaa2742ee54f4acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level_up_prefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef, type: 3}
+  level_up_anim_t: 0.35
+  level_up_anim_scale: 1
+  player_base_attack_damage: 1
+  player_base_attack_speed: 0.4
+  player_base_attack_scale: 1
+  player_base_hp_max: 100

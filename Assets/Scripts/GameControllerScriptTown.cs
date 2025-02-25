@@ -47,6 +47,7 @@ public class GameControllerScriptMenu : MonoBehaviour
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
+        GameState.player_trf = player_trf;
 
         player_stats = GameState.player_stats;
 

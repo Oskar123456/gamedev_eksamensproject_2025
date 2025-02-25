@@ -36,8 +36,16 @@ public class PlayerScript : MonoBehaviour
     float cam_trf_angle_x, cam_trf_angle_y;
     Vector3 cam_trf_dist = new Vector3(-10, 16.85f, -10);
 
+    public List<AudioClip> sounds;
+    AudioSource audio_source;
+    public GameObject level_up_prefab;
+    public float level_up_anim_t;
+    public float level_up_anim_scale;
+    GameObject level_up_effect;
+
     /* state flags */
     bool did_move = false;
+    bool did_fall = false;
     bool did_move_when_jump = false;
     bool did_jump = false;
     bool did_sprint = false;
@@ -88,6 +96,8 @@ public class PlayerScript : MonoBehaviour
 
         stats = GameState.player_stats;
         game_controller = GameObject.Find("GameController");
+
+        audio_source = GetComponent<AudioSource>();
 
         /* test initialization */
     }
@@ -171,8 +181,7 @@ public class PlayerScript : MonoBehaviour
 
     void PollMovement()
     {
-        if (is_falling || is_attacking) {
-            // Debug.Log("PollMovement: is_falling");
+        if (!did_fall && (is_falling || is_attacking)) {
             return;
         }
 
@@ -218,6 +227,8 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Space)) {
             did_jump = true;
             fall_speed = fall_init;
+            audio_source.clip = sounds[1];
+            audio_source.Play();
             if (did_move) {
                 did_move_when_jump = true;
             } else {
@@ -236,6 +247,7 @@ public class PlayerScript : MonoBehaviour
         if (!is_falling) {
             char_ctrl.Move(Vector3.down * 0.01f);
             if (!char_ctrl.isGrounded) {
+                did_fall = true;
                 is_falling = true;
                 fall_begin_t = Time.time;
                 return;
@@ -253,6 +265,8 @@ public class PlayerScript : MonoBehaviour
         if (char_ctrl.isGrounded) {
             is_falling = false;
             fall_speed = 0.01f;
+            audio_source.clip = sounds[2];
+            audio_source.Play();
         }
     }
 
@@ -300,6 +314,7 @@ public class PlayerScript : MonoBehaviour
     void ResetState()
     {
         did_jump = false;
+        did_fall = false;
         did_move = false;
         did_land = false;
         did_attack = false;
@@ -325,10 +340,22 @@ public class PlayerScript : MonoBehaviour
 
     void TakeDamage(int damage)
     {
+        audio_source.clip = sounds[3];
+        audio_source.Play();
         stats.hp -= damage;
     }
 
     void OnTriggerEnter(Collider collider)
     {
+    }
+
+    void OnLevelUp()
+    {
+        Debug.Log("OnLevelUp");
+        level_up_effect = Instantiate(level_up_prefab, transform.position + halfway_up_vec, Quaternion.identity);
+        level_up_effect.transform.localScale = level_up_effect.transform.localScale * level_up_anim_scale;
+        Destroy(level_up_effect, level_up_anim_t);
+        audio_source.clip = sounds[0];
+        audio_source.Play();
     }
 }

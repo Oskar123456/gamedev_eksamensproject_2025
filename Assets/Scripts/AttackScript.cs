@@ -21,8 +21,11 @@ public class AttackScript : MonoBehaviour
 {
     public GameObject attack_effect_prefab;
     public GameObject hit_effect_prefab;
+    public List<AudioClip> sounds;
     public float yaw, pitch, roll;
     public float offset_forward, offset_right, offset_up;
+
+    AudioSource audio_source;
 
     Vector3 origin, position, end_position;
     Quaternion rotation, end_rotation;
@@ -44,6 +47,7 @@ public class AttackScript : MonoBehaviour
     void Awake()
     {
         was_damaged = new List<GameObject>();
+        audio_source = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -68,6 +72,9 @@ public class AttackScript : MonoBehaviour
 
         Destroy(effect, stats.duration);
         Destroy(gameObject, stats.duration);
+
+        audio_source.clip = sounds[0];
+        audio_source.Play();
     }
 
     void Update()
@@ -97,6 +104,9 @@ public class AttackScript : MonoBehaviour
         Destroy(hit_effect, stats.hit_effect_duration);
 
         collider.SendMessage("OnHit", new AttackHitInfo(stats, Time.time, normal), SendMessageOptions.DontRequireReceiver);
+
+        audio_source.clip = sounds[1];
+        audio_source.Play();
     }
 }
 

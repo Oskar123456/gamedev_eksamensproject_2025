@@ -29,6 +29,7 @@
   - [stone pillars](https://assetstore.unity.com/packages/3d/environments/occult-stone-pillars-281009)
   - [ancient clay jug](https://assetstore.unity.com/packages/3d/props/interior/ancient-clay-jug-ornate-ceramic-vase-298044)
   - [Water](https://assetstore.unity.com/packages/vfx/shaders/urp-stylized-water-shader-proto-series-187485)
+  - [RPG Sounds](https://assetstore.unity.com/packages/audio/sound-fx/rpg-essentials-sound-effects-free-227708)
 
 ## TODO:
 

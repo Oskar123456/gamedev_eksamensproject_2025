@@ -373,7 +373,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7870002306659917723}
   - component: {fileID: 906067927961532832}
-  - component: {fileID: 1119799521368576278}
   - component: {fileID: 5306886990268653940}
   - component: {fileID: 7156336936712735962}
   - component: {fileID: 5389526629514160262}
@@ -428,28 +427,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &1119799521368576278
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6393203089805348888}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4277936243970900915, guid: 9ad131497dd2d1545b6c35e7cc732b35, type: 3}
 --- !u!114 &5306886990268653940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +442,8 @@ MonoBehaviour:
   basic_attack: {fileID: 7920122493874507242, guid: eafc8c9255fe8f352951ebc55cadf942, type: 3}
   death_effect_prefab: {fileID: 8510626178070770473, guid: 080aea53684e48292b3019050ec62823, type: 3}
   healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
+  death_effect_delete_t: 1
+  death_effect_scale: 1
 --- !u!114 &7156336936712735962
 MonoBehaviour:
   m_ObjectHideFlags: 0

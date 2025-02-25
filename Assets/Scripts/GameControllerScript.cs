@@ -65,6 +65,7 @@ public class GameControllerScript : MonoBehaviour
         player = GameObject.Find("Player");
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
+        GameState.player_trf = player_trf;
 
         player_stats = GameState.player_stats;
 
@@ -99,7 +100,6 @@ public class GameControllerScript : MonoBehaviour
 
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
         Debug.Log("finish: " + current_level.GetFinishPosition().ToString());
-        Debug.Log("player stats: " + player_stats.hp);
     }
 
     void Update()

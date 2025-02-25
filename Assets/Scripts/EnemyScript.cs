@@ -22,6 +22,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyScript : MonoBehaviour
 {
     public GameObject basic_attack;

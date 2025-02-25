@@ -31,10 +31,17 @@ public class GameState : MonoBehaviour
 {
     public static GameState Instance;
 
+    public static Transform player_trf;
+
     public static PlayerStats player_stats;
     public static string level_name;
     public static int level = 0;
     public static int difficulty = 0;
+
+    public int player_base_attack_damage = 1;
+    public float player_base_attack_speed = 0.4f;
+    public float player_base_attack_scale = 1f;
+    public int player_base_hp_max = 100;
 
     void Awake()
     {
@@ -46,6 +53,11 @@ public class GameState : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         player_stats = new PlayerStats();
+        player_stats.attack_stats.damage = player_base_attack_damage;
+        player_stats.attack_stats.duration = player_base_attack_damage;
+        player_stats.attack_stats.scale = player_base_attack_damage;
+        player_stats.hp_max = player_base_hp_max;
+        player_stats.Sync();
     }
 
     public static void Reset()
