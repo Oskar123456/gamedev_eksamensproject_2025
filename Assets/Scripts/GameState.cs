@@ -33,12 +33,16 @@ public class GameState : MonoBehaviour
 
     public static Transform player_trf;
 
+    static PlayerStatsInternal player_stats_default;
     static PlayerStats player_stats;
     static AttackStats player_attack_stats;
+    static AttackStatsInternal player_attack_stats_default;
 
     public static string level_name;
     public static int level = 0;
     public static int difficulty = 0;
+
+    public static bool has_died;
 
     void Awake()
     {
@@ -56,12 +60,12 @@ public class GameState : MonoBehaviour
         player_stats.level = 1;
         player_attack_stats.entity_type = EntityType.Player;
 
+        SaveDefaultPlayerStats();
         SavePlayerStats();
     }
 
     void Start()
     {
-        SavePlayerStats();
     }
 
     public static void Reset()
@@ -69,6 +73,7 @@ public class GameState : MonoBehaviour
         level_name = "";
         level = 0;
         difficulty = 0;
+        SetPlayerStatsToDefault();
     }
 
     public static void SavePlayerStats()
@@ -104,4 +109,71 @@ public class GameState : MonoBehaviour
         p_as.speed = player_attack_stats.speed;
         p_as.scale = player_attack_stats.scale;
     }
+
+    public static void SetPlayerStatsToDefault()
+    {
+        GameObject p = GameObject.Find("Player");
+        PlayerStats p_s = p.GetComponent<PlayerStats>();
+        AttackStats p_as = p.GetComponent<AttackStats>();
+
+        p_s.level = player_stats_default.level;
+        p_s.hp = player_stats_default.hp;
+        p_s.hp_max = player_stats_default.hp_max;
+        p_s.xp = player_stats_default.xp;
+        p_s.xp_max = player_stats_default.xp_max;
+
+        p_as.entity_type = EntityType.Player;
+        p_as.damage = player_attack_stats_default.damage;
+        p_as.speed = player_attack_stats_default.speed;
+        p_as.scale = player_attack_stats_default.scale;
+
+        player_stats.level = p_s.level;
+        player_stats.hp = p_s.hp;
+        player_stats.hp_max = p_s.hp_max;
+        player_stats.xp = p_s.xp;
+        player_stats.xp_max = p_s.xp_max;
+
+        player_attack_stats.entity_type = EntityType.Player;
+        player_attack_stats.damage = p_as.damage;
+        player_attack_stats.speed = p_as.speed;
+        player_attack_stats.scale = p_as.scale;
+    }
+
+    public static void SaveDefaultPlayerStats()
+    {
+        player_stats_default = new PlayerStatsInternal();
+        player_attack_stats_default = new AttackStatsInternal();
+
+        GameObject p = GameObject.Find("Player");
+        PlayerStats p_s = p.GetComponent<PlayerStats>();
+        AttackStats p_as = p.GetComponent<AttackStats>();
+
+        player_stats_default.level = p_s.level;
+        player_stats_default.hp = p_s.hp;
+        player_stats_default.hp_max = p_s.hp_max;
+        player_stats_default.xp = p_s.xp;
+        player_stats_default.xp_max = p_s.xp_max;
+
+        player_attack_stats_default.entity_type = EntityType.Player;
+        player_attack_stats_default.damage = p_as.damage;
+        player_attack_stats_default.speed = p_as.speed;
+        player_attack_stats_default.scale = p_as.scale;
+    }
+}
+
+class PlayerStatsInternal
+{
+    public int hp = 100, hp_max = 100;
+    public int xp = 0, xp_max = 1;
+    public int level = 1;
+    public bool invulnerable;
+    public float stun_lock = 0.15f;
+}
+
+public class AttackStatsInternal
+{
+    public EntityType entity_type;
+    public int damage;
+    public float speed;
+    public float scale;
 }

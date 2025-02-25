@@ -34,6 +34,13 @@ public class Buff : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        // if (collider.gameObject.tag == "Attack") {
+        //     AttackScript ascr = collider.gameObject.GetComponent<AttackScript>();
+        //     if (ascr.GetAttacker().tag == "Enemy") {
+        //         Destroy(collider.gameObject);
+        //     }
+        // }
+
         if (collider.gameObject.tag != "Enemy") {
             return;
         }

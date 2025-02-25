@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4405944608868173792}
   m_Layer: 0
   m_Name: ShockWaveAttack
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   cooldown: 1
   duration: 1
   hit_effect_duration: 0.4
-  damage_begin_t: 0.4
+  damage_begin_t: 0.3
   damage_end_t: 0.6
   scale: 1
   range: 5
