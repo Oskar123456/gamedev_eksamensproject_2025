@@ -48,6 +48,8 @@ public class EnemyScript : MonoBehaviour
     float nav_update_t = 0.1f;
     float nav_update_t_left;
     /* combat */
+    GameObject attack_go;
+
     EnemyStats stats;
     AttackStats attack_stats;
     AttackBaseStats attack_base_stats;
@@ -123,6 +125,7 @@ public class EnemyScript : MonoBehaviour
 
     void TakeDamage(int damage)
     {
+        Destroy(attack_go);
         stats.hp -= damage;
         healthbar_slider.value = (float)stats.hp / stats.hp_max;
         healthbar.SetActive(true);
@@ -186,9 +189,9 @@ public class EnemyScript : MonoBehaviour
             normal.y = 0;
             transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, normal);
 
-            GameObject attack_obj = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation, transform);
+            attack_go = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation, transform);
 
-            AttackScript ascr = attack_obj.GetComponent<AttackScript>();
+            AttackScript ascr = attack_go.GetComponent<AttackScript>();
             ascr.SetStats(attack_stats);
             ascr.SetAttacker(gameObject);
             ascr.SetAttackerEntityType(EntityType.Enemy);
@@ -199,7 +202,7 @@ public class EnemyScript : MonoBehaviour
     {
         stats.hp += GameState.level * 5;
         stats.hp_max += GameState.level * 5;
-        attack_stats.damage += GameState.level;
+        attack_stats.damage += GameState.level * 3;
         attack_stats.speed += GameState.level * 0.05f;
         attack_stats.scale += GameState.level * 0.05f;
     }

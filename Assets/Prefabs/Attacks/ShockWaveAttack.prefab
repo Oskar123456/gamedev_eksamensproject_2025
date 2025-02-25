@@ -116,7 +116,7 @@ MonoBehaviour:
   offset_forward: 2.5
   offset_right: 0
   offset_up: 0
-  offset_forward_effect: 0
+  offset_forward_effect: -1.2
   offset_right_effect: 0
   offset_up_effect: 0
 --- !u!114 &-8717756154877254582

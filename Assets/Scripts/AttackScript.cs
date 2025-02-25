@@ -73,9 +73,13 @@ public class AttackScript : MonoBehaviour
 
         attacker_tag = attacker.tag;
 
-        GameObject effect = Instantiate(attack_effect_prefab, transform.position,
-                attacker.transform.rotation * Quaternion.Euler(yaw_effect, pitch_effect, roll_effect));
-        effect.transform.localScale = effect.transform.localScale * base_stats.scale;
+        position = transform.position + offset_forward_effect * attacker.transform.forward
+            + offset_up_effect * attacker.transform.up + offset_right_effect * attacker.transform.right;
+        GameObject effect = Instantiate(attack_effect_prefab, position, attacker.transform.rotation * Quaternion.Euler(yaw_effect, pitch_effect, roll_effect), transform);
+
+        effect.transform.localScale = new Vector3(effect.transform.localScale.x * base_stats.scale / MathF.Max(transform.localScale.x, 1),
+                effect.transform.localScale.y * base_stats.scale / MathF.Max(transform.localScale.y, 1),
+                effect.transform.localScale.z * base_stats.scale / MathF.Max(transform.localScale.z, 1));
 
         ParticleSystem ps = effect.GetComponent<ParticleSystem>();
         var main = ps.main;

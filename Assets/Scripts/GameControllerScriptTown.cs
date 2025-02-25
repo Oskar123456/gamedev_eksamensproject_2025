@@ -69,7 +69,7 @@ public class GameControllerScriptMenu : MonoBehaviour
         player_marker_trf = player_marker.GetComponent<Transform>();
         finish_marker_trf = finish_marker.GetComponent<Transform>();
 
-        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos, Quaternion.identity, transform);
+        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up, Quaternion.identity, transform);
         portal_exit.GetComponent<Transform>().localScale *= 4.0f;
 
         finish_marker_trf.position = new Vector3(finish_pos.x, 290, finish_pos.z);
