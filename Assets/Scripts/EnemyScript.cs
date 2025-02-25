@@ -39,7 +39,8 @@ public class EnemyScript : MonoBehaviour
 
     /* effects */
     GameObject death_effect;
-    float death_effect_delete_t = 0.6f;
+    public float death_effect_delete_t = 1f;
+    public float death_effect_scale = 1f;
 
     float nav_update_t = 0.1f;
     float nav_update_t_left;
@@ -67,8 +68,8 @@ public class EnemyScript : MonoBehaviour
     {
         if (stats.hp < 1) {
             GameState.player_stats.AddXp(GameState.level);
-            death_effect = Instantiate(death_effect_prefab, new Vector3(transform.position.x,
-                        transform.position.y + (transform.localScale.y / 2.0f), transform.position.z), Quaternion.identity, transform);
+            death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
+            death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
             Destroy(death_effect, death_effect_delete_t);
             Destroy(gameObject);
             return;
