@@ -466,7 +466,8 @@ PrefabInstance:
       propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3650785397806734304, guid: 0855a4ad272267c978ac42d89422e7af, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -554,7 +555,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2048514675077854580, guid: 0d4c9edeb60bbea4ab74a994ae4c7f42, type: 3}
       propertyPath: m_Name
-      value: UI 2
+      value: UI
       objectReference: {fileID: 0}
     - target: {fileID: 2559401233208239537, guid: 0d4c9edeb60bbea4ab74a994ae4c7f42, type: 3}
       propertyPath: m_AnchorMax.x
@@ -642,6 +643,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562439504593364171, guid: 0d4c9edeb60bbea4ab74a994ae4c7f42, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8030676362575823334, guid: 0d4c9edeb60bbea4ab74a994ae4c7f42, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256075366883232702, guid: 0d4c9edeb60bbea4ab74a994ae4c7f42, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

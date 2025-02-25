@@ -553,7 +553,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5906814200418423915}
   - component: {fileID: 5564385363061296924}
-  - component: {fileID: -3650785397806734304}
   - component: {fileID: 5336615579196186634}
   - component: {fileID: 2624797399502729401}
   - component: {fileID: 5997726135023729026}
@@ -600,10 +599,12 @@ MonoBehaviour:
   camera_dist: 0.6
   scroll_speed: 0.5
   sounds:
-  - {fileID: 8300000, guid: 8ff2a2d7e79f81c40ac447512f879374, type: 3}
+  - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
   - {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
   - {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
   - {fileID: 8300000, guid: df7087e4d8a8bb546bc08ce68632903f, type: 3}
+  level_up_audio_prefab: {fileID: 7201156227621268438, guid: c58445f7f05a04c0f8c26a87f3caf383, type: 3}
+  level_up_text_prefab: {fileID: 7759828847315582701, guid: 09c3f77702d4130c1b2bb478e2d99d8c, type: 3}
   level_up_prefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef, type: 3}
   level_up_anim_t: 0.35
   level_up_anim_scale: 1
@@ -613,24 +614,6 @@ MonoBehaviour:
   fall_gravity: 75
   fall_max: 5
   attack_time: 0.35
---- !u!114 &-3650785397806734304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994390678672761593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a7482fddcf47e5cbb7af9d1f787e740, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  level_up_prefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef, type: 3}
-  hp: 100
-  hp_max: 100
-  xp: 0
-  xp_max: 1
-  level: 1
 --- !u!95 &5336615579196186634
 Animator:
   serializedVersion: 7

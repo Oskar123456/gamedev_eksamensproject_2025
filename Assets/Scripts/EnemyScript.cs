@@ -70,7 +70,7 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         if (stats.hp < 1) {
-            GameState.player_stats.AddXp(GameState.level);
+            player.SendMessage("AddXp", GameState.level);
             death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
             death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
             Destroy(death_effect, death_effect_delete_t);

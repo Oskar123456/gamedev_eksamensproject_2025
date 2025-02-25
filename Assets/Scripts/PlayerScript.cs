@@ -38,6 +38,9 @@ public class PlayerScript : MonoBehaviour
 
     public List<AudioClip> sounds;
     AudioSource audio_source;
+
+    public GameObject level_up_audio_prefab;
+    public GameObject level_up_text_prefab;
     public GameObject level_up_prefab;
     public float level_up_anim_t;
     public float level_up_anim_scale;
@@ -349,13 +352,21 @@ public class PlayerScript : MonoBehaviour
     {
     }
 
+    void AddXp(int n)
+    {
+        if (GameState.player_stats.AddXp(n)) {
+            OnLevelUp();
+        }
+    }
+
     void OnLevelUp()
     {
-        Debug.Log("OnLevelUp");
+        Instantiate(level_up_audio_prefab, transform.position + halfway_up_vec, Quaternion.identity);
         level_up_effect = Instantiate(level_up_prefab, transform.position + halfway_up_vec, Quaternion.identity);
         level_up_effect.transform.localScale = level_up_effect.transform.localScale * level_up_anim_scale;
         Destroy(level_up_effect, level_up_anim_t);
-        audio_source.clip = sounds[0];
-        audio_source.Play();
+        // level_up_audio_source.clip = sounds[0];
+        // level_up_audio_source.Play();
+        Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
     }
 }

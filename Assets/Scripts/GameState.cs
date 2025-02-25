@@ -52,6 +52,7 @@ public class GameState : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
         player_stats = new PlayerStats();
         player_stats.attack_stats.damage = player_base_attack_damage;
         player_stats.attack_stats.duration = player_base_attack_damage;
@@ -63,6 +64,7 @@ public class GameState : MonoBehaviour
     public static void Reset()
     {
         player_stats = new PlayerStats();
+
         level_name = "";
         level = 0;
         difficulty = 0;
