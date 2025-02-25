@@ -243,7 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity_type: 2
   damage: 1
-  speed: 1
+  speed: 0.8
   scale: 1
 --- !u!1 &2581113889530394746
 GameObject:

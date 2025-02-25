@@ -136,8 +136,8 @@ MonoBehaviour:
   cooldown: 1
   duration: 1
   hit_effect_duration: 0.4
-  damage_begin_t: 0.6
-  damage_end_t: 0.7
+  damage_begin_t: 0.4
+  damage_end_t: 0.6
   scale: 1
   range: 5
 --- !u!82 &3193938680571945932

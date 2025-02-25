@@ -104,7 +104,7 @@ public class AttackScript : MonoBehaviour
         if (alive_t < base_stats.damage_begin_t || alive_t > base_stats.damage_end_t)
             return;
 
-        if (collider.gameObject?.tag == attacker_tag) {
+        if (collider.gameObject.tag == attacker_tag) {
             return;
         }
 

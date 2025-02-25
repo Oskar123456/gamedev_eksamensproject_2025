@@ -82,8 +82,11 @@ public class PlayerScript : MonoBehaviour
     float anim_mul_fall_speed = 0.15f;
     float[] anim_attack_time = { 1.0f, 1.333f };
     /* effects */
+    Renderer renderer;
+    Color color_original;
     Vector3 halfway_up_vec;
-    Queue<GameObject> attacks = new Queue<GameObject>();
+    float effect_blink_t = 0.5f;
+    float effect_blink_left_t;
 
     void Awake()
     {
@@ -91,6 +94,9 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+        renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
+        color_original = renderer.material.color;
+
         trf = GetComponent<Transform>();
         char_ctrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -127,6 +133,11 @@ public class PlayerScript : MonoBehaviour
         PollMovement();
         PollAttack();
         PollMisc();
+
+        if (effect_blink_left_t > 0) {
+            effect_blink_left_t -= Time.deltaTime;
+            renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
+        }
 
         ChooseAnimation();
 
@@ -356,6 +367,7 @@ public class PlayerScript : MonoBehaviour
         audio_source.clip = sounds[3];
         audio_source.Play();
         stats.hp -= damage;
+        effect_blink_left_t = effect_blink_t;
     }
 
     void OnTriggerEnter(Collider collider)
