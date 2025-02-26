@@ -12,6 +12,8 @@
   - Space : Jump
   - Mouse Buttons: Attack
   - Right Mouse Button: Cast Spell
+  - Number Keys : Switch Active Attack
+  - [Left-Shift+]Number Keys : Switch Active Spell
   - Tab : [Maximize] Minimap
 
 ## Third Party Assets List
