@@ -1,37 +1,56 @@
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
+
 using Attacks;
 using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Spells
 {
     public class Buff : MonoBehaviour
     {
-        GameObject player;
-        PlayerStats player_stats;
-        AttackerStats player_attack_stats;
+        AudioSource audio_source;
+        // public List<AudioClip> sounds;
+        // public GameObject audio_hit_dummy;
+        // public GameObject hit_effect_prefab;
 
-        public float duration;
-        public bool makes_invulnerable;
+        SpellBaseStats stats;
+        CasterStats caster_stats;
 
         float created_t;
+        float alive_t, left_t, left_t_fraction;
 
         void Start()
         {
             created_t = Time.time;
 
-            player = GameObject.Find("Player");
-            player_stats = player.GetComponent<PlayerStats>();
-            player_attack_stats = player.GetComponent<AttackerStats>();
+            stats = GetComponent<SpellBaseStats>();
+            caster_stats = GetComponent<CasterStats>();
+            audio_source = GetComponent<AudioSource>();
 
-            if (makes_invulnerable)
-                player_stats.invulnerable = true;
+            caster_stats.caster.GetComponent<PlayerStats>().invulnerable = true;
+            transform.SetParent(caster_stats.caster.transform);
+            transform.position = transform.position + (Vector3.up * caster_stats.caster.transform.lossyScale.y);
         }
 
         void Update()
         {
-            if (Time.time - created_t > duration) {
+            if (Time.time - created_t > stats.duration) {
                 Destroy(gameObject);
-                if (makes_invulnerable)
-                    player_stats.invulnerable = false;
+                caster_stats.caster.GetComponent<PlayerStats>().invulnerable = false;
             }
         }
 
@@ -44,13 +63,13 @@ namespace Spells
             //     }
             // }
 
-            if (collider.gameObject.tag != "Enemy") {
-                return;
-            }
+            // if (collider.gameObject.tag != "Enemy") {
+            //     return;
+            // }
 
-            Vector3 normal = Vector3.Normalize(collider.transform.position - transform.position) * 0.4f;
+//             Vector3 normal = Vector3.Normalize(collider.transform.position - transform.position) * 0.4f;
 
-            collider.gameObject.SendMessage("OnPush", normal);
+//             collider.gameObject.SendMessage("OnPush", normal);
         }
     }
 }

@@ -31,9 +31,12 @@ namespace UI
         public float fade_in = 1;
         float fade_in_left;
 
+        void Awake()
+        {
+        }
+
         void Start()
         {
-            /* debug */
             GameObject.Find("Player").SetActive(false);
             /* level intro */
             screen_color = GameObject.Find("ScreenPanel");

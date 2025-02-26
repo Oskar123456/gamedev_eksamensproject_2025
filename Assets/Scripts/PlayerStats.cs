@@ -13,6 +13,8 @@
  * */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
@@ -22,6 +24,8 @@ public class PlayerStats : MonoBehaviour
     public int level = 1;
     public bool invulnerable;
     public float stun_lock = 0.15f;
+    public List<int> learned_attacks;
+    public List<int> learned_spells;
 
     public bool AddXp(int xp)
     {

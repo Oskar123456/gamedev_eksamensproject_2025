@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using Attacks;
 using Spells;
 using UnityEngine;
@@ -134,10 +135,12 @@ public class PlayerScript : MonoBehaviour
 
         audio_source = GetComponent<AudioSource>();
         /* UI */
-        ui_active_attack = GameObject.Find("ActiveAttack");
-        ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
-        ui_active_spell = GameObject.Find("ActiveSpell");
-        ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+        if (SceneManager.GetActiveScene().name != "Menu") {
+            ui_active_attack = GameObject.Find("ActiveAttack");
+            ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
+            ui_active_spell = GameObject.Find("ActiveSpell");
+            ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+        }
     }
 
     void Update()
@@ -486,13 +489,10 @@ public class PlayerScript : MonoBehaviour
         Image img_icon = ui_active_attack.GetComponent<Image>();
         img_icon.sprite = attack.GetComponent<AttackInfo>().icon;
 
-        Debug.Log(ui_active_attack_text);
-        Debug.Log(active_attack_info.name);
-        Debug.Log(active_attack_stats.damage);
-        Debug.Log(attack_stats.damage);
-
         ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
                 active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+
+        // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
     }
 
     void ChangeActiveSpell(GameObject spell)
@@ -506,5 +506,7 @@ public class PlayerScript : MonoBehaviour
 
         ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
                 active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
+
+        // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
     }
 }
