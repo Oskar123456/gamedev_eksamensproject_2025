@@ -195,11 +195,7 @@ public class PlayerScript : MonoBehaviour
                 did_attack = true;
                 animator.SetFloat("attack_speed", 1 / (current_attack_stats.duration / attack_stats.speed));
 
-                GameObject attack_obj = Instantiate(current_attack, transform.position + halfway_up_vec, transform.rotation);
-                AttackScript ascr = attack_obj.GetComponent<AttackScript>();
-                ascr.SetStats(attack_stats);
-                ascr.SetAttacker(gameObject);
-                ascr.SetAttackerEntityType(EntityType.Player);
+                Attack();
             } else {
                 return;
             }
@@ -220,11 +216,11 @@ public class PlayerScript : MonoBehaviour
                 cast_time_left = cast_time_t / spell_stats.speed;
                 cast_cooldown_left = current_spell_stats.cooldown;
                 animator.SetFloat("cast_speed", spell_stats.speed);
+                did_cast = true;
+                is_casting = true;
 
                 CastSpell();
 
-                did_cast = true;
-                is_casting = true;
                 return;
             } else {
                 return;
@@ -444,12 +440,27 @@ public class PlayerScript : MonoBehaviour
         attack_stats.scale += 0.05f;
     }
 
+    void Attack()
+    {
+        GameObject attack_obj = Instantiate(current_attack, transform.position, transform.rotation);
+        AttackerStats ats = attack_obj.GetComponent<AttackerStats>();
+        ats.attacker = gameObject;
+        ats.entity_type = EntityType.Player;
+        ats.attacker_tag = "Player";
+        ats.damage = attack_stats.damage;
+        ats.speed = attack_stats.speed;
+        ats.scale = attack_stats.scale;
+    }
+
     void CastSpell()
     {
-        GameObject spell_obj = Instantiate(current_spell, transform.position + halfway_up_vec, transform.rotation);
-        SpellBaseStats bsrc = spell_obj.GetComponent<SpellBaseStats>();
-        bsrc.SetStats(spell_stats);
-        bsrc.SetCaster(gameObject);
-        bsrc.SetCasterEntityType(EntityType.Player);
+        GameObject spell_obj = Instantiate(current_spell, transform.position, transform.rotation);
+        CasterStats css = spell_obj.GetComponent<CasterStats>();
+        css.caster = gameObject;
+        css.entity_type = EntityType.Player;
+        css.caster_tag = "Player";
+        css.damage = spell_stats.damage;
+        css.speed = spell_stats.speed;
+        css.scale = spell_stats.scale;
     }
 }

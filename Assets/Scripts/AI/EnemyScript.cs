@@ -189,10 +189,13 @@ namespace AI
 
                 attack_go = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation, transform);
 
-                AttackScript ascr = attack_go.GetComponent<AttackScript>();
-                ascr.SetStats(attack_stats);
-                ascr.SetAttacker(gameObject);
-                ascr.SetAttackerEntityType(EntityType.Enemy);
+                AttackerStats ats = attack_go.GetComponent<AttackerStats>();
+                ats.attacker = gameObject;
+                ats.entity_type = EntityType.Enemy;
+                ats.attacker_tag = "Enemy";
+                ats.damage = attack_stats.damage;
+                ats.speed = attack_stats.speed;
+                ats.scale = attack_stats.scale;
             }
         }
 

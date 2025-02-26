@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -8717756154877254582}
   - component: {fileID: 3193938680571945932}
   - component: {fileID: 4405944608868173792}
+  - component: {fileID: 4676333222184677114}
   m_Layer: 0
   m_Name: ShockWaveAttack
   m_TagString: Attack
@@ -107,18 +108,6 @@ MonoBehaviour:
   sounds:
   - {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   - {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
-  yaw: 0
-  pitch: 0
-  roll: 0
-  yaw_effect: 0
-  pitch_effect: 0
-  roll_effect: 90
-  offset_forward: 3.3
-  offset_right: 0
-  offset_up: 0
-  offset_forward_effect: -2
-  offset_right_effect: 0
-  offset_up_effect: 0
 --- !u!114 &-8717756154877254582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +247,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 2, z: 1.0000002}
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &4676333222184677114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140377860948176698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985aa542a6c74222da26379b5fd5a906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacker: {fileID: 0}
+  attacker_tag: 
+  entity_type: 0
+  damage: 0
+  speed: 0
+  scale: 0

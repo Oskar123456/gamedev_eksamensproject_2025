@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using Attacks;
+using Spells;
 using TMPro;
 using Unity.AI.Navigation;
 using UnityEditor;
@@ -34,10 +35,13 @@ public class GameState : MonoBehaviour
 
     public static Transform player_trf;
 
-    static PlayerStatsInternal player_stats_default;
     static PlayerStats player_stats;
     static AttackerStats player_attack_stats;
+    static CasterStats player_caster_stats;
+
+    static PlayerStatsInternal player_stats_default;
     static AttackStatsInternal player_attack_stats_default;
+    static CasterStatsInternal player_caster_stats_default;
 
     public static string level_name;
     public static int level = 0;
@@ -57,6 +61,7 @@ public class GameState : MonoBehaviour
 
         player_stats = GetComponent<PlayerStats>();
         player_attack_stats = GetComponent<AttackerStats>();
+        player_caster_stats = GetComponent<CasterStats>();
 
         player_stats.level = 1;
         player_attack_stats.entity_type = EntityType.Player;
@@ -82,6 +87,7 @@ public class GameState : MonoBehaviour
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
         AttackerStats p_as = p.GetComponent<AttackerStats>();
+        CasterStats p_cs = p.GetComponent<CasterStats>();
 
         player_stats.level = p_s.level;
         player_stats.hp = p_s.hp;
@@ -92,6 +98,10 @@ public class GameState : MonoBehaviour
         player_attack_stats.damage = p_as.damage;
         player_attack_stats.speed = p_as.speed;
         player_attack_stats.scale = p_as.scale;
+
+        player_caster_stats.damage = p_cs.damage;
+        player_caster_stats.speed = p_cs.speed;
+        player_caster_stats.scale = p_cs.scale;
     }
 
     public static void SetPlayerStats()
@@ -99,6 +109,7 @@ public class GameState : MonoBehaviour
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
         AttackerStats p_as = p.GetComponent<AttackerStats>();
+        CasterStats p_cs = p.GetComponent<CasterStats>();
 
         p_s.level = player_stats.level;
         p_s.hp = player_stats.hp;
@@ -109,6 +120,10 @@ public class GameState : MonoBehaviour
         p_as.damage = player_attack_stats.damage;
         p_as.speed = player_attack_stats.speed;
         p_as.scale = player_attack_stats.scale;
+
+        p_cs.damage = player_caster_stats.damage;
+        p_cs.speed = player_caster_stats.speed;
+        p_cs.scale = player_caster_stats.scale;
     }
 
     public static void SetPlayerStatsToDefault()
@@ -116,6 +131,7 @@ public class GameState : MonoBehaviour
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
         AttackerStats p_as = p.GetComponent<AttackerStats>();
+        CasterStats p_cs = p.GetComponent<CasterStats>();
 
         p_s.level = player_stats_default.level;
         p_s.hp = player_stats_default.hp;
@@ -138,16 +154,22 @@ public class GameState : MonoBehaviour
         player_attack_stats.damage = p_as.damage;
         player_attack_stats.speed = p_as.speed;
         player_attack_stats.scale = p_as.scale;
+
+        player_caster_stats.damage = p_cs.damage;
+        player_caster_stats.speed = p_cs.speed;
+        player_caster_stats.scale = p_cs.scale;
     }
 
     public static void SaveDefaultPlayerStats()
     {
         player_stats_default = new PlayerStatsInternal();
         player_attack_stats_default = new AttackStatsInternal();
+        player_caster_stats_default = new CasterStatsInternal();
 
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
         AttackerStats p_as = p.GetComponent<AttackerStats>();
+        CasterStats p_cs = p.GetComponent<CasterStats>();
 
         player_stats_default.level = p_s.level;
         player_stats_default.hp = p_s.hp;
@@ -159,20 +181,36 @@ public class GameState : MonoBehaviour
         player_attack_stats_default.damage = p_as.damage;
         player_attack_stats_default.speed = p_as.speed;
         player_attack_stats_default.scale = p_as.scale;
+
+        player_caster_stats_default.damage = p_cs.damage;
+        player_caster_stats_default.speed = p_cs.speed;
+        player_caster_stats_default.scale = p_cs.scale;
     }
 }
 
 class PlayerStatsInternal
 {
-    public int hp = 100, hp_max = 100;
-    public int xp = 0, xp_max = 1;
-    public int level = 1;
+    public int hp, hp_max;
+    public int xp, xp_max;
+    public int level;
     public bool invulnerable;
-    public float stun_lock = 0.15f;
+    public float stun_lock;
 }
 
 public class AttackStatsInternal
 {
+    public GameObject attacker;
+    public string attacker_tag;
+    public EntityType entity_type;
+    public int damage;
+    public float speed;
+    public float scale;
+}
+
+public class CasterStatsInternal
+{
+    public GameObject caster;
+    public string caster_tag;
     public EntityType entity_type;
     public int damage;
     public float speed;

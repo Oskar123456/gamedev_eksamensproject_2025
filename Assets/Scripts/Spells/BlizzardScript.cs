@@ -27,10 +27,8 @@ public class BlizzardScript : MonoBehaviour
     // public GameObject spell_effect_prefab;
     public GameObject hit_effect_prefab;
 
-    SpellBaseStats base_stats;
-    GameObject caster;
-    string caster_tag;
-    EntityType caster_entity_type;
+    SpellBaseStats stats;
+    CasterStats caster_stats;
 
     float created_t;
     float alive_t, left_t, left_t_fraction;
@@ -40,18 +38,26 @@ public class BlizzardScript : MonoBehaviour
     List<GameObject> was_damaged;
     List<float> was_damaged_t;
 
+    void SetStats()
+    {
+        stats.damage += caster_stats.damage;
+    }
+
     void Awake()
     {
-        base_stats = GetComponent<SpellBaseStats>();
+        stats = GetComponent<SpellBaseStats>();
+        caster_stats = GetComponent<CasterStats>();
+        audio_source = GetComponent<AudioSource>();
         was_damaged = new List<GameObject>();
         was_damaged_t = new List<float>();
-        audio_source = GetComponent<AudioSource>();
     }
 
     void Start()
     {
+        SetStats();
+
         created_t = Time.time;
-        left_t = base_stats.duration;
+        left_t = stats.duration;
         left_t_fraction = 1;
 
         RaycastHit hit_info;
@@ -63,7 +69,7 @@ public class BlizzardScript : MonoBehaviour
 
         transform.position = hit_info.point;
 
-        Destroy(gameObject, base_stats.duration);
+        Destroy(gameObject, stats.duration);
 
         audio_source.clip = sounds[0];
         audio_source.Play();
@@ -76,7 +82,7 @@ public class BlizzardScript : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.tag == base_stats.caster_tag) {
+        if (collider.gameObject.tag == caster_stats.caster_tag) {
             return;
         }
 
@@ -102,9 +108,9 @@ public class BlizzardScript : MonoBehaviour
 
         GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
         GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
-        Destroy(hit_effect, base_stats.hit_effect_duration);
+        Destroy(hit_effect, stats.hit_effect_duration);
         Destroy(hit_effect_sound, 1);
 
-        collider.SendMessage("OnHit", new AttackHitInfo(base_stats.caster_entity_type, base_stats, Time.time, Vector3.zero), SendMessageOptions.DontRequireReceiver);
+        collider.SendMessage("OnHit", new AttackHitInfo(caster_stats.entity_type, stats, Time.time, Vector3.zero), SendMessageOptions.DontRequireReceiver);
     }
 }

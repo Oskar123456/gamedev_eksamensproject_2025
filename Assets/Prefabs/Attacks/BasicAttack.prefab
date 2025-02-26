@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5845446798962500844}
   - component: {fileID: -8414411899959863520}
   - component: {fileID: 2103595294580563174}
+  - component: {fileID: -4988659526657542996}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Attack
@@ -30,13 +31,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7914326041902401196}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.08715578, w: 0.9961947}
   m_LocalPosition: {x: 10, y: 10, z: 10}
   m_LocalScale: {x: 3.6, y: 0.05, z: 3.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10}
 --- !u!33 &1898325277819011849
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -130,18 +131,6 @@ MonoBehaviour:
   sounds:
   - {fileID: 8300000, guid: 323e15cfe809e114ab92c9f4b25e8bc2, type: 3}
   - {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
-  yaw: 0
-  pitch: 0
-  roll: 0
-  yaw_effect: 0
-  pitch_effect: 0
-  roll_effect: -10
-  offset_forward: 0
-  offset_right: 0
-  offset_up: 0
-  offset_forward_effect: 0
-  offset_right_effect: 0
-  offset_up_effect: 0
 --- !u!114 &-8414411899959863520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,3 +249,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-4988659526657542996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914326041902401196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985aa542a6c74222da26379b5fd5a906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacker: {fileID: 0}
+  attacker_tag: 
+  entity_type: 0
+  damage: 0
+  speed: 0
+  scale: 0
