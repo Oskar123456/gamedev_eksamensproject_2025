@@ -616,7 +616,7 @@ MonoBehaviour:
   move_speed_sprint: 30
   fall_init: -0.6
   fall_gravity: 75
-  fall_max: 5
+  fall_max: 3.5
 --- !u!95 &5336615579196186634
 Animator:
   serializedVersion: 7
@@ -805,6 +805,8 @@ MonoBehaviour:
   stun_lock: 0.15
   learned_attacks: 0000000001000000
   learned_spells: 0000000001000000
+  active_attack: 0
+  active_spell: 0
 --- !u!114 &-515644869448004947
 MonoBehaviour:
   m_ObjectHideFlags: 0
