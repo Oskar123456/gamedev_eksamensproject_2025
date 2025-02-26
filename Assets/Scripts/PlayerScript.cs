@@ -449,8 +449,8 @@ public class PlayerScript : MonoBehaviour
         Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
 
         attack_stats.damage += 1;
-        attack_stats.speed += 0.05f;
-        attack_stats.scale += 0.05f;
+        attack_stats.speed += 0.15f;
+        attack_stats.scale += 0.15f;
 
         ChangeActiveAttack(active_attack);
         ChangeActiveSpell(active_spell);

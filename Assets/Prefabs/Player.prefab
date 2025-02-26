@@ -803,7 +803,7 @@ MonoBehaviour:
   level: 1
   invulnerable: 0
   stun_lock: 0.15
-  learned_attacks: 00000000
+  learned_attacks: 0000000001000000
   learned_spells: 0000000001000000
 --- !u!114 &-515644869448004947
 MonoBehaviour:
