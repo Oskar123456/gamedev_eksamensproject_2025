@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using Attacks;
 using TMPro;
 using Unity.AI.Navigation;
 using UnityEditor;
@@ -35,7 +36,7 @@ public class GameState : MonoBehaviour
 
     static PlayerStatsInternal player_stats_default;
     static PlayerStats player_stats;
-    static AttackStats player_attack_stats;
+    static AttackerStats player_attack_stats;
     static AttackStatsInternal player_attack_stats_default;
 
     public static string level_name;
@@ -55,7 +56,7 @@ public class GameState : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         player_stats = GetComponent<PlayerStats>();
-        player_attack_stats = GetComponent<AttackStats>();
+        player_attack_stats = GetComponent<AttackerStats>();
 
         player_stats.level = 1;
         player_attack_stats.entity_type = EntityType.Player;
@@ -80,7 +81,7 @@ public class GameState : MonoBehaviour
     {
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
-        AttackStats p_as = p.GetComponent<AttackStats>();
+        AttackerStats p_as = p.GetComponent<AttackerStats>();
 
         player_stats.level = p_s.level;
         player_stats.hp = p_s.hp;
@@ -97,7 +98,7 @@ public class GameState : MonoBehaviour
     {
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
-        AttackStats p_as = p.GetComponent<AttackStats>();
+        AttackerStats p_as = p.GetComponent<AttackerStats>();
 
         p_s.level = player_stats.level;
         p_s.hp = player_stats.hp;
@@ -114,7 +115,7 @@ public class GameState : MonoBehaviour
     {
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
-        AttackStats p_as = p.GetComponent<AttackStats>();
+        AttackerStats p_as = p.GetComponent<AttackerStats>();
 
         p_s.level = player_stats_default.level;
         p_s.hp = player_stats_default.hp;
@@ -146,7 +147,7 @@ public class GameState : MonoBehaviour
 
         GameObject p = GameObject.Find("Player");
         PlayerStats p_s = p.GetComponent<PlayerStats>();
-        AttackStats p_as = p.GetComponent<AttackStats>();
+        AttackerStats p_as = p.GetComponent<AttackerStats>();
 
         player_stats_default.level = p_s.level;
         player_stats_default.hp = p_s.hp;

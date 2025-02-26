@@ -15,6 +15,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Attacks;
+using Spells;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -26,8 +28,8 @@ public class PlayerScript : MonoBehaviour
     SpellBaseStats current_spell_stats;
 
     PlayerStats stats;
-    AttackStats attack_stats;
-    SpellStats spell_stats;
+    AttackerStats attack_stats;
+    CasterStats spell_stats;
 
     GameObject game_controller;
     CharacterController char_ctrl;
@@ -119,10 +121,10 @@ public class PlayerScript : MonoBehaviour
         audio_source = GetComponent<AudioSource>();
 
         stats = GetComponent<PlayerStats>();
-        attack_stats = GetComponent<AttackStats>();
+        attack_stats = GetComponent<AttackerStats>();
         current_attack_stats = current_attack.GetComponent<AttackBaseStats>();
 
-        spell_stats = GetComponent<SpellStats>();
+        spell_stats = GetComponent<CasterStats>();
         current_spell_stats = current_spell.GetComponent<SpellBaseStats>();
 
         /* test initialization */

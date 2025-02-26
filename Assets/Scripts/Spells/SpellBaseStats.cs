@@ -12,30 +12,30 @@
  *
  * */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellBaseStats : MonoBehaviour
+namespace Spells
 {
-    public int damage;
-    public float scale;
-    public float speed;
-    public float duration;
-    public float cooldown;
-    public float hit_effect_duration;
-
-    public EntityType caster_entity_type;
-    public string caster_tag;
-    public GameObject caster;
-
-    public void SetStats(SpellStats caster_stats)
+    public class SpellBaseStats : MonoBehaviour
     {
-        damage = damage + caster_stats.damage;
-        scale = scale * caster_stats.scale;
-    }
+        public int damage;
+        public float scale;
+        public float speed;
+        public float duration;
+        public float cooldown;
+        public float hit_effect_duration;
 
-    public void SetCasterEntityType(EntityType et) { caster_entity_type = et; }
-    public void SetCaster(GameObject a) { caster = a; caster_tag = a.tag; }
+        public EntityType caster_entity_type;
+        public string caster_tag;
+        public GameObject caster;
+
+        public void SetStats(CasterStats caster_stats)
+        {
+            damage = damage + caster_stats.damage;
+            scale = scale * caster_stats.scale;
+        }
+
+        public void SetCasterEntityType(EntityType et) { caster_entity_type = et; }
+        public void SetCaster(GameObject a) { caster = a; caster_tag = a.tag; }
+    }
 }
