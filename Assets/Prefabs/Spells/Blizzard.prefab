@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8211044258933486219}
   - component: {fileID: 2507661114643517743}
   - component: {fileID: -9064541873201731666}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Blizzard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3589852960994460264}
   m_Enabled: 0
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -292,10 +292,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6624763299230503756}
     m_Modifications:
+    - target: {fileID: 9783306273693948, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 161766660727748596, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_Name
       value: Snow AOE
       objectReference: {fileID: 0}
+    - target: {fileID: 161766660727748596, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 911693503594785049, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.125
@@ -331,6 +339,14 @@ PrefabInstance:
     - target: {fileID: 3250004757399677474, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3340405831355010171, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755427329330461547, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4055776136547584293, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalScale.x
@@ -339,6 +355,14 @@ PrefabInstance:
     - target: {fileID: 4055776136547584293, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 4076722735597955491, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113329159867422864, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4285771878599676363, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalScale.x
@@ -355,6 +379,10 @@ PrefabInstance:
     - target: {fileID: 4285771878599676363, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4285771878599676364, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6174142838767263408, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalScale.x
@@ -419,6 +447,10 @@ PrefabInstance:
     - target: {fileID: 6928458153528979022, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7351305826099865803, guid: 05ce920d629922a4eb4795ef7494ce5c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

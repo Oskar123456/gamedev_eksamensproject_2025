@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2263345342717578464}
   - component: {fileID: 1426594768346743986}
   - component: {fileID: 8261723057789934497}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StonesHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4969,7 +4969,7 @@ GameObject:
   - component: {fileID: 6769510301992631377}
   - component: {fileID: 8949361930574207042}
   - component: {fileID: 6518775104832246976}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StoneSlash
   m_TagString: Attack
   m_Icon: {fileID: 0}
@@ -9864,7 +9864,7 @@ GameObject:
   - component: {fileID: 3953376548265214544}
   - component: {fileID: 7435333660688052674}
   - component: {fileID: 2335833536880307622}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14764,7 +14764,7 @@ GameObject:
   - component: {fileID: 5456347341826510579}
   - component: {fileID: 6257171422853075135}
   - component: {fileID: 6404166855258416875}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19664,7 +19664,7 @@ GameObject:
   - component: {fileID: 5670439337408433388}
   - component: {fileID: 5282070970435964538}
   - component: {fileID: 1935705784263191420}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Stones
   m_TagString: Untagged
   m_Icon: {fileID: 0}

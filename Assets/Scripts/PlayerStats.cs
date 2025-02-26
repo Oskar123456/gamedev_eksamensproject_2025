@@ -26,6 +26,7 @@ public class PlayerStats : MonoBehaviour
     public float stun_lock = 0.15f;
     public List<int> learned_attacks;
     public List<int> learned_spells;
+    public int active_attack, active_spell;
 
     public bool AddXp(int xp)
     {

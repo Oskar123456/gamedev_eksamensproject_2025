@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8263726099211062105}
   - component: {fileID: 4637640030810330797}
   - component: {fileID: 7999864986906310440}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4902,7 +4902,7 @@ GameObject:
   - component: {fileID: 4283958575136980052}
   - component: {fileID: 2462974457310366171}
   - component: {fileID: 1504479959183460313}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9802,7 +9802,7 @@ GameObject:
   - component: {fileID: 4885102176999578094}
   - component: {fileID: 1497564525868850922}
   - component: {fileID: 6991152655574345451}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StoneHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14705,7 +14705,7 @@ GameObject:
   - component: {fileID: 5815459247339168604}
   - component: {fileID: 4066391130773718860}
   - component: {fileID: 2781714048475022908}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

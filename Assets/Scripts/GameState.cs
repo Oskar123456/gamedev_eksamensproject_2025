@@ -96,6 +96,8 @@ public class GameState : MonoBehaviour
         player_stats.xp_max = p_s.xp_max;
         player_stats.learned_attacks.InsertRange(0, p_s.learned_attacks);
         player_stats.learned_spells.InsertRange(0, p_s.learned_spells);
+        player_stats.active_attack = p_s.active_attack;
+        player_stats.active_spell = p_s.active_spell;
 
         player_attack_stats.damage = p_as.damage;
         player_attack_stats.speed = p_as.speed;
@@ -120,6 +122,8 @@ public class GameState : MonoBehaviour
         p_s.xp_max = player_stats.xp_max;
         p_s.learned_attacks.InsertRange(0, player_stats.learned_attacks);
         p_s.learned_spells.InsertRange(0, player_stats.learned_spells);
+        p_s.active_attack = player_stats.active_attack;
+        p_s.active_spell = player_stats.active_spell;
 
         p_as.damage = player_attack_stats.damage;
         p_as.speed = player_attack_stats.speed;
@@ -144,6 +148,8 @@ public class GameState : MonoBehaviour
         p_s.xp_max = player_stats_default.xp_max;
         p_s.learned_attacks.InsertRange(0, player_stats_default.learned_attacks);
         p_s.learned_spells.InsertRange(0, player_stats_default.learned_spells);
+        p_s.active_attack = player_stats_default.active_attack;
+        p_s.active_spell = player_stats_default.active_spell;
 
         p_as.entity_type = EntityType.Player;
         p_as.damage = player_attack_stats_default.damage;
@@ -186,6 +192,8 @@ public class GameState : MonoBehaviour
         player_stats_default.xp_max = p_s.xp_max;
         player_stats_default.learned_attacks.InsertRange(0, p_s.learned_attacks);
         player_stats_default.learned_spells.InsertRange(0, p_s.learned_spells);
+        player_stats_default.active_attack = p_s.active_attack;
+        player_stats_default.active_spell = p_s.active_spell;
 
         player_attack_stats_default.entity_type = EntityType.Player;
         player_attack_stats_default.damage = p_as.damage;
@@ -207,6 +215,7 @@ class PlayerStatsInternal
     public float stun_lock;
     public List<int> learned_attacks;
     public List<int> learned_spells;
+    public int active_attack, active_spell;
 }
 
 public class AttackStatsInternal

@@ -54,7 +54,7 @@ public class ActiveSpellButtonScript : MonoBehaviour
 
                 Button ability_button = ability.GetComponent<Button>();
                 ability_button.onClick.AddListener(() => {
-                        player.SendMessage("ChangeActiveSpell", GameData.spell_list[ii]);
+                        player.SendMessage("ChangeActiveSpell", ii);
                         Toggle();
                         });
 

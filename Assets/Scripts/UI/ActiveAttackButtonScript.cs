@@ -54,7 +54,7 @@ public class ActiveAttackButtonScript : MonoBehaviour
 
                 Button ability_button = ability.GetComponent<Button>();
                 ability_button.onClick.AddListener(() => {
-                        player.SendMessage("ChangeActiveAttack", GameData.attack_list[ii]);
+                        player.SendMessage("ChangeActiveAttack", ii);
                         Toggle();
                         });
 

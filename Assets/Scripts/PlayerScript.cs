@@ -140,6 +140,8 @@ public class PlayerScript : MonoBehaviour
             ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
             ui_active_spell = GameObject.Find("ActiveSpell");
             ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+            ChangeActiveAttack(stats.active_attack);
+            ChangeActiveSpell(stats.active_spell);
         }
     }
 
@@ -189,7 +191,24 @@ public class PlayerScript : MonoBehaviour
         char_ctrl.Move(Vector3.down * fall_speed);
     }
 
-    void PollKeys() { }
+    void PollKeys()
+    {
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                ChangeActiveSpell(0);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                ChangeActiveSpell(1);
+            }
+        } else {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                ChangeActiveAttack(0);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                ChangeActiveAttack(1);
+            }
+        }
+    }
 
     void PollMouse()
     {
@@ -452,8 +471,8 @@ public class PlayerScript : MonoBehaviour
         attack_stats.speed += 0.15f;
         attack_stats.scale += 0.15f;
 
-        ChangeActiveAttack(active_attack);
-        ChangeActiveSpell(active_spell);
+        ChangeActiveAttack(stats.active_attack);
+        ChangeActiveSpell(stats.active_spell);
     }
 
     void Attack()
@@ -480,14 +499,19 @@ public class PlayerScript : MonoBehaviour
         css.scale = caster_stats.scale;
     }
 
-    void ChangeActiveAttack(GameObject attack)
+    void ChangeActiveAttack(int i)
     {
-        active_attack = attack;
+        if (i >= GameData.attack_list.Count || !stats.learned_attacks.Contains(i)) {
+            return;
+        }
+
+        active_attack = GameData.attack_list[i];
         active_attack_info = active_attack.GetComponent<AttackInfo>();
         active_attack_stats = active_attack.GetComponent<AttackBaseStats>();
+        stats.active_attack = i;
 
         Image img_icon = ui_active_attack.GetComponent<Image>();
-        img_icon.sprite = attack.GetComponent<AttackInfo>().icon;
+        img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
 
         ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
                 active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
@@ -495,14 +519,19 @@ public class PlayerScript : MonoBehaviour
         // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
     }
 
-    void ChangeActiveSpell(GameObject spell)
+    void ChangeActiveSpell(int i)
     {
-        active_spell = spell;
+        if (i >= GameData.spell_list.Count || !stats.learned_spells.Contains(i)) {
+            return;
+        }
+
+        active_spell = GameData.spell_list[i];
         active_spell_info = active_spell.GetComponent<SpellInfo>();
         active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
+        stats.active_spell = i;
 
         Image img_icon = ui_active_spell.GetComponent<Image>();
-        img_icon.sprite = spell.GetComponent<SpellInfo>().icon;
+        img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
 
         ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
                 active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7449621102111839714}
   - component: {fileID: 1524828035506283608}
   - component: {fileID: 146386193475586705}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4902,7 +4902,7 @@ GameObject:
   - component: {fileID: 4217091315589905795}
   - component: {fileID: 6116488798579860165}
   - component: {fileID: 7674132967352038767}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Charge slash blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9798,7 +9798,7 @@ GameObject:
   - component: {fileID: 5791228363725426289}
   - component: {fileID: 618479882567896758}
   - component: {fileID: 92608685367141253}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Slash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14689,7 +14689,7 @@ GameObject:
   - component: {fileID: 5721899690055568511}
   - component: {fileID: 4300010541389397967}
   - component: {fileID: 2034962235843021139}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GlowForward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19580,7 +19580,7 @@ GameObject:
   - component: {fileID: 7387988807326404467}
   - component: {fileID: 8329008367219850896}
   - component: {fileID: 9113869825583926266}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Slash2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24471,7 +24471,7 @@ GameObject:
   - component: {fileID: 672648895277768674}
   - component: {fileID: 2675892436287407580}
   - component: {fileID: 7977334438333269340}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
