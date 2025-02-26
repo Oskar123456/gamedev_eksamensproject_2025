@@ -70,11 +70,11 @@ namespace Attacks
             origin = attacker_stats.attacker.transform.position;
             halfway_up_vec = Vector3.up * (attacker_stats.attacker.transform.lossyScale.y / 2.0f);
 
-            transform.rotation = attacker_stats.attacker.transform.rotation * Quaternion.Euler(0, 0, -10);
+            transform.rotation = attacker_stats.attacker.transform.rotation * Quaternion.Euler(0, 0, 90);
             transform.localScale = transform.localScale * stats.scale;
 
             GameObject effect = Instantiate(attack_effect_prefab, transform.position + halfway_up_vec + (attacker_stats.attacker.transform.forward * offs_effect),
-                    attacker_stats.attacker.transform.rotation * Quaternion.Euler(0, 0, -10), transform);
+                    attacker_stats.attacker.transform.rotation * Quaternion.Euler(0, 0, 90), transform);
 
             transform.position = transform.position + (attacker_stats.attacker.transform.forward * offs_collider);
 
