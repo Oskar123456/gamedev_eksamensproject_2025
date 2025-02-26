@@ -97,6 +97,9 @@ public class GameControllerScript : MonoBehaviour
 
         StartNew();
 
+        player.SendMessage("ChangeActiveAttack", GameData.attack_list[0]);
+        player.SendMessage("ChangeActiveSpell", GameData.spell_list[0]);
+
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
         Debug.Log("finish: " + current_level.GetFinishPosition().ToString());
     }

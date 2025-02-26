@@ -21,7 +21,11 @@ public class GameData : MonoBehaviour
 {
     public static GameData Instance;
 
-    static List<EnemyStats> enemy_stats_list;
+    public List<GameObject> attack_list_prefabs;
+    public List<GameObject> spell_list_prefabs;
+
+    public static List<GameObject> attack_list;
+    public static List<GameObject> spell_list;
 
     void Awake()
     {
@@ -32,9 +36,14 @@ public class GameData : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        Debug.Log(attack_list_prefabs.Count);
+        Debug.Log(spell_list_prefabs.Count);
+
+        attack_list = attack_list_prefabs;
+        spell_list = spell_list_prefabs;
     }
 }
 
 public enum EntityType { None, Player, Enemy }
 public enum EnemyType { Ghost }
-public enum Spell { ForceField, Blizzard }

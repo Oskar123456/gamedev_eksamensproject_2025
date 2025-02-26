@@ -18,18 +18,29 @@ using System.Collections.Generic;
 using Attacks;
 using Spells;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerScript : MonoBehaviour
 {
-    public GameObject current_attack;
-    public GameObject current_spell;
+    public GameObject active_attack;
+    public GameObject active_spell;
 
-    AttackBaseStats current_attack_stats;
-    SpellBaseStats current_spell_stats;
+    AttackInfo active_attack_info;
+    SpellInfo active_spell_info;
+
+    GameObject ui_active_attack;
+    TextMeshProUGUI ui_active_attack_text;
+
+    GameObject ui_active_spell;
+    TextMeshProUGUI ui_active_spell_text;
+
+    AttackBaseStats active_attack_stats;
+    SpellBaseStats active_spell_stats;
 
     PlayerStats stats;
     AttackerStats attack_stats;
-    CasterStats spell_stats;
+    CasterStats caster_stats;
 
     GameObject game_controller;
     CharacterController char_ctrl;
@@ -97,6 +108,9 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
+        stats = GetComponent<PlayerStats>();
+        attack_stats = GetComponent<AttackerStats>();
+        caster_stats = GetComponent<CasterStats>();
     }
 
     void Start()
@@ -119,15 +133,11 @@ public class PlayerScript : MonoBehaviour
         game_controller = GameObject.Find("GameController");
 
         audio_source = GetComponent<AudioSource>();
-
-        stats = GetComponent<PlayerStats>();
-        attack_stats = GetComponent<AttackerStats>();
-        current_attack_stats = current_attack.GetComponent<AttackBaseStats>();
-
-        spell_stats = GetComponent<CasterStats>();
-        current_spell_stats = current_spell.GetComponent<SpellBaseStats>();
-
-        /* test initialization */
+        /* UI */
+        ui_active_attack = GameObject.Find("ActiveAttack");
+        ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
+        ui_active_spell = GameObject.Find("ActiveSpell");
+        ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -191,9 +201,9 @@ public class PlayerScript : MonoBehaviour
     {
         if (!is_attacking && !is_casting) {
             if (Input.GetMouseButton(0)) {
-                attack_time_left = current_attack_stats.duration / attack_stats.speed;
+                attack_time_left = active_attack_stats.duration / attack_stats.speed;
                 did_attack = true;
-                animator.SetFloat("attack_speed", 1 / (current_attack_stats.duration / attack_stats.speed));
+                animator.SetFloat("attack_speed", 1 / (active_attack_stats.duration / attack_stats.speed));
 
                 Attack();
             } else {
@@ -213,9 +223,9 @@ public class PlayerScript : MonoBehaviour
     {
         if (!is_casting && cast_cooldown_left <= 0) {
             if (Input.GetMouseButton(1)) {
-                cast_time_left = cast_time_t / spell_stats.speed;
-                cast_cooldown_left = current_spell_stats.cooldown;
-                animator.SetFloat("cast_speed", spell_stats.speed);
+                cast_time_left = cast_time_t / caster_stats.speed;
+                cast_cooldown_left = active_spell_stats.cooldown;
+                animator.SetFloat("cast_speed", caster_stats.speed);
                 did_cast = true;
                 is_casting = true;
 
@@ -438,11 +448,14 @@ public class PlayerScript : MonoBehaviour
         attack_stats.damage += 1;
         attack_stats.speed += 0.05f;
         attack_stats.scale += 0.05f;
+
+        ChangeActiveAttack(active_attack);
+        ChangeActiveSpell(active_spell);
     }
 
     void Attack()
     {
-        GameObject attack_obj = Instantiate(current_attack, transform.position, transform.rotation);
+        GameObject attack_obj = Instantiate(active_attack, transform.position, transform.rotation);
         AttackerStats ats = attack_obj.GetComponent<AttackerStats>();
         ats.attacker = gameObject;
         ats.entity_type = EntityType.Player;
@@ -454,13 +467,44 @@ public class PlayerScript : MonoBehaviour
 
     void CastSpell()
     {
-        GameObject spell_obj = Instantiate(current_spell, transform.position, transform.rotation);
+        GameObject spell_obj = Instantiate(active_spell, transform.position, transform.rotation);
         CasterStats css = spell_obj.GetComponent<CasterStats>();
         css.caster = gameObject;
         css.entity_type = EntityType.Player;
         css.caster_tag = "Player";
-        css.damage = spell_stats.damage;
-        css.speed = spell_stats.speed;
-        css.scale = spell_stats.scale;
+        css.damage = caster_stats.damage;
+        css.speed = caster_stats.speed;
+        css.scale = caster_stats.scale;
+    }
+
+    void ChangeActiveAttack(GameObject attack)
+    {
+        active_attack = attack;
+        active_attack_info = active_attack.GetComponent<AttackInfo>();
+        active_attack_stats = active_attack.GetComponent<AttackBaseStats>();
+
+        Image img_icon = ui_active_attack.GetComponent<Image>();
+        img_icon.sprite = attack.GetComponent<AttackInfo>().icon;
+
+        Debug.Log(ui_active_attack_text);
+        Debug.Log(active_attack_info.name);
+        Debug.Log(active_attack_stats.damage);
+        Debug.Log(attack_stats.damage);
+
+        ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
+                active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+    }
+
+    void ChangeActiveSpell(GameObject spell)
+    {
+        active_spell = spell;
+        active_spell_info = active_spell.GetComponent<SpellInfo>();
+        active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
+
+        Image img_icon = ui_active_spell.GetComponent<Image>();
+        img_icon.sprite = spell.GetComponent<SpellInfo>().icon;
+
+        ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
+                active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
     }
 }

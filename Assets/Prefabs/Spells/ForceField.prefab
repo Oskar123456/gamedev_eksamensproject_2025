@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5280401394199520228}
   - component: {fileID: 8463947271273812326}
   - component: {fileID: 8774406398153739595}
+  - component: {fileID: 8280514497436889816}
   m_Layer: 2
   m_Name: ForceField
   m_TagString: Untagged
@@ -137,8 +138,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0174639873adc7fb842c92fda57c8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
+  scale: 0
+  speed: 0
   duration: 4
   cooldown: 4
+  hit_effect_duration: 0
+  caster_entity_type: 0
+  caster_tag: 
+  caster: {fileID: 0}
+--- !u!114 &8280514497436889816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8998535066068384355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd1a0be470fd1e76beddbc2d6761ec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
+  name: Force Field
 --- !u!1001 &6881790258032427098
 PrefabInstance:
   m_ObjectHideFlags: 0

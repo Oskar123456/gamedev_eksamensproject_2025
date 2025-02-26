@@ -77,6 +77,9 @@ public class GameControllerScriptMenu : MonoBehaviour
 
         WarpPlayerToStart();
         UpdateMiniMapCam();
+
+        player.SendMessage("ChangeActiveAttack", GameData.attack_list[0]);
+        player.SendMessage("ChangeActiveSpell", GameData.spell_list[0]);
     }
 
     void Update()

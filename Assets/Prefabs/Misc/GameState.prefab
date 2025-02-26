@@ -60,6 +60,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83d38f5c549c59eaa050c8dfd6ddb2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack_list_prefabs:
+  - {fileID: 7914326041902401196, guid: db6b93ffbc81de7388aa89137b168642, type: 3}
+  spell_list_prefabs:
+  - {fileID: 3589852960994460264, guid: f3602c0d2d952b43ba7986a60b0dcc47, type: 3}
+  - {fileID: 8998535066068384355, guid: 72d493682337aa68799d83ac4810e341, type: 3}
 --- !u!114 &-3845718278396459047
 MonoBehaviour:
   m_ObjectHideFlags: 0
