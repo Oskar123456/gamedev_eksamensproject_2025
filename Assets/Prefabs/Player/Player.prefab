@@ -614,8 +614,8 @@ MonoBehaviour:
   level_up_anim_scale: 1
   move_speed_normal: 10
   move_speed_sprint: 30
-  fall_init: -0.5
-  fall_gravity: 30
+  fall_init: -0.4
+  fall_gravity: 20
   fall_max: 3
 --- !u!95 &5336615579196186634
 Animator:
