@@ -37,9 +37,6 @@ public class GameData : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        Debug.Log(attack_list_prefabs.Count);
-        Debug.Log(spell_list_prefabs.Count);
-
         attack_list = attack_list_prefabs;
         spell_list = spell_list_prefabs;
     }

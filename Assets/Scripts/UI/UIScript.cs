@@ -100,6 +100,7 @@ namespace UI
                     screen_color_img.color = new Color(1, 1, 1, 0);
                     screen_color.SetActive(false);
                 }
+                return;
             }
         }
     }

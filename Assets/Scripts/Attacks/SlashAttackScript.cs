@@ -90,26 +90,27 @@ namespace Attacks
 
         void OnTriggerStay(Collider collider)
         {
-            if (alive_t < stats.damage_begin_t || alive_t > stats.damage_end_t)
-                return;
-
             if (collider.gameObject.tag == attacker_stats.attacker_tag) {
                 return;
             }
 
+            if (alive_t < stats.damage_begin_t || alive_t > stats.damage_end_t)
+                return;
+
             if (was_damaged.Contains(collider.gameObject))
                 return;
 
-            was_damaged.Add(collider.gameObject);
-
-            Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
-            normal.y = 0;
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             Destroy(hit_effect, stats.hit_effect_duration);
             Destroy(hit_effect_sound, 1);
+
+            was_damaged.Add(collider.gameObject);
+
+            Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
+            normal.y = 0;
 
             collider.SendMessage("OnHit", new AttackHitInfo(attacker_stats.entity_type, stats, Time.time, normal), SendMessageOptions.DontRequireReceiver);
         }

@@ -36,7 +36,7 @@ public class PlayerStats : MonoBehaviour
         while (this.xp >= xp_max) {
             this.xp -= xp_max;
             level++;
-            xp_max = level * 2;
+            xp_max = level * level;
             hp_max += 1;
             hp = Math.Min(hp + 5, hp_max);
             did_level = true;
