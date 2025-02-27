@@ -39,7 +39,6 @@
 
 ## TODO:
 
-  - refactor attack system; attack prefabs should contain scriptable base stats.
   - ... rest of the game...
 
 
