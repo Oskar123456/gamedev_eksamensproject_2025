@@ -61,10 +61,13 @@ public class GameControllerScript : MonoBehaviour
     LevelType current_level_type;
     Level current_level;
 
+    bool no_player_found;
+
     void Awake()
     {
-        player = Instantiate(player_prefab, new Vector3(0, -100, 0), Quaternion.identity);
-        player.name = "Player";
+        GameState.InstantiatePlayer();
+        player = GameObject.Find("Player");
+
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
@@ -74,7 +77,6 @@ public class GameControllerScript : MonoBehaviour
         GameState.level++;
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
             : "Cistern (" + GameState.level.ToString() + ")";
-        GameState.SetPlayerStats();
     }
 
     void Start()

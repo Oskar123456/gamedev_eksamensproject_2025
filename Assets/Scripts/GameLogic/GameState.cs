@@ -32,6 +32,7 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
     public GameObject player_prefab;
+    private static GameObject pf;
 
     public static GameState Instance;
 
@@ -50,6 +51,7 @@ public class GameState : MonoBehaviour
     public static int difficulty = 0;
 
     public static bool has_died;
+    public static bool first_load = true;
 
     void Awake()
     {
@@ -68,15 +70,28 @@ public class GameState : MonoBehaviour
         player_stats.level = 1;
         player_attack_stats.entity_type = EntityType.Player;
 
-        GameObject p = Instantiate(player_prefab, new Vector3(0, -100, 0), Quaternion.identity);
-        p.name = "Player";
-        SaveDefaultPlayerStats();
-        SavePlayerStats();
-        Destroy(p);
+        pf = player_prefab;
     }
 
     void Start()
     {
+    }
+
+    public static void InstantiatePlayer()
+    {
+        if (GameObject.Find("Player") != null) {
+            Destroy(GameObject.Find("Player"));
+        }
+
+        GameObject p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
+        p.name = "Player";
+        if (first_load) {
+            SaveDefaultPlayerStats();
+            SetPlayerStatsToDefault();
+            first_load = false;
+        } else {
+            SetPlayerStats();
+        }
     }
 
     public static void Reset()
@@ -85,6 +100,7 @@ public class GameState : MonoBehaviour
         level = 0;
         difficulty = 0;
         SetPlayerStatsToDefault();
+        SavePlayerStats();
     }
 
     public static void SavePlayerStats()
@@ -177,7 +193,7 @@ public class GameState : MonoBehaviour
         player_caster_stats.scale = p_cs.scale;
     }
 
-    void SaveDefaultPlayerStats()
+    static void SaveDefaultPlayerStats()
     {
         player_stats_default = new PlayerStatsInternal();
         player_stats_default.learned_attacks = new List<int>();

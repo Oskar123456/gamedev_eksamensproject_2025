@@ -128,7 +128,7 @@ namespace Player
             char_ctrl = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
 
-            cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
+            cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
             cam_trf_angle_x = cam_trf.eulerAngles.x;
             cam_trf_angle_y = cam_trf.eulerAngles.y;
 
@@ -140,14 +140,16 @@ namespace Player
 
             audio_source = GetComponent<AudioSource>();
             /* UI */
-            if (SceneManager.GetActiveScene().name != "Menu") {
+            // if (SceneManager.GetActiveScene().name != "Menu") {
                 ui_active_attack = GameObject.Find("ActiveAttack");
-                ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
+                if (ui_active_attack != null)
+                    ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
                 ui_active_spell = GameObject.Find("ActiveSpell");
-                ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+                if (ui_active_spell != null)
+                    ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
                 ChangeActiveAttack(stats.active_attack);
                 ChangeActiveSpell(stats.active_spell);
-            }
+            // }
         }
 
         void Update()
@@ -182,6 +184,10 @@ namespace Player
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
 
             ChooseAnimation();
+
+            if (trf.hasChanged) {
+                UpdateCam();
+            }
 
             ResetState();
         }
@@ -223,6 +229,8 @@ namespace Player
                     Attack();
                     did_attack = true;
                     is_attacking = true;
+                    Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
+                                (1 / (active_attack_stats.duration / attack_stats.speed)), (active_attack_stats.duration / attack_stats.speed)));
                     return;
                 } else {
                     return;
@@ -320,7 +328,6 @@ namespace Player
             if (did_move) {
                 pitch += 45f;
                 trf.eulerAngles = new Vector3(0, pitch, 0);
-                UpdateCam();
             }
         }
 
@@ -355,7 +362,7 @@ namespace Player
 
             else if (d_xz > 0) {
                 if (did_sprint) {
-                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 4);
+                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 2);
                     animator.Play("BattleRunForward");
                 } else {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz);
@@ -467,11 +474,12 @@ namespace Player
             active_attack_stats = active_attack.GetComponent<AttackBaseStats>();
             stats.active_attack = i;
 
-            Image img_icon = ui_active_attack.GetComponent<Image>();
-            img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
-
-            ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
-                active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+            if (ui_active_attack != null) {
+                Image img_icon = ui_active_attack.GetComponent<Image>();
+                img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
+                ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
+                        active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+            }
 
             // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
         }
@@ -487,11 +495,12 @@ namespace Player
             active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
             stats.active_spell = i;
 
-            Image img_icon = ui_active_spell.GetComponent<Image>();
-            img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
-
-            ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
-                active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
+            if (ui_active_spell != null) {
+                Image img_icon = ui_active_spell.GetComponent<Image>();
+                img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
+                ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
+                        active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
+            }
 
             // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
         }

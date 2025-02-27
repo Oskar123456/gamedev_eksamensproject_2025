@@ -64,7 +64,7 @@ namespace AI
 
             player = GameObject.Find("Player");
             player_trf = player.GetComponent<Transform>();
-            player_cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
+            player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
 
             healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 1.0f), Quaternion.identity, transform);
             healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();

@@ -42,21 +42,27 @@ public class GameControllerScriptMenu : MonoBehaviour
     bool minimap_maximized = false;
     Vector2 minimap_img_pos;
 
+    bool no_player_found;
+
     void Awake()
     {
-        Vector3 start_pos = new Vector3(0, 2, 0);
-        player = Instantiate(player_prefab, start_pos, Quaternion.identity);
-        player.name = "Player";
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
-        GameState.player_trf = player_trf;
-
+        GameState.InstantiatePlayer();
         GameState.level_name = "Town";
-        GameState.SetPlayerStats();
     }
 
     void Start()
     {
+        Vector3 start_pos = new Vector3(0, 2, 0);
+        player = GameObject.Find("Player");
+        player.GetComponent<CharacterController>().enabled = false;
+        player.transform.position = start_pos;
+        player.GetComponent<CharacterController>().enabled = true;
+
+        player_trf = player.GetComponent<Transform>();
+        player_char_ctrl = player.GetComponent<CharacterController>();
+
+        GameState.player_trf = player_trf;
+
         minimap_img = GameObject.Find("MiniMapImg");
         minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
         minimap_cam_trf = GameObject.Find("MiniMapCamera").GetComponent<Transform>();
