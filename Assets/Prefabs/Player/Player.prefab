@@ -1776,7 +1776,7 @@ MonoBehaviour:
   damage_bonus_ice: 0
   damage_bonus_fire: 0
   damage_bonus_normal: 0
-  spell_level: 0
+  spell_level: 1
 --- !u!1 &6487535533447757023
 GameObject:
   m_ObjectHideFlags: 0

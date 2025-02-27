@@ -62,9 +62,20 @@ public class PlayerStats : MonoBehaviour
         this.stun_lock = ps.stun_lock;
         this.move_speed_bonus = ps.move_speed_bonus;
         this.skill_points = ps.skill_points;
-        this.learned_attacks.InsertRange(0, ps.learned_attacks);
-        this.learned_spells.InsertRange(0, ps.learned_spells);
         this.active_attack = ps.active_attack;
         this.active_spell = ps.active_spell;
+
+        this.learned_attacks = new List<int>();
+        this.learned_spells = new List<int>();
+        this.spell_levels = new List<int>();
+        for (int i = 0; i < ps.learned_attacks.Count; i++) {
+            this.learned_attacks.Add(ps.learned_attacks[i]);
+        }
+        for (int i = 0; i < ps.learned_spells.Count; i++) {
+            this.learned_spells.Add(ps.learned_spells[i]);
+        }
+        for (int i = 0; i < ps.spell_levels.Count; i++) {
+            this.spell_levels.Add(ps.spell_levels[i]);
+        }
     }
 }

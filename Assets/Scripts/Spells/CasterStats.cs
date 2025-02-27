@@ -26,7 +26,7 @@ namespace Spells
         public float scale;
         public float duration = 1;
         public int damage_bonus_ice, damage_bonus_fire, damage_bonus_normal;
-        public int spell_level;
+        public int spell_level = 1;
 
         public void Set(CasterStats cs)
         {

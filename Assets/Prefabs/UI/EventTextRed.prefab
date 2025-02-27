@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2375096453961772737}
   - component: {fileID: 3987005426758976151}
   - component: {fileID: 5993596671128972456}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: EventTextRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,5 +149,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d1a4d4f83ff71dfba3a38485c8a35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txt_color: {r: 0.55686283, g: 1, b: 0, a: 1}
+  txt_color: {r: 1, g: 0, b: 0.10917854, a: 1}
   fade_in: 2

@@ -168,7 +168,7 @@ namespace AI
                 nma.ResetPath();
 
             if (stats.hp < 1) {
-                player.SendMessage("AddXp", GameState.level);
+                player.SendMessage("OnRecXp", GameState.level);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
                 Destroy(death_effect, death_effect_delete_t);

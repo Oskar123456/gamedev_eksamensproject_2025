@@ -148,6 +148,8 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void OnDeath()
     {
-        SceneManager.LoadScene("Town");
+        GameState.Reset();
+        GameState.has_died = true;
+        SceneManager.LoadScene("Menu");
     }
 }

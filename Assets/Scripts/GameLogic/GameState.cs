@@ -101,6 +101,9 @@ public class GameState : MonoBehaviour
         difficulty = 0;
         SetPlayerStatsToDefault();
         SavePlayerStats();
+        for (int i = 0; i < player_stats_default.spell_levels.Count; i++) {
+            Debug.Log(player_stats_default.spell_levels[i]);
+        }
     }
 
     public static void SavePlayerStats()
@@ -138,9 +141,9 @@ public class GameState : MonoBehaviour
         player_attack_stats_default.SetOther(p_as);
         player_caster_stats_default.SetOther(p_cs);
 
-        player_stats_default.Set(player_stats);
-        player_attack_stats_default.Set(player_attack_stats);
-        player_caster_stats_default.Set(player_caster_stats);
+        player_stats_default.SetOther(player_stats);
+        player_attack_stats_default.SetOther(player_attack_stats);
+        player_caster_stats_default.SetOther(player_caster_stats);
     }
 
     static void SaveDefaultPlayerStats()
@@ -184,11 +187,21 @@ class PlayerStatsInternal
         this.xp = ps.xp;
         this.xp_max = ps.xp_max;
         this.skill_points = ps.skill_points;
-        this.learned_attacks.InsertRange(0, ps.learned_attacks);
-        this.learned_spells.InsertRange(0, ps.learned_spells);
-        this.spell_levels.InsertRange(0, ps.spell_levels);
         this.active_attack = ps.active_attack;
         this.active_spell = ps.active_spell;
+
+        this.learned_attacks = new List<int>();
+        this.learned_spells = new List<int>();
+        this.spell_levels = new List<int>();
+        for (int i = 0; i < ps.learned_attacks.Count; i++) {
+            this.learned_attacks.Add(ps.learned_attacks[i]);
+        }
+        for (int i = 0; i < ps.learned_spells.Count; i++) {
+            this.learned_spells.Add(ps.learned_spells[i]);
+        }
+        for (int i = 0; i < ps.spell_levels.Count; i++) {
+            this.spell_levels.Add(ps.spell_levels[i]);
+        }
     }
 
     public void SetOther(PlayerStats ps)
@@ -199,11 +212,21 @@ class PlayerStatsInternal
         ps.xp = this.xp;
         ps.xp_max = this.xp_max;
         ps.skill_points = this.skill_points;
-        ps.learned_attacks.InsertRange(0, this.learned_attacks);
-        ps.learned_spells.InsertRange(0, this.learned_spells);
-        ps.spell_levels.InsertRange(0, this.spell_levels);
         ps.active_attack = this.active_attack;
         ps.active_spell = this.active_spell;
+
+        ps.learned_attacks = new List<int>();
+        ps.learned_spells = new List<int>();
+        ps.spell_levels = new List<int>();
+        for (int i = 0; i < this.learned_attacks.Count; i++) {
+            ps.learned_attacks.Add(this.learned_attacks[i]);
+        }
+        for (int i = 0; i < this.learned_spells.Count; i++) {
+            ps.learned_spells.Add(this.learned_spells[i]);
+        }
+        for (int i = 0; i < this.spell_levels.Count; i++) {
+            ps.spell_levels.Add(this.spell_levels[i]);
+        }
     }
 }
 

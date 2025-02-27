@@ -199,7 +199,6 @@ public class GameControllerScript : MonoBehaviour
 
     void OnDeath()
     {
-        Debug.Log("DEAD DEAD DEAD");
         GameState.Reset();
         GameState.has_died = true;
         SceneManager.LoadScene("Menu");

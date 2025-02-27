@@ -41,8 +41,8 @@ namespace Player
         AttackBaseStats active_attack_stats;
         SpellBaseStats active_spell_stats;
 
-
         GameObject skill_tree_plus_button;
+        UITest ui_test;
 
         PlayerStats stats;
         AttackerStats attack_stats;
@@ -81,6 +81,7 @@ namespace Player
         bool is_attacking = false;
         bool is_casting = false;
         bool is_falling = false;
+        bool is_mouse_hover_ui = false;
         /* state parameters */
 
         // public float fall_init = -0.5f;
@@ -127,6 +128,7 @@ namespace Player
 
         void Start()
         {
+            ui_test = GameObject.Find("UI").GetComponent<UITest>();
             wizard_renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
             color_original = wizard_renderer.material.color;
 
@@ -152,6 +154,7 @@ namespace Player
             ui_active_spell = GameObject.Find("ActiveSpell");
             if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+
             ChangeActiveAttack(stats.active_attack);
             ChangeActiveSpell(stats.active_spell);
         }
@@ -169,6 +172,7 @@ namespace Player
             }
 
             if (hit_time_left <= 0) {
+                is_mouse_hover_ui = ui_test.IsPointerOverUIElement();
                 PollKeys();
                 PollMouse();
                 PollMovement();
@@ -240,8 +244,7 @@ namespace Player
         void PollAttack()
         {
             if (!is_attacking && !is_casting) {
-                // if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0)) {
-                if (Input.GetMouseButton(0)) {
+                if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = active_attack_stats.duration / attack_stats.speed;
                     animator.SetFloat("attack_speed", 1 / (active_attack_stats.duration / attack_stats.speed));
                     Attack();
@@ -266,8 +269,7 @@ namespace Player
         void PollSpell()
         {
             if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
-                // if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(1)) {
-                if (Input.GetMouseButton(1)) {
+                if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
                     cast_time_left = cast_time_t / caster_stats.speed;
                     cast_cooldown_left = active_spell_stats.cooldown;
                     animator.SetFloat("cast_speed", caster_stats.speed);
@@ -396,6 +398,7 @@ namespace Player
 
         void ResetState()
         {
+            is_mouse_hover_ui = false;
             did_cast = false;
             did_jump = false;
             did_move = false;
@@ -439,7 +442,7 @@ namespace Player
         {
         }
 
-        void AddXp(int n)
+        void OnRecXp(int n)
         {
             GameObject xp_effect = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
             xp_effect.transform.localScale = xp_effect.transform.localScale;
