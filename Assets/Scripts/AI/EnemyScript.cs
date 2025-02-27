@@ -156,7 +156,7 @@ namespace AI
             if (hit_info.entity_type != EntityType.Player)
                 return;
 
-            TakeDamage(hit_info.stats.damage);
+            TakeDamage(hit_info.damage);
 
             /* TODO: refactor as "pushback()" or something */
             if (nma.enabled)
@@ -172,7 +172,7 @@ namespace AI
             }
 
             nma.enabled = false;
-            transform.position = transform.position + (hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 1.0f));
+            transform.position = transform.position + (hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.damage), 1.0f));
             nma.enabled = true;
         }
 

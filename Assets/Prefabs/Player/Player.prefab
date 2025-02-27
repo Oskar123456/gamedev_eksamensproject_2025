@@ -1485,12 +1485,12 @@ MonoBehaviour:
   level_up_prefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef, type: 3}
   level_up_anim_t: 0.35
   level_up_anim_scale: 1
-  move_speed_normal: 0.2
+  move_speed_normal: 0.15
   move_speed_sprint_multi: 2.2
   v_jump: 50
-  a_horizontal: 100
-  a_horizontal_sprint: 100
-  a_minus_horizontal: 300
+  a_horizontal: 150
+  a_horizontal_sprint: 200
+  a_minus_horizontal: 350
   a_vertical: -200
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 13
@@ -1680,6 +1680,7 @@ MonoBehaviour:
   level: 1
   invulnerable: 0
   stun_lock: 0.15
+  move_speed_bonus: 0
   learned_attacks: 0000000001000000
   learned_spells: 0000000001000000
   active_attack: 0
@@ -1702,6 +1703,9 @@ MonoBehaviour:
   damage: 1
   speed: 0.6
   scale: 1
+  damage_bonus_ice: 0
+  damage_bonus_fire: 0
+  damage_bonus_normal: 0
 --- !u!114 &1521443553826026948
 MonoBehaviour:
   m_ObjectHideFlags: 0

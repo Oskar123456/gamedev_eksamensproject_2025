@@ -49,7 +49,6 @@ namespace Player
         CharacterController char_ctrl;
         Animator animator;
         Transform trf;
-        System.Random rng = new System.Random();
 
         public float camera_dist = 0.5f;
         public float scroll_speed = 0.5f;
@@ -71,23 +70,18 @@ namespace Player
 
         /* state flags */
         bool did_move = false;
-        bool did_fall = false;
-        bool did_move_when_jump = false;
         bool did_jump = false;
         bool did_sprint = false;
-        bool did_land = false;
         bool did_attack = false;
         bool did_cast = false;
         bool is_attacking = false;
         bool is_casting = false;
-        bool was_hit = false;
         bool is_falling = false;
         /* state parameters */
 
         // public float fall_init = -0.5f;
         // public float fall_gravity = 30f;
         // public float fall_max = 1f;
-        float fall_speed = 0f;
         float fall_begin_t;
 
         float attack_time_left = 0;
@@ -96,7 +90,7 @@ namespace Player
         float cast_cooldown_left = 0;
         float hit_time_left = 0;
         /* movement */
-        float move_speed;
+        float move_speed = 0.2f;
         public float move_speed_normal = 0.2f;
         public float move_speed_sprint_multi = 2.2f;
 
@@ -106,14 +100,13 @@ namespace Player
         public float v_jump = 0.5f;
         public float a_horizontal = 100, a_horizontal_sprint = 200, a_minus_horizontal = 300, a_vertical = -200f;
         public float a_minus_horizontal_fall_factor = 0.01f;
-        float t_horizontal = 0, t_vertical = 0;
         float fall_time;
         float pitch_0, pitch;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
         float[] anim_attack_time = { 1.0f, 1.333f };
         /* effects */
-        Renderer renderer;
+        Renderer wizard_renderer;
         Color color_original;
         Vector3 halfway_up_vec;
         float effect_blink_t = 0.5f;
@@ -128,8 +121,8 @@ namespace Player
 
         void Start()
         {
-            renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
-            color_original = renderer.material.color;
+            wizard_renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
+            color_original = wizard_renderer.material.color;
 
             trf = GetComponent<Transform>();
             char_ctrl = GetComponent<CharacterController>();
@@ -166,7 +159,7 @@ namespace Player
 
             if (effect_blink_left_t > 0) {
                 effect_blink_left_t -= Time.deltaTime;
-                renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
+                wizard_renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
             }
 
             if (hit_time_left <= 0) {
@@ -187,11 +180,6 @@ namespace Player
             }
 
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
-
-            char_ctrl.Move(Vector3.up * -0.01f);
-            is_falling = !char_ctrl.isGrounded;
-            if (is_falling)
-                char_ctrl.Move(Vector3.up * 0.01f);
 
             ChooseAnimation();
 
@@ -327,11 +315,6 @@ namespace Player
                 did_jump = true;
                 audio_source.clip = sounds[1];
                 audio_source.Play();
-                if (did_move) {
-                    did_move_when_jump = true;
-                } else {
-                    did_move_when_jump = false;
-                }
             }
 
             if (did_move) {
@@ -343,11 +326,11 @@ namespace Player
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Vector3 normal = hit.normal;
-            if (normal.y >= 0.9 && is_falling) {
+            // Vector3 normal = hit.normal;
+            // if (normal.y >= 0.9 && is_falling) {
                 // did_land = true;
                 // is_falling = false;
-            }
+            // }
         }
 
         void ChooseAnimation()
@@ -389,12 +372,9 @@ namespace Player
         {
             did_cast = false;
             did_jump = false;
-            did_fall = false;
             did_move = false;
-            did_land = false;
             did_attack = false;
             did_sprint = false;
-            was_hit = false;
         }
 
         void UpdateCam()
@@ -405,8 +385,8 @@ namespace Player
 
         void OnHit(AttackHitInfo hit_info)
         {
-            TakeDamage(hit_info.stats.damage);
-            char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 1.0f));
+            TakeDamage(hit_info.damage);
+            char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.damage), 1.0f));
         }
 
         void OnEnemyCollision(EnemyStats enemy_stats)
@@ -422,7 +402,6 @@ namespace Player
             audio_source.Play();
             stats.hp -= damage;
             effect_blink_left_t = effect_blink_t;
-            was_hit = true;
             hit_time_left = stats.stun_lock;
         }
 
@@ -519,6 +498,12 @@ namespace Player
 
         void UpdateVelocity()
         {
+            char_ctrl.Move(Vector3.up * -0.01f);
+            is_falling = !char_ctrl.isGrounded;
+            if (is_falling) {
+                char_ctrl.Move(Vector3.up * 0.01f);
+            }
+
             /* velocity */
             if (!is_falling) {
                 v_vertical_0 = 0;

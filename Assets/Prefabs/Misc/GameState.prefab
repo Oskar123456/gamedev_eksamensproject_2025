@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d283fd04d036625aaa2742ee54f4acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_prefab: {fileID: 4359746022008019940, guid: c57f7be1cc0abdab2ba30ce10d3108df, type: 3}
 --- !u!114 &-1244298126073946756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +85,9 @@ MonoBehaviour:
   damage: 0
   speed: 0
   scale: 0
+  damage_bonus_ice: 0
+  damage_bonus_fire: 0
+  damage_bonus_normal: 0
 --- !u!114 &-8178631027551643548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,8 +107,11 @@ MonoBehaviour:
   level: 1
   invulnerable: 0
   stun_lock: 0.15
+  move_speed_bonus: 0
   learned_attacks: 
   learned_spells: 
+  active_attack: 0
+  active_spell: 0
 --- !u!114 &8590847231512065285
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@
  *
  * */
 
+using Attacks;
 using UnityEngine;
 
 namespace Spells
@@ -24,6 +25,7 @@ namespace Spells
         public float duration;
         public float cooldown;
         public float hit_effect_duration;
+        public DamageType damage_type;
 
         public EntityType caster_entity_type;
         public string caster_tag;

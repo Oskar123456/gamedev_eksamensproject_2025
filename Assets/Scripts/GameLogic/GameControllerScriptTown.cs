@@ -18,6 +18,7 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScriptMenu : MonoBehaviour
 {
+    public GameObject player_prefab;
     public GameObject portal_exit_prefab;
     public GameObject finish_marker_prefab;
     public GameObject player_marker_prefab;
@@ -43,7 +44,9 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void Awake()
     {
-        player = GameObject.Find("Player");
+        Vector3 start_pos = new Vector3(0, 2, 0);
+        player = Instantiate(player_prefab, start_pos, Quaternion.identity);
+        player.name = "Player";
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
@@ -60,10 +63,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         minimap_cam.orthographic = true;
         minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
-        player = GameObject.Find("Player");
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
-
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         player_marker_trf = player_marker.GetComponent<Transform>();
@@ -75,7 +74,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         finish_marker_trf.position = new Vector3(finish_pos.x, 290, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
 
-        WarpPlayerToStart();
         UpdateMiniMapCam();
     }
 
@@ -107,10 +105,6 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void WarpPlayerToStart()
     {
-        Vector3 start_pos = new Vector3(0, 2, 0);
-        player_char_ctrl.enabled = false;
-        player_trf.position = start_pos;
-        player_char_ctrl.enabled = true;
     }
 
     void Clean()

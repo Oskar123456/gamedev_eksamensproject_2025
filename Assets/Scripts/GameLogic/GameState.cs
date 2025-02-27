@@ -31,6 +31,8 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
+    public GameObject player_prefab;
+
     public static GameState Instance;
 
     public static Transform player_trf;
@@ -66,8 +68,11 @@ public class GameState : MonoBehaviour
         player_stats.level = 1;
         player_attack_stats.entity_type = EntityType.Player;
 
+        GameObject p = Instantiate(player_prefab, new Vector3(0, -100, 0), Quaternion.identity);
+        p.name = "Player";
         SaveDefaultPlayerStats();
         SavePlayerStats();
+        Destroy(p);
     }
 
     void Start()
@@ -172,7 +177,7 @@ public class GameState : MonoBehaviour
         player_caster_stats.scale = p_cs.scale;
     }
 
-    public static void SaveDefaultPlayerStats()
+    void SaveDefaultPlayerStats()
     {
         player_stats_default = new PlayerStatsInternal();
         player_stats_default.learned_attacks = new List<int>();

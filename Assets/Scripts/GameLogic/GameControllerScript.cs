@@ -25,6 +25,7 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
+    public GameObject player_prefab;
     public GameObject level_object_container_prefab;
     public GameObject portal_entrance_prefab;
     public GameObject portal_exit_prefab;
@@ -62,7 +63,8 @@ public class GameControllerScript : MonoBehaviour
 
     void Awake()
     {
-        player = GameObject.Find("Player");
+        player = Instantiate(player_prefab, new Vector3(0, -100, 0), Quaternion.identity);
+        player.name = "Player";
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
