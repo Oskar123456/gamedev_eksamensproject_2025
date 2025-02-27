@@ -110,23 +110,9 @@ public class GameState : MonoBehaviour
         AttackerStats p_as = p.GetComponent<AttackerStats>();
         CasterStats p_cs = p.GetComponent<CasterStats>();
 
-        player_stats.level = p_s.level;
-        player_stats.hp = p_s.hp;
-        player_stats.hp_max = p_s.hp_max;
-        player_stats.xp = p_s.xp;
-        player_stats.xp_max = p_s.xp_max;
-        player_stats.learned_attacks.InsertRange(0, p_s.learned_attacks);
-        player_stats.learned_spells.InsertRange(0, p_s.learned_spells);
-        player_stats.active_attack = p_s.active_attack;
-        player_stats.active_spell = p_s.active_spell;
-
-        player_attack_stats.damage = p_as.damage;
-        player_attack_stats.speed = p_as.speed;
-        player_attack_stats.scale = p_as.scale;
-
-        player_caster_stats.damage = p_cs.damage;
-        player_caster_stats.speed = p_cs.speed;
-        player_caster_stats.scale = p_cs.scale;
+        player_stats.Set(p_s);
+        player_attack_stats.Set(p_as);
+        player_caster_stats.Set(p_cs);
     }
 
     public static void SetPlayerStats()
@@ -136,23 +122,9 @@ public class GameState : MonoBehaviour
         AttackerStats p_as = p.GetComponent<AttackerStats>();
         CasterStats p_cs = p.GetComponent<CasterStats>();
 
-        p_s.level = player_stats.level;
-        p_s.hp = player_stats.hp;
-        p_s.hp_max = player_stats.hp_max;
-        p_s.xp = player_stats.xp;
-        p_s.xp_max = player_stats.xp_max;
-        p_s.learned_attacks.InsertRange(0, player_stats.learned_attacks);
-        p_s.learned_spells.InsertRange(0, player_stats.learned_spells);
-        p_s.active_attack = player_stats.active_attack;
-        p_s.active_spell = player_stats.active_spell;
-
-        p_as.damage = player_attack_stats.damage;
-        p_as.speed = player_attack_stats.speed;
-        p_as.scale = player_attack_stats.scale;
-
-        p_cs.damage = player_caster_stats.damage;
-        p_cs.speed = player_caster_stats.speed;
-        p_cs.scale = player_caster_stats.scale;
+        p_s.Set(player_stats);
+        p_as.Set(player_attack_stats);
+        p_cs.Set(player_caster_stats);
     }
 
     public static void SetPlayerStatsToDefault()
@@ -162,35 +134,13 @@ public class GameState : MonoBehaviour
         AttackerStats p_as = p.GetComponent<AttackerStats>();
         CasterStats p_cs = p.GetComponent<CasterStats>();
 
-        p_s.level = player_stats_default.level;
-        p_s.hp = player_stats_default.hp;
-        p_s.hp_max = player_stats_default.hp_max;
-        p_s.xp = player_stats_default.xp;
-        p_s.xp_max = player_stats_default.xp_max;
-        p_s.learned_attacks.InsertRange(0, player_stats_default.learned_attacks);
-        p_s.learned_spells.InsertRange(0, player_stats_default.learned_spells);
-        p_s.active_attack = player_stats_default.active_attack;
-        p_s.active_spell = player_stats_default.active_spell;
+        player_stats_default.SetOther(p_s);
+        player_attack_stats_default.SetOther(p_as);
+        player_caster_stats_default.SetOther(p_cs);
 
-        p_as.entity_type = EntityType.Player;
-        p_as.damage = player_attack_stats_default.damage;
-        p_as.speed = player_attack_stats_default.speed;
-        p_as.scale = player_attack_stats_default.scale;
-
-        player_stats.level = p_s.level;
-        player_stats.hp = p_s.hp;
-        player_stats.hp_max = p_s.hp_max;
-        player_stats.xp = p_s.xp;
-        player_stats.xp_max = p_s.xp_max;
-
-        player_attack_stats.entity_type = EntityType.Player;
-        player_attack_stats.damage = p_as.damage;
-        player_attack_stats.speed = p_as.speed;
-        player_attack_stats.scale = p_as.scale;
-
-        player_caster_stats.damage = p_cs.damage;
-        player_caster_stats.speed = p_cs.speed;
-        player_caster_stats.scale = p_cs.scale;
+        player_stats_default.Set(player_stats);
+        player_attack_stats_default.Set(player_attack_stats);
+        player_caster_stats_default.Set(player_caster_stats);
     }
 
     static void SaveDefaultPlayerStats()
@@ -198,6 +148,7 @@ public class GameState : MonoBehaviour
         player_stats_default = new PlayerStatsInternal();
         player_stats_default.learned_attacks = new List<int>();
         player_stats_default.learned_spells = new List<int>();
+        player_stats_default.spell_levels = new List<int>();
         player_attack_stats_default = new AttackStatsInternal();
         player_caster_stats_default = new CasterStatsInternal();
 
@@ -206,24 +157,9 @@ public class GameState : MonoBehaviour
         AttackerStats p_as = p.GetComponent<AttackerStats>();
         CasterStats p_cs = p.GetComponent<CasterStats>();
 
-        player_stats_default.level = p_s.level;
-        player_stats_default.hp = p_s.hp;
-        player_stats_default.hp_max = p_s.hp_max;
-        player_stats_default.xp = p_s.xp;
-        player_stats_default.xp_max = p_s.xp_max;
-        player_stats_default.learned_attacks.InsertRange(0, p_s.learned_attacks);
-        player_stats_default.learned_spells.InsertRange(0, p_s.learned_spells);
-        player_stats_default.active_attack = p_s.active_attack;
-        player_stats_default.active_spell = p_s.active_spell;
-
-        player_attack_stats_default.entity_type = EntityType.Player;
-        player_attack_stats_default.damage = p_as.damage;
-        player_attack_stats_default.speed = p_as.speed;
-        player_attack_stats_default.scale = p_as.scale;
-
-        player_caster_stats_default.damage = p_cs.damage;
-        player_caster_stats_default.speed = p_cs.speed;
-        player_caster_stats_default.scale = p_cs.scale;
+        player_stats_default.Set(p_s);
+        player_attack_stats_default.Set(p_as);
+        player_caster_stats_default.Set(p_cs);
     }
 }
 
@@ -234,9 +170,41 @@ class PlayerStatsInternal
     public int level;
     public bool invulnerable;
     public float stun_lock;
+    public int skill_points = 0;
     public List<int> learned_attacks;
     public List<int> learned_spells;
+    public List<int> spell_levels;
     public int active_attack, active_spell;
+
+    public void Set(PlayerStats ps)
+    {
+        this.level = ps.level;
+        this.hp = ps.hp;
+        this.hp_max = ps.hp_max;
+        this.xp = ps.xp;
+        this.xp_max = ps.xp_max;
+        this.skill_points = ps.skill_points;
+        this.learned_attacks.InsertRange(0, ps.learned_attacks);
+        this.learned_spells.InsertRange(0, ps.learned_spells);
+        this.spell_levels.InsertRange(0, ps.spell_levels);
+        this.active_attack = ps.active_attack;
+        this.active_spell = ps.active_spell;
+    }
+
+    public void SetOther(PlayerStats ps)
+    {
+        ps.level = this.level;
+        ps.hp = this.hp;
+        ps.hp_max = this.hp_max;
+        ps.xp = this.xp;
+        ps.xp_max = this.xp_max;
+        ps.skill_points = this.skill_points;
+        ps.learned_attacks.InsertRange(0, this.learned_attacks);
+        ps.learned_spells.InsertRange(0, this.learned_spells);
+        ps.spell_levels.InsertRange(0, this.spell_levels);
+        ps.active_attack = this.active_attack;
+        ps.active_spell = this.active_spell;
+    }
 }
 
 public class AttackStatsInternal
@@ -247,6 +215,26 @@ public class AttackStatsInternal
     public int damage;
     public float speed;
     public float scale;
+
+    public void Set(AttackerStats ats)
+    {
+        this.attacker = ats.attacker;
+        this.attacker_tag = ats.attacker_tag;
+        this.entity_type = ats.entity_type;
+        this.damage = ats.damage;
+        this.speed = ats.speed;
+        this.scale = ats.scale;
+    }
+
+    public void SetOther(AttackerStats ats)
+    {
+        ats.attacker = this.attacker;
+        ats.attacker_tag = this.attacker_tag;
+        ats.entity_type = this.entity_type;
+        ats.damage = this.damage;
+        ats.speed = this.speed;
+        ats.scale = this.scale;
+    }
 }
 
 public class CasterStatsInternal
@@ -257,4 +245,27 @@ public class CasterStatsInternal
     public int damage;
     public float speed;
     public float scale;
+    public int spell_level;
+
+    public void Set(CasterStats cs)
+    {
+        this.caster = cs.caster;
+        this.caster_tag = cs.caster_tag;
+        this.entity_type = cs.entity_type;
+        this.damage = cs.damage;
+        this.speed = cs.speed;
+        this.scale = cs.scale;
+        this.spell_level = cs.spell_level;
+    }
+
+    public void SetOther(CasterStats cs)
+    {
+        cs.caster = this.caster;
+        cs.caster_tag = this.caster_tag;
+        cs.entity_type = this.entity_type;
+        cs.damage = this.damage;
+        cs.speed = this.speed;
+        cs.scale = this.scale;
+        cs.spell_level = this.spell_level;
+    }
 }

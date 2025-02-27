@@ -41,6 +41,9 @@ namespace Player
         AttackBaseStats active_attack_stats;
         SpellBaseStats active_spell_stats;
 
+
+        GameObject skill_tree_plus_button;
+
         PlayerStats stats;
         AttackerStats attack_stats;
         CasterStats caster_stats;
@@ -61,6 +64,7 @@ namespace Player
         public List<AudioClip> sounds;
         AudioSource audio_source;
 
+        public GameObject bad_text_prefab;
         public GameObject level_up_audio_prefab;
         public GameObject level_up_text_prefab;
         public GameObject level_up_prefab;
@@ -117,6 +121,8 @@ namespace Player
             stats = GetComponent<PlayerStats>();
             attack_stats = GetComponent<AttackerStats>();
             caster_stats = GetComponent<CasterStats>();
+            /* UI */
+            skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
         }
 
         void Start()
@@ -140,16 +146,14 @@ namespace Player
 
             audio_source = GetComponent<AudioSource>();
             /* UI */
-            // if (SceneManager.GetActiveScene().name != "Menu") {
-                ui_active_attack = GameObject.Find("ActiveAttack");
-                if (ui_active_attack != null)
-                    ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
-                ui_active_spell = GameObject.Find("ActiveSpell");
-                if (ui_active_spell != null)
-                    ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
-                ChangeActiveAttack(stats.active_attack);
-                ChangeActiveSpell(stats.active_spell);
-            // }
+            ui_active_attack = GameObject.Find("ActiveAttack");
+            if (ui_active_attack != null)
+                ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
+            ui_active_spell = GameObject.Find("ActiveSpell");
+            if (ui_active_spell != null)
+                ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+            ChangeActiveAttack(stats.active_attack);
+            ChangeActiveSpell(stats.active_spell);
         }
 
         void Update()
@@ -173,6 +177,19 @@ namespace Player
                 PollMisc();
             } else {
                 hit_time_left -= Time.deltaTime;
+                attack_time_left -= Time.deltaTime;
+                cast_time_left -= Time.deltaTime;
+                cast_cooldown_left -= Time.deltaTime;
+                if (cast_time_left > 0) {
+                    is_casting = true;
+                } else {
+                    is_casting = false;
+                }
+                if (attack_time_left > 0) {
+                    is_attacking = true;
+                } else {
+                    is_attacking = false;
+                }
             }
 
             UpdateVelocity();
@@ -223,14 +240,15 @@ namespace Player
         void PollAttack()
         {
             if (!is_attacking && !is_casting) {
-                if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0)) {
+                // if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0)) {
+                if (Input.GetMouseButton(0)) {
                     attack_time_left = active_attack_stats.duration / attack_stats.speed;
                     animator.SetFloat("attack_speed", 1 / (active_attack_stats.duration / attack_stats.speed));
                     Attack();
                     did_attack = true;
                     is_attacking = true;
-                    Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
-                                (1 / (active_attack_stats.duration / attack_stats.speed)), (active_attack_stats.duration / attack_stats.speed)));
+                    // Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
+                    //             (1 / (active_attack_stats.duration / attack_stats.speed)), (active_attack_stats.duration / attack_stats.speed)));
                     return;
                 } else {
                     return;
@@ -248,7 +266,8 @@ namespace Player
         void PollSpell()
         {
             if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
-                if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(1)) {
+                // if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(1)) {
+                if (Input.GetMouseButton(1)) {
                     cast_time_left = cast_time_t / caster_stats.speed;
                     cast_cooldown_left = active_spell_stats.cooldown;
                     animator.SetFloat("cast_speed", caster_stats.speed);
@@ -410,6 +429,10 @@ namespace Player
             stats.hp -= damage;
             effect_blink_left_t = effect_blink_t;
             hit_time_left = stats.stun_lock;
+
+            GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+            txt.transform.localScale = txt.transform.localScale;
+            txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", damage);
         }
 
         void OnTriggerEnter(Collider collider)
@@ -418,6 +441,9 @@ namespace Player
 
         void AddXp(int n)
         {
+            GameObject xp_effect = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+            xp_effect.transform.localScale = xp_effect.transform.localScale;
+            xp_effect.GetComponent<TextMeshProUGUI>().text = string.Format("+{0}xp", n);
             if (stats.AddXp(n)) {
                 OnLevelUp();
             }
@@ -437,6 +463,8 @@ namespace Player
 
             ChangeActiveAttack(stats.active_attack);
             ChangeActiveSpell(stats.active_spell);
+
+            skill_tree_plus_button.SetActive(true);
         }
 
         void Attack()
@@ -454,6 +482,7 @@ namespace Player
         void CastSpell()
         {
             GameObject spell_obj = Instantiate(active_spell, transform.position, transform.rotation);
+            spell_obj.transform.localScale = spell_obj.transform.localScale * active_spell_stats.GetScale(caster_stats);
             CasterStats css = spell_obj.GetComponent<CasterStats>();
             css.caster = gameObject;
             css.entity_type = EntityType.Player;
@@ -461,6 +490,7 @@ namespace Player
             css.damage = caster_stats.damage;
             css.speed = caster_stats.speed;
             css.scale = caster_stats.scale;
+            css.spell_level = caster_stats.spell_level;
         }
 
         void ChangeActiveAttack(int i)
@@ -493,13 +523,17 @@ namespace Player
             active_spell = GameData.spell_list[i];
             active_spell_info = active_spell.GetComponent<SpellInfo>();
             active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
+            caster_stats.spell_level = stats.spell_levels[i];
             stats.active_spell = i;
 
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
                 img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
-                ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
-                        active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
+                ui_active_spell_text.text = string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", active_spell_info.name,
+                        Environment.NewLine, caster_stats.spell_level, Environment.NewLine,
+                        Environment.NewLine, active_spell_stats.GetDamage(caster_stats),
+                        Environment.NewLine, active_spell_stats.GetScale(caster_stats),
+                        Environment.NewLine, active_spell_stats.GetDuration(caster_stats));
             }
 
             // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
@@ -549,6 +583,15 @@ namespace Player
             v_vertical_0 = v_vertical;
             v_horizontal_0 = v_horizontal;
 
+        }
+
+        void OnLevelUpSpell(int i)
+        {
+            stats.spell_levels[i]++;
+            ChangeActiveSpell(i);
+            if (stats.skill_points < 1) {
+                skill_tree_plus_button.SetActive(false);
+            }
         }
     }
 }

@@ -34,6 +34,9 @@ public class GameControllerScript : MonoBehaviour
 
     public List<GameObject> enemy_prefabs;
 
+    GameObject UI;
+    GameObject active_attack_button;
+    GameObject active_spell_button;
     GameObject minimap_img;
     Camera minimap_cam;
     Transform minimap_cam_trf;
@@ -99,6 +102,10 @@ public class GameControllerScript : MonoBehaviour
         player_marker_trf = player_marker.GetComponent<Transform>();
         finish_marker_trf = finish_marker.GetComponent<Transform>();
 
+        UI = GameObject.Find("UI");
+        active_attack_button = GameObject.Find("ActiveAttackButton");
+        active_spell_button = GameObject.Find("ActiveSpellButton");
+
         StartNew();
 
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
@@ -124,6 +131,20 @@ public class GameControllerScript : MonoBehaviour
 
         if (player_trf.hasChanged) {
             // player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            UI.SendMessage("HideUI");
+            active_attack_button.SendMessage("Hide");
+            active_spell_button.SendMessage("Hide");
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.C)) {
+            UI.SendMessage("ToggleSkillTree");
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
+            UI.SendMessage("ToggleInventory");
         }
     }
 

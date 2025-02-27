@@ -38,11 +38,6 @@ public class BlizzardScript : MonoBehaviour
     List<GameObject> was_damaged;
     List<float> was_damaged_t;
 
-    void SetStats()
-    {
-        stats.damage += caster_stats.damage;
-    }
-
     void Awake()
     {
         stats = GetComponent<SpellBaseStats>();
@@ -54,10 +49,8 @@ public class BlizzardScript : MonoBehaviour
 
     void Start()
     {
-        SetStats();
-
         created_t = Time.time;
-        left_t = stats.duration;
+        left_t = stats.GetDuration(caster_stats);
         left_t_fraction = 1;
 
         RaycastHit hit_info;
@@ -69,7 +62,7 @@ public class BlizzardScript : MonoBehaviour
 
         transform.position = hit_info.point;
 
-        Destroy(gameObject, stats.duration);
+        Destroy(gameObject, stats.GetDuration(caster_stats));
 
         audio_source.clip = sounds[0];
         audio_source.Play();
@@ -111,6 +104,6 @@ public class BlizzardScript : MonoBehaviour
         Destroy(hit_effect, stats.hit_effect_duration);
         Destroy(hit_effect_sound, 1);
 
-        collider.SendMessage("OnHit", new AttackHitInfo(caster_stats.entity_type, stats, Time.time, Vector3.zero), SendMessageOptions.DontRequireReceiver);
+        collider.SendMessage("OnHit", new AttackHitInfo(caster_stats.entity_type, stats, caster_stats, Time.time, Vector3.zero), SendMessageOptions.DontRequireReceiver);
     }
 }

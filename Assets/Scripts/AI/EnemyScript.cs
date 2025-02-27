@@ -17,6 +17,7 @@ using Attacks;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using TMPro;
 
 namespace AI
 {
@@ -25,6 +26,7 @@ namespace AI
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyScript : MonoBehaviour
     {
+        public GameObject text_prefab;
         public GameObject basic_attack;
         public GameObject death_effect_prefab;
         public GameObject healthbar_prefab;
@@ -37,6 +39,7 @@ namespace AI
         GameObject healthbar;
         Slider healthbar_slider;
         Transform player_cam_trf;
+        Transform overlay_trf;
 
         /* effects */
         GameObject death_effect;
@@ -74,6 +77,8 @@ namespace AI
             stats = GetComponent<EnemyStats>();
             attack_stats = GetComponent<AttackerStats>();
             attack_base_stats = basic_attack.GetComponent<AttackBaseStats>();
+
+            overlay_trf = GameObject.Find("Overlay").GetComponent<Transform>();
 
             ScaleStatsToLevel();
         }
