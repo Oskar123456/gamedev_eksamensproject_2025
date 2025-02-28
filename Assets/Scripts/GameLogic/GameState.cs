@@ -60,7 +60,6 @@ public class GameState : MonoBehaviour
         pf = player_prefab;
         player_stats_saved = GetComponent<PlayerStats>();
         Reset();
-        Destroy(GameObject.Find("Player"));
     }
 
     void Start()
@@ -69,6 +68,11 @@ public class GameState : MonoBehaviour
 
     public static void InstantiatePlayer()
     {
+        if (first_load) {
+            first_load = false;
+            return;
+        }
+
         if (GameObject.Find("Player") != null) {
             Destroy(GameObject.Find("Player"));
         }

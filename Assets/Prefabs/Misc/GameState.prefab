@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3172895456924648541
+--- !u!1 &5139368094641232231
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3243792493892912770}
-  - component: {fileID: 6119106361051388732}
-  - component: {fileID: -1244298126073946756}
-  - component: {fileID: -3845718278396459047}
-  - component: {fileID: -8178631027551643548}
-  - component: {fileID: 8590847231512065285}
+  - component: {fileID: 4804268748478049034}
+  - component: {fileID: 3218765361298711769}
+  - component: {fileID: 8359355049980494737}
+  - component: {fileID: 2844560547324050661}
   m_Layer: 0
   m_Name: GameState
   m_TagString: Untagged
@@ -21,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3243792493892912770
+--- !u!4 &4804268748478049034
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
+  m_GameObject: {fileID: 5139368094641232231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -36,97 +34,78 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6119106361051388732
+--- !u!114 &3218765361298711769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
+  m_GameObject: {fileID: 5139368094641232231}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d283fd04d036625aaa2742ee54f4acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_prefab: {fileID: 5931893304690391489, guid: e8f10f20493fa4d41ae04c51a95e66bf, type: 3}
---- !u!114 &-1244298126073946756
+  player_prefab: {fileID: 379657652657367342, guid: 117255cbbcda283b289246e8d5832a07, type: 3}
+--- !u!114 &8359355049980494737
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
+  m_GameObject: {fileID: 5139368094641232231}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b83d38f5c549c59eaa050c8dfd6ddb2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attack_list_prefabs:
-  - {fileID: 7914326041902401196, guid: db6b93ffbc81de7388aa89137b168642, type: 3}
-  - {fileID: 2514293596474669052, guid: dc26a9b6e2e390cd3a0d9966240de496, type: 3}
+  - {fileID: 7830924915545753900, guid: ac7e19246a17b9d9e9d4679cce2d6d2d, type: 3}
+  - {fileID: 3937297048887836661, guid: 6aff4bfc56811e49ab071a132610a12f, type: 3}
   spell_list_prefabs:
-  - {fileID: 3589852960994460264, guid: f3602c0d2d952b43ba7986a60b0dcc47, type: 3}
-  - {fileID: 8998535066068384355, guid: 72d493682337aa68799d83ac4810e341, type: 3}
---- !u!114 &-3845718278396459047
+  - {fileID: 4426750551055592007, guid: 5c3ae7a57a4f1c8e892fa9b2240721b3, type: 3}
+  - {fileID: 6506590698679266267, guid: 3a74865aa4ed02e9e8f3c5b24f3e7911, type: 3}
+  _spell_sprites:
+  - {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
+  - {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
+  _attack_sprites:
+  - {fileID: 21300000, guid: c890dd06d4a350946ab11e4778bf47d8, type: 3}
+  - {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
+  - {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
+--- !u!114 &2844560547324050661
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985aa542a6c74222da26379b5fd5a906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attacker: {fileID: 0}
-  attacker_tag: 
-  entity_type: 0
-  damage: 0
-  speed: 0
-  scale: 0
-  damage_bonus_ice: 0
-  damage_bonus_fire: 0
-  damage_bonus_normal: 0
---- !u!114 &-8178631027551643548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
+  m_GameObject: {fileID: 5139368094641232231}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a7482fddcf47e5cbb7af9d1f787e740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  hp_max: 100
+  level: 1
   xp: 0
   xp_max: 1
-  level: 1
+  hp: 100
+  hp_max: 100
   invulnerable: 0
   stun_lock: 0.15
   move_speed_bonus: 0
-  learned_attacks: 
-  learned_spells: 
-  active_attack: 0
-  active_spell: 0
---- !u!114 &8590847231512065285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3172895456924648541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0280fd09c5ca98fdda2d689105f5c947, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  caster: {fileID: 0}
-  caster_tag: 
-  entity_type: 0
-  damage: 0
-  speed: 0
-  scale: 0
+  skill_points: 0
+  attack_damage: 0
+  attack_damage_normal: 0
+  attack_damage_ice: 0
+  attack_damage_fire: 0
+  attack_speed: 0
+  attack_scale: 0
+  attack_duration: 0
+  attack_cooldown: 0
+  spell_damage: 0
+  spell_damage_normal: 0
+  spell_damage_ice: 0
+  spell_damage_fire: 0
+  spell_speed: 0
+  spell_scale: 0
+  spell_duration: 0
+  spell_cooldown: 0

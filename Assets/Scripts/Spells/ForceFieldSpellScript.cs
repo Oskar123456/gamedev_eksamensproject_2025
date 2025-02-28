@@ -54,6 +54,20 @@ namespace Spells
 
     public class ForceFieldSpell : Spell
     {
+        public ForceFieldSpell()
+        {
+            prefab_index = 1;
+            sprite_index = 1;
+            name = "Force Field";
+            level = 1;
+            damage_base = 0; damage_per_level = 0;
+            duration_base = 1; duration_per_level = 0.1f;
+            cooldown_base = 4; cooldown_per_level = 0;
+            scale_base = 1; scale_per_level = 0;
+            damage_type = DamageType.Normal;
+
+        }
+
         public override void ScaleWithPlayerStats(PlayerStats ps)
         {
             damage   = 0;
@@ -72,18 +86,19 @@ namespace Spells
                 return;
             }
 
-            GameObject instance = GameState.InstantiateGlobal(GameData.spell_list[prefab_index], parent.position + (Vector3.up * parent.lossyScale.y / 2), Quaternion.identity);
+            GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], parent.position + (Vector3.up * parent.lossyScale.y / 2), Quaternion.identity);
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
             spell_stats.scale = scale;
             spell_stats.duration = duration;
+            spell_stats.base_duration = 4;
             spell_stats.damage_type = damage_type;
             spell_stats.caster = parent.gameObject;
         }
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}{4}Buff: InvulnDuration: {5}", name,
+            return string.Format("{0}{1}Level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
                     delimiter, level, delimiter,
                     delimiter, duration);
         }

@@ -22,8 +22,8 @@ namespace Spells
     public abstract class Spell
     {
         public int prefab_index;
+        public int sprite_index;
         public string name;
-        public Sprite sprite;
 
         public int level;
 

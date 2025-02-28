@@ -132,6 +132,11 @@ namespace Player
             if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
 
+            stats.learned_spells.Add(new BlizzardSpell());
+            stats.learned_spells.Add(new ForceFieldSpell());
+            stats.learned_attacks.Add(new SlashAttack());
+            stats.learned_attacks.Add(new IceSlashAttack());
+
             ChangeActiveAttack(0);
             ChangeActiveSpell(0);
         }
@@ -224,6 +229,8 @@ namespace Player
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = stats.active_attack.duration / stats.attack_speed;
                     animator.SetFloat("attack_speed", stats.active_attack.duration_base / stats.active_attack.duration);
+                    Debug.Log(stats.active_attack.duration_base / stats.active_attack.duration);
+                    Debug.Log(stats.active_attack.duration / stats.attack_speed);
                     stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
@@ -449,10 +456,11 @@ namespace Player
             }
 
             stats.active_attack = stats.learned_attacks[i];
+            stats.active_attack.ScaleWithPlayerStats(stats);
 
             if (ui_active_attack != null) {
                 Image img_icon = ui_active_attack.GetComponent<Image>();
-                img_icon.sprite = stats.active_attack.sprite;
+                img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
                 ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
             }
 
@@ -466,10 +474,11 @@ namespace Player
             }
 
             stats.active_spell = stats.learned_spells[i];
+            stats.active_spell.ScaleWithPlayerStats(stats);
 
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
-                img_icon.sprite = stats.active_spell.sprite;
+                img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
                 ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
             }
 

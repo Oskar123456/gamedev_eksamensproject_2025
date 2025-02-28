@@ -50,7 +50,7 @@ public class ActiveAttackButtonScript : MonoBehaviour
     {
         if (!open) {
             for (int i = 0; i < player_stats.learned_attacks.Count; i++) {
-                Sprite icon = player_stats.learned_attacks[i].sprite;
+                Sprite icon = GameData.attack_sprites[player_stats.learned_spells[i].sprite_index];
                 GameObject ability = Instantiate(ability_button_prefab, Vector3.zero, Quaternion.identity, transform);
                 Image img = ability.GetComponent<Image>();
                 img.sprite = icon;

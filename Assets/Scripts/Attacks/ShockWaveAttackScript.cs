@@ -53,7 +53,9 @@ namespace Attacks
 
             origin = stats.attacker.transform.position;
 
-            ParticleSystem ps = GetComponent<ParticleSystem>();
+            GameObject eff = Instantiate(attack_effect_prefab, transform.position, transform.rotation, transform);
+
+            ParticleSystem ps = eff.GetComponent<ParticleSystem>();
             var main = ps.main;
             main.simulationSpeed = stats.base_duration / stats.duration;
 
@@ -94,6 +96,20 @@ namespace Attacks
 
     public class ShockWaveAttack : Attack
     {
+        public ShockWaveAttack()
+        {
+            prefab_index = 2;
+            sprite_index = 2;
+            name = "ShockWaveAttack";
+            level = 1;
+            damage_base = 1; damage_per_level = 1;
+            duration_base = 1; duration_per_level = 0;
+            cooldown_base = 1; cooldown_per_level = 0;
+            scale_base = 1; scale_per_level = 0.1f;
+            damage_type = DamageType.Normal;
+
+        }
+
         public override void ScaleWithPlayerStats(PlayerStats ps)
         {
             damage   = (damage_per_level * level + damage_base) + ps.attack_damage;
@@ -112,12 +128,13 @@ namespace Attacks
 
         public override void Use(Transform parent)
         {
-            GameObject instance = GameState.InstantiateGlobal(GameData.attack_list[prefab_index],
+            GameObject instance = GameState.InstantiateGlobal(GameData.attack_prefabs[prefab_index],
                     parent.position + Vector3.up * parent.lossyScale.y / 2, parent.rotation);
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
             attack_stats.scale = scale;
             attack_stats.duration = duration;
+            attack_stats.base_duration = 1;
             attack_stats.damage_type = damage_type;
             attack_stats.attacker = parent.gameObject;
         }

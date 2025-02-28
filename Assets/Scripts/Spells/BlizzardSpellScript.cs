@@ -89,6 +89,19 @@ namespace Spells
 
     public class BlizzardSpell : Spell
     {
+        public BlizzardSpell()
+        {
+            prefab_index = 0;
+            sprite_index = 0;
+            name = "Blizzard";
+            level = 1;
+            damage_base = 1; damage_per_level = 1;
+            duration_base = 2; duration_per_level = 0;
+            cooldown_base = 4; cooldown_per_level = 0;
+            scale_base = 0.25f; scale_per_level = 0.1f;
+            damage_type = DamageType.Ice;
+        }
+
         public override void ScaleWithPlayerStats(PlayerStats ps)
         {
             damage   = (damage_per_level   * level + damage_base)   + ps.spell_damage + ps.spell_damage_ice;
@@ -107,11 +120,14 @@ namespace Spells
                 return;
             }
 
-            GameObject instance = GameState.InstantiateGlobal(GameData.spell_list[prefab_index], hit_info.point, Quaternion.identity);
+            GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], hit_info.point, Quaternion.identity);
+            instance.transform.localScale = instance.transform.localScale * scale;
+
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
             spell_stats.scale = scale;
             spell_stats.duration = duration;
+            spell_stats.base_duration = 4;
             spell_stats.damage_type = damage_type;
             spell_stats.caster = parent.gameObject;
         }

@@ -80,6 +80,8 @@ namespace UI
             player_trf = player.GetComponent<Transform>();
             player_stats = player.GetComponent<PlayerStats>();
 
+            Debug.Log("UIScript: " + player + " " + player_trf + " " + player_stats);
+
             player_info = GameObject.Find("PlayerInfo").GetComponent<TextMeshProUGUI>();
             debug_info = GameObject.Find("DebugInfo").GetComponent<TextMeshProUGUI>();
             hp_info = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
@@ -196,7 +198,7 @@ namespace UI
                 string descr = player_stats.learned_spells[i].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
                 description.GetComponent<TextMeshProUGUI>().text = descr;
 
-                Sprite sprite = player_stats.learned_spells[i].sprite;
+                Sprite sprite = GameData.spell_sprites[player_stats.learned_spells[i].sprite_index];
                 icon.GetComponent<Image>().sprite = sprite;
 
                 if (player_stats.skill_points > 0) {
