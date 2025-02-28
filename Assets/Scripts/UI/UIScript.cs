@@ -29,6 +29,7 @@ namespace UI
         public GameObject skill_tree_element_button;
         public GameObject skill_tree_element_description;
 
+        AudioSource audio_source;
         GameObject player;
         GameObject skill_tree_plus_button;
         Transform player_trf;
@@ -72,6 +73,7 @@ namespace UI
             level_intro_text = GameObject.Find("LevelIntroText").GetComponent<TextMeshProUGUI>();
             level_intro_text.text = GameState.level_name;
             /* game UI */
+            audio_source = GetComponent<AudioSource>();
             skill_tree = GameObject.Find("SkillTree");
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
             inventory = GameObject.Find("Inventory");
@@ -211,6 +213,7 @@ namespace UI
                             player_stats.skill_points--;
                             player.SendMessage("OnLevelUpSpell", ii);
                             BuildSkillTree();
+                            audio_source.Play();
                             });
                     RectTransform rt_button = button.GetComponent<RectTransform>();
                     rt_button.anchoredPosition = new Vector2(-100, 0);
