@@ -71,7 +71,7 @@ public class PlayerStats : MonoBehaviour
         return did_level;
     }
 
-    public void Set(PlayerStats ps)
+    public void CopyFrom(PlayerStats ps)
     {
         this.level = ps.level;
         this.xp = ps.xp;

@@ -97,9 +97,9 @@ namespace Attacks
     {
         public override void ScaleWithPlayerStats(PlayerStats ps)
         {
-            damage   = (damage_per_level   * level + damage_base)   + ps.attack_damage;
-            scale    = (scale_per_level    * level + scale_base)    * ps.attack_scale;
-            duration = base_duration / ps.attack_speed;
+            damage   = (damage_per_level * level + damage_base) + ps.attack_damage;
+            scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
+            duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }
 

@@ -19,10 +19,11 @@ using UnityEngine;
 
 namespace Spells
 {
-    public abstract class Spell
+    public abstract class Spell : MonoBehaviour
     {
         public int prefab_index;
         public string name;
+        public Sprite sprite;
 
         public int level;
 

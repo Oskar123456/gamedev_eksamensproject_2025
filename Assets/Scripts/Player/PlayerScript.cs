@@ -99,8 +99,6 @@ namespace Player
         void Awake()
         {
             stats = GetComponent<PlayerStats>();
-            attack_stats = GetComponent<AttackerStats>();
-            caster_stats = GetComponent<CasterStats>();
             /* UI */
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
         }
@@ -134,8 +132,8 @@ namespace Player
             if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
 
-            ChangeActiveAttack(stats.active_attack);
-            ChangeActiveSpell(stats.active_spell);
+            ChangeActiveAttack(0);
+            ChangeActiveSpell(0);
         }
 
         void Update()
@@ -225,7 +223,7 @@ namespace Player
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = stats.active_attack.duration / stats.attack_speed;
-                    animator.SetFloat("attack_speed", 1 / (stats.active_attack.duration / stats.attack_speed));
+                    animator.SetFloat("attack_speed", stats.active_attack.duration_base / stats.active_attack.duration);
                     stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
@@ -446,18 +444,15 @@ namespace Player
 
         void ChangeActiveAttack(int i)
         {
-            if (i >= GameData.attack_list.Count || !stats.learned_attacks.Contains(i)) {
+            if (i >= stats.learned_attacks.Count) {
                 return;
             }
 
-            active_attack = GameData.attack_list[i];
-            active_attack_info = active_attack.GetComponent<AttackInfo>();
-            active_attack_stats = active_attack.GetComponent<AttackBaseStats>();
-            stats.active_attack = i;
+            stats.active_attack = stats.learned_attacks[i];
 
             if (ui_active_attack != null) {
                 Image img_icon = ui_active_attack.GetComponent<Image>();
-                img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
+                img_icon.sprite = stats.active_attack.sprite;
                 ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
                         active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
             }
@@ -467,20 +462,16 @@ namespace Player
 
         void ChangeActiveSpell(int i)
         {
-            if (i >= GameData.spell_list.Count || !stats.learned_spells.Contains(i)) {
+            if (i >= stats.learned_spells.Count) {
                 return;
             }
 
-            active_spell = GameData.spell_list[i];
-            active_spell_info = active_spell.GetComponent<SpellInfo>();
-            active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
-            caster_stats.spell_level = stats.spell_levels[i];
-            stats.active_spell = i;
+            stats.active_spell = stats.learned_spells[i];
 
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
-                img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
-                ui_active_spell_text.text = active_spell_stats.GetSpellDescriptionShort(caster_stats, caster_stats.spell_level, Environment.NewLine);
+                img_icon.sprite = active_spell.sprite;
+                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
             }
 
             // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);

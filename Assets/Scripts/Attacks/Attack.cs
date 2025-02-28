@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Attacks
 {
-    public abstract class Attack
+    public abstract class Attack : MonoBehaviour
     {
         public int prefab_index;
         public string name;
