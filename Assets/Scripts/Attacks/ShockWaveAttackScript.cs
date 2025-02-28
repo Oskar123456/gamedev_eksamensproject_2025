@@ -23,7 +23,7 @@ namespace Attacks
     {
         public GameObject attack_effect_prefab;
         public GameObject hit_effect_prefab;
-        public List<AudioClip> sounds;
+        public GameObject audio_hit_dummy;
 
         public float offs_collider, offs_effect;
 
@@ -88,9 +88,6 @@ namespace Attacks
 
             Destroy(effect, stats.duration);
             Destroy(gameObject, stats.duration);
-
-            audio_source.clip = sounds[0];
-            audio_source.Play();
         }
 
         void Update()
@@ -116,13 +113,12 @@ namespace Attacks
             normal.y = 0;
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
+            GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             Destroy(hit_effect, stats.hit_effect_duration);
+            Destroy(hit_effect_sound, 1);
 
             collider.SendMessage("OnHit", new AttackHitInfo(attacker_stats.entity_type, stats, Time.time, normal), SendMessageOptions.DontRequireReceiver);
-
-            audio_source.clip = sounds[1];
-            audio_source.Play();
         }
     }
 }

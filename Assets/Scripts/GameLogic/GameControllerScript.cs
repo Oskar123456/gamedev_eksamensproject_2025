@@ -25,6 +25,7 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
+    public GameObject player_prefab;
     public GameObject level_object_container_prefab;
     public GameObject portal_entrance_prefab;
     public GameObject portal_exit_prefab;
@@ -33,6 +34,9 @@ public class GameControllerScript : MonoBehaviour
 
     public List<GameObject> enemy_prefabs;
 
+    GameObject UI;
+    GameObject active_attack_button;
+    GameObject active_spell_button;
     GameObject minimap_img;
     Camera minimap_cam;
     Transform minimap_cam_trf;
@@ -60,9 +64,13 @@ public class GameControllerScript : MonoBehaviour
     LevelType current_level_type;
     Level current_level;
 
+    bool no_player_found;
+
     void Awake()
     {
+        GameState.InstantiatePlayer();
         player = GameObject.Find("Player");
+
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
@@ -72,7 +80,6 @@ public class GameControllerScript : MonoBehaviour
         GameState.level++;
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
             : "Cistern (" + GameState.level.ToString() + ")";
-        GameState.SetPlayerStats();
     }
 
     void Start()
@@ -94,6 +101,10 @@ public class GameControllerScript : MonoBehaviour
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         player_marker_trf = player_marker.GetComponent<Transform>();
         finish_marker_trf = finish_marker.GetComponent<Transform>();
+
+        UI = GameObject.Find("UI");
+        active_attack_button = GameObject.Find("ActiveAttackButton");
+        active_spell_button = GameObject.Find("ActiveSpellButton");
 
         StartNew();
 
@@ -120,6 +131,20 @@ public class GameControllerScript : MonoBehaviour
 
         if (player_trf.hasChanged) {
             // player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            UI.SendMessage("HideUI");
+            active_attack_button.SendMessage("Hide");
+            active_spell_button.SendMessage("Hide");
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.C)) {
+            UI.SendMessage("ToggleSkillTree");
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
+            UI.SendMessage("ToggleInventory");
         }
     }
 
@@ -174,7 +199,6 @@ public class GameControllerScript : MonoBehaviour
 
     void OnDeath()
     {
-        Debug.Log("DEAD DEAD DEAD");
         GameState.Reset();
         GameState.has_died = true;
         SceneManager.LoadScene("Menu");

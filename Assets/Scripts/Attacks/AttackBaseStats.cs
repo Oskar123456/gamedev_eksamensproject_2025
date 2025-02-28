@@ -26,5 +26,6 @@ namespace Attacks
         public float damage_begin_t = 0.08f, damage_end_t = 0.4f;
         public float scale = 1;
         public float range = 1;
+        public DamageType damage_type;
     }
 }

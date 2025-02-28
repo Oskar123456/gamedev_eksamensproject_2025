@@ -37,7 +37,6 @@ namespace UI
 
         void Start()
         {
-            GameObject.Find("Player").SetActive(false);
             /* level intro */
             screen_color = GameObject.Find("ScreenPanel");
             screen_color_img = screen_color.GetComponent<Image>();

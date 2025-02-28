@@ -41,6 +41,9 @@ namespace Player
         AttackBaseStats active_attack_stats;
         SpellBaseStats active_spell_stats;
 
+        GameObject skill_tree_plus_button;
+        UITest ui_test;
+
         PlayerStats stats;
         AttackerStats attack_stats;
         CasterStats caster_stats;
@@ -49,7 +52,6 @@ namespace Player
         CharacterController char_ctrl;
         Animator animator;
         Transform trf;
-        System.Random rng = new System.Random();
 
         public float camera_dist = 0.5f;
         public float scroll_speed = 0.5f;
@@ -62,6 +64,7 @@ namespace Player
         public List<AudioClip> sounds;
         AudioSource audio_source;
 
+        public GameObject bad_text_prefab;
         public GameObject level_up_audio_prefab;
         public GameObject level_up_text_prefab;
         public GameObject level_up_prefab;
@@ -71,23 +74,19 @@ namespace Player
 
         /* state flags */
         bool did_move = false;
-        bool did_fall = false;
-        bool did_move_when_jump = false;
         bool did_jump = false;
         bool did_sprint = false;
-        bool did_land = false;
         bool did_attack = false;
         bool did_cast = false;
         bool is_attacking = false;
         bool is_casting = false;
-        bool was_hit = false;
         bool is_falling = false;
+        bool is_mouse_hover_ui = false;
         /* state parameters */
 
         // public float fall_init = -0.5f;
         // public float fall_gravity = 30f;
         // public float fall_max = 1f;
-        float fall_speed = 0f;
         float fall_begin_t;
 
         float attack_time_left = 0;
@@ -96,7 +95,7 @@ namespace Player
         float cast_cooldown_left = 0;
         float hit_time_left = 0;
         /* movement */
-        float move_speed;
+        float move_speed = 0.2f;
         public float move_speed_normal = 0.2f;
         public float move_speed_sprint_multi = 2.2f;
 
@@ -106,14 +105,13 @@ namespace Player
         public float v_jump = 0.5f;
         public float a_horizontal = 100, a_horizontal_sprint = 200, a_minus_horizontal = 300, a_vertical = -200f;
         public float a_minus_horizontal_fall_factor = 0.01f;
-        float t_horizontal = 0, t_vertical = 0;
         float fall_time;
         float pitch_0, pitch;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
         float[] anim_attack_time = { 1.0f, 1.333f };
         /* effects */
-        Renderer renderer;
+        Renderer wizard_renderer;
         Color color_original;
         Vector3 halfway_up_vec;
         float effect_blink_t = 0.5f;
@@ -124,18 +122,21 @@ namespace Player
             stats = GetComponent<PlayerStats>();
             attack_stats = GetComponent<AttackerStats>();
             caster_stats = GetComponent<CasterStats>();
+            /* UI */
+            skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
         }
 
         void Start()
         {
-            renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
-            color_original = renderer.material.color;
+            ui_test = GameObject.Find("UI").GetComponent<UITest>();
+            wizard_renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
+            color_original = wizard_renderer.material.color;
 
             trf = GetComponent<Transform>();
             char_ctrl = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
 
-            cam_trf = GameObject.Find("MainCamera").GetComponent<Transform>();
+            cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
             cam_trf_angle_x = cam_trf.eulerAngles.x;
             cam_trf_angle_y = cam_trf.eulerAngles.y;
 
@@ -147,14 +148,15 @@ namespace Player
 
             audio_source = GetComponent<AudioSource>();
             /* UI */
-            if (SceneManager.GetActiveScene().name != "Menu") {
-                ui_active_attack = GameObject.Find("ActiveAttack");
+            ui_active_attack = GameObject.Find("ActiveAttack");
+            if (ui_active_attack != null)
                 ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
-                ui_active_spell = GameObject.Find("ActiveSpell");
+            ui_active_spell = GameObject.Find("ActiveSpell");
+            if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
-                ChangeActiveAttack(stats.active_attack);
-                ChangeActiveSpell(stats.active_spell);
-            }
+
+            ChangeActiveAttack(stats.active_attack);
+            ChangeActiveSpell(stats.active_spell);
         }
 
         void Update()
@@ -166,10 +168,11 @@ namespace Player
 
             if (effect_blink_left_t > 0) {
                 effect_blink_left_t -= Time.deltaTime;
-                renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
+                wizard_renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
             }
 
             if (hit_time_left <= 0) {
+                is_mouse_hover_ui = ui_test.IsPointerOverUIElement();
                 PollKeys();
                 PollMouse();
                 PollMovement();
@@ -178,6 +181,19 @@ namespace Player
                 PollMisc();
             } else {
                 hit_time_left -= Time.deltaTime;
+                attack_time_left -= Time.deltaTime;
+                cast_time_left -= Time.deltaTime;
+                cast_cooldown_left -= Time.deltaTime;
+                if (cast_time_left > 0) {
+                    is_casting = true;
+                } else {
+                    is_casting = false;
+                }
+                if (attack_time_left > 0) {
+                    is_attacking = true;
+                } else {
+                    is_attacking = false;
+                }
             }
 
             UpdateVelocity();
@@ -188,12 +204,11 @@ namespace Player
 
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
 
-            char_ctrl.Move(Vector3.up * -0.01f);
-            is_falling = !char_ctrl.isGrounded;
-            if (is_falling)
-                char_ctrl.Move(Vector3.up * 0.01f);
-
             ChooseAnimation();
+
+            if (trf.hasChanged) {
+                UpdateCam();
+            }
 
             ResetState();
         }
@@ -229,12 +244,14 @@ namespace Player
         void PollAttack()
         {
             if (!is_attacking && !is_casting) {
-                if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0)) {
+                if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = active_attack_stats.duration / attack_stats.speed;
                     animator.SetFloat("attack_speed", 1 / (active_attack_stats.duration / attack_stats.speed));
                     Attack();
                     did_attack = true;
                     is_attacking = true;
+                    // Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
+                    //             (1 / (active_attack_stats.duration / attack_stats.speed)), (active_attack_stats.duration / attack_stats.speed)));
                     return;
                 } else {
                     return;
@@ -252,7 +269,7 @@ namespace Player
         void PollSpell()
         {
             if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
-                if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(1)) {
+                if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
                     cast_time_left = cast_time_t / caster_stats.speed;
                     cast_cooldown_left = active_spell_stats.cooldown;
                     animator.SetFloat("cast_speed", caster_stats.speed);
@@ -327,27 +344,21 @@ namespace Player
                 did_jump = true;
                 audio_source.clip = sounds[1];
                 audio_source.Play();
-                if (did_move) {
-                    did_move_when_jump = true;
-                } else {
-                    did_move_when_jump = false;
-                }
             }
 
             if (did_move) {
                 pitch += 45f;
                 trf.eulerAngles = new Vector3(0, pitch, 0);
-                UpdateCam();
             }
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Vector3 normal = hit.normal;
-            if (normal.y >= 0.9 && is_falling) {
+            // Vector3 normal = hit.normal;
+            // if (normal.y >= 0.9 && is_falling) {
                 // did_land = true;
                 // is_falling = false;
-            }
+            // }
         }
 
         void ChooseAnimation()
@@ -372,7 +383,7 @@ namespace Player
 
             else if (d_xz > 0) {
                 if (did_sprint) {
-                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 4);
+                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 2);
                     animator.Play("BattleRunForward");
                 } else {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz);
@@ -387,14 +398,12 @@ namespace Player
 
         void ResetState()
         {
+            is_mouse_hover_ui = false;
             did_cast = false;
             did_jump = false;
-            did_fall = false;
             did_move = false;
-            did_land = false;
             did_attack = false;
             did_sprint = false;
-            was_hit = false;
         }
 
         void UpdateCam()
@@ -405,8 +414,8 @@ namespace Player
 
         void OnHit(AttackHitInfo hit_info)
         {
-            TakeDamage(hit_info.stats.damage);
-            char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.stats.damage), 1.0f));
+            TakeDamage(hit_info.damage);
+            char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.damage), 1.0f));
         }
 
         void OnEnemyCollision(EnemyStats enemy_stats)
@@ -422,16 +431,22 @@ namespace Player
             audio_source.Play();
             stats.hp -= damage;
             effect_blink_left_t = effect_blink_t;
-            was_hit = true;
             hit_time_left = stats.stun_lock;
+
+            GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+            txt.transform.localScale = txt.transform.localScale;
+            txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", damage);
         }
 
         void OnTriggerEnter(Collider collider)
         {
         }
 
-        void AddXp(int n)
+        void OnRecXp(int n)
         {
+            GameObject xp_effect = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+            xp_effect.transform.localScale = xp_effect.transform.localScale;
+            xp_effect.GetComponent<TextMeshProUGUI>().text = string.Format("+{0}xp", n);
             if (stats.AddXp(n)) {
                 OnLevelUp();
             }
@@ -451,6 +466,8 @@ namespace Player
 
             ChangeActiveAttack(stats.active_attack);
             ChangeActiveSpell(stats.active_spell);
+
+            skill_tree_plus_button.SetActive(true);
         }
 
         void Attack()
@@ -468,6 +485,7 @@ namespace Player
         void CastSpell()
         {
             GameObject spell_obj = Instantiate(active_spell, transform.position, transform.rotation);
+            spell_obj.transform.localScale = spell_obj.transform.localScale * active_spell_stats.GetScale(caster_stats);
             CasterStats css = spell_obj.GetComponent<CasterStats>();
             css.caster = gameObject;
             css.entity_type = EntityType.Player;
@@ -475,6 +493,7 @@ namespace Player
             css.damage = caster_stats.damage;
             css.speed = caster_stats.speed;
             css.scale = caster_stats.scale;
+            css.spell_level = caster_stats.spell_level;
         }
 
         void ChangeActiveAttack(int i)
@@ -488,11 +507,12 @@ namespace Player
             active_attack_stats = active_attack.GetComponent<AttackBaseStats>();
             stats.active_attack = i;
 
-            Image img_icon = ui_active_attack.GetComponent<Image>();
-            img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
-
-            ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
-                active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+            if (ui_active_attack != null) {
+                Image img_icon = ui_active_attack.GetComponent<Image>();
+                img_icon.sprite = active_attack.GetComponent<AttackInfo>().icon;
+                ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
+                        active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+            }
 
             // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
         }
@@ -506,19 +526,30 @@ namespace Player
             active_spell = GameData.spell_list[i];
             active_spell_info = active_spell.GetComponent<SpellInfo>();
             active_spell_stats = active_spell.GetComponent<SpellBaseStats>();
+            caster_stats.spell_level = stats.spell_levels[i];
             stats.active_spell = i;
 
-            Image img_icon = ui_active_spell.GetComponent<Image>();
-            img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
-
-            ui_active_spell_text.text = string.Format("{0}{1}Dmg: {2}",
-                active_spell_info.name, Environment.NewLine, active_spell_stats.damage + caster_stats.damage);
+            if (ui_active_spell != null) {
+                Image img_icon = ui_active_spell.GetComponent<Image>();
+                img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
+                ui_active_spell_text.text = string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", active_spell_info.name,
+                        Environment.NewLine, caster_stats.spell_level, Environment.NewLine,
+                        Environment.NewLine, active_spell_stats.GetDamage(caster_stats),
+                        Environment.NewLine, active_spell_stats.GetScale(caster_stats),
+                        Environment.NewLine, active_spell_stats.GetDuration(caster_stats));
+            }
 
             // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
         }
 
         void UpdateVelocity()
         {
+            char_ctrl.Move(Vector3.up * -0.01f);
+            is_falling = !char_ctrl.isGrounded;
+            if (is_falling) {
+                char_ctrl.Move(Vector3.up * 0.01f);
+            }
+
             /* velocity */
             if (!is_falling) {
                 v_vertical_0 = 0;
@@ -555,6 +586,15 @@ namespace Player
             v_vertical_0 = v_vertical;
             v_horizontal_0 = v_horizontal;
 
+        }
+
+        void OnLevelUpSpell(int i)
+        {
+            stats.spell_levels[i]++;
+            ChangeActiveSpell(i);
+            if (stats.skill_points < 1) {
+                skill_tree_plus_button.SetActive(false);
+            }
         }
     }
 }

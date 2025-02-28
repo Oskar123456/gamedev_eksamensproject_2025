@@ -38,6 +38,14 @@ public class ActiveSpellButtonScript : MonoBehaviour
         // TODO: Cooldown fade
     }
 
+    void Hide()
+    {
+        foreach (Transform child in transform) {
+            Destroy(child.gameObject);
+        }
+        open = false;
+    }
+
     void Toggle()
     {
         if (!open) {

@@ -440,6 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12297fd0ef2072fab06daafb576c00f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text_prefab: {fileID: 7759828847315582701, guid: 2779305fe4967a0799879d98f6ea5f6f, type: 3}
   basic_attack: {fileID: 2140377860948176698, guid: 868720e33316577fd93d07513abfeffa, type: 3}
   death_effect_prefab: {fileID: 8510626178070770473, guid: 080aea53684e48292b3019050ec62823, type: 3}
   healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
@@ -460,6 +461,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 5
   hp_max: 5
+  invulnerable: 0
+  stun_lock: 0.25
   collision_damage: 1
 --- !u!114 &348920364794282543
 MonoBehaviour:
@@ -473,10 +476,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985aa542a6c74222da26379b5fd5a906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attacker: {fileID: 0}
+  attacker_tag: 
   entity_type: 2
   damage: 1
   speed: 0.6
   scale: 1
+  damage_bonus_ice: 0
+  damage_bonus_fire: 0
+  damage_bonus_normal: 0
 --- !u!195 &5389526629514160262
 NavMeshAgent:
   m_ObjectHideFlags: 0

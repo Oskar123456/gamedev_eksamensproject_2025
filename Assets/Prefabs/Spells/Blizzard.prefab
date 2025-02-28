@@ -146,12 +146,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0174639873adc7fb842c92fda57c8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  base_damage: 1
   damage: 1
-  scale: 1
+  base_scale: 0.5
+  scale: 0.5
+  base_duration: 2
+  duration: 2
   speed: 1
-  duration: 4
   cooldown: 4
   hit_effect_duration: 0.4
+  damage_type: 0
+  does_damage: 1
+  damage_per_level: 1
+  duration_per_level: 0.15
+  scale_per_level: 0.15
   caster_entity_type: 0
   caster_tag: 
   caster: {fileID: 0}
@@ -270,6 +278,11 @@ MonoBehaviour:
   damage: 0
   speed: 0
   scale: 0
+  duration: 1
+  damage_bonus_ice: 0
+  damage_bonus_fire: 0
+  damage_bonus_normal: 0
+  spell_level: 0
 --- !u!114 &-9064541873201731666
 MonoBehaviour:
   m_ObjectHideFlags: 0

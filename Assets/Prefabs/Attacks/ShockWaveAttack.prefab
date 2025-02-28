@@ -112,6 +112,7 @@ MonoBehaviour:
   damage_end_t: 0.6
   scale: 1
   range: 5
+  damage_type: 0
 --- !u!65 &4405944608868173792
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -151,6 +152,9 @@ MonoBehaviour:
   damage: 0
   speed: 0
   scale: 0
+  damage_bonus_ice: 0
+  damage_bonus_fire: 0
+  damage_bonus_normal: 0
 --- !u!114 &-5465608595059403073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,9 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attack_effect_prefab: {fileID: 3367314013316085171, guid: 8b20002c2b69a9d44ab5bae8e1d923cd, type: 3}
   hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
-  sounds:
-  - {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
-  - {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
+  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
   offs_collider: 2.8
   offs_effect: -1.35
 --- !u!82 &4607538722044756053
@@ -180,9 +182,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  m_Resource: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 0.101
   m_Pitch: 1
   Loop: 0

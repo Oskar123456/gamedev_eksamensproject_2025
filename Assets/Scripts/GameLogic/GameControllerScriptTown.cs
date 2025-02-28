@@ -18,12 +18,16 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScriptMenu : MonoBehaviour
 {
+    public GameObject player_prefab;
     public GameObject portal_exit_prefab;
     public GameObject finish_marker_prefab;
     public GameObject player_marker_prefab;
 
     public Vector3 finish_pos;
 
+    GameObject UI;
+    GameObject active_attack_button;
+    GameObject active_spell_button;
     GameObject minimap_img;
     Camera minimap_cam;
     Transform minimap_cam_trf;
@@ -41,28 +45,36 @@ public class GameControllerScriptMenu : MonoBehaviour
     bool minimap_maximized = false;
     Vector2 minimap_img_pos;
 
+    bool no_player_found;
+
     void Awake()
     {
-        player = GameObject.Find("Player");
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
-        GameState.player_trf = player_trf;
-
+        GameState.InstantiatePlayer();
         GameState.level_name = "Town";
-        GameState.SetPlayerStats();
     }
 
     void Start()
     {
+        Vector3 start_pos = new Vector3(0, 2, 0);
+        player = GameObject.Find("Player");
+        player.GetComponent<CharacterController>().enabled = false;
+        player.transform.position = start_pos;
+        player.GetComponent<CharacterController>().enabled = true;
+
+        player_trf = player.GetComponent<Transform>();
+        player_char_ctrl = player.GetComponent<CharacterController>();
+
+        GameState.player_trf = player_trf;
+
         minimap_img = GameObject.Find("MiniMapImg");
         minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
         minimap_cam_trf = GameObject.Find("MiniMapCamera").GetComponent<Transform>();
         minimap_cam.orthographic = true;
         minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
-        player = GameObject.Find("Player");
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
+        UI = GameObject.Find("UI");
+        active_attack_button = GameObject.Find("ActiveAttackButton");
+        active_spell_button = GameObject.Find("ActiveSpellButton");
 
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
@@ -75,7 +87,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         finish_marker_trf.position = new Vector3(finish_pos.x, 290, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
 
-        WarpPlayerToStart();
         UpdateMiniMapCam();
     }
 
@@ -96,6 +107,20 @@ public class GameControllerScriptMenu : MonoBehaviour
             player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
             UpdateMiniMapCam();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            UI.SendMessage("HideUI");
+            active_attack_button.SendMessage("Hide");
+            active_spell_button.SendMessage("Hide");
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.C)) {
+            UI.SendMessage("ToggleSkillTree");
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
+            UI.SendMessage("ToggleInventory");
+        }
     }
 
     void UpdateMiniMapCam()
@@ -107,10 +132,6 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void WarpPlayerToStart()
     {
-        Vector3 start_pos = new Vector3(0, 2, 0);
-        player_char_ctrl.enabled = false;
-        player_trf.position = start_pos;
-        player_char_ctrl.enabled = true;
     }
 
     void Clean()
@@ -127,6 +148,8 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void OnDeath()
     {
-        SceneManager.LoadScene("Town");
+        GameState.Reset();
+        GameState.has_died = true;
+        SceneManager.LoadScene("Menu");
     }
 }
