@@ -15,6 +15,9 @@
   - Number Keys : Switch Active Attack
   - [Left-Shift+]Number Keys : Switch Active Spell
   - Tab : [Maximize] Minimap
+  - T : Open Skill Tree
+  - I/E : Open Inventory
+  - Escape : Close UI
 
 ## Third Party Assets List
 
