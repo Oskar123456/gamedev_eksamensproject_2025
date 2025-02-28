@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0174639873adc7fb842c92fda57c8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Blizzard
   base_damage: 1
   damage: 1
   base_scale: 0.5

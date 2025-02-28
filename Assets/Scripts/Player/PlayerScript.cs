@@ -532,11 +532,7 @@ namespace Player
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
                 img_icon.sprite = active_spell.GetComponent<SpellInfo>().icon;
-                ui_active_spell_text.text = string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", active_spell_info.name,
-                        Environment.NewLine, caster_stats.spell_level, Environment.NewLine,
-                        Environment.NewLine, active_spell_stats.GetDamage(caster_stats),
-                        Environment.NewLine, active_spell_stats.GetScale(caster_stats),
-                        Environment.NewLine, active_spell_stats.GetDuration(caster_stats));
+                ui_active_spell_text.text = active_spell_stats.GetSpellDescriptionShort(caster_stats, caster_stats.spell_level, Environment.NewLine);
             }
 
             // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
