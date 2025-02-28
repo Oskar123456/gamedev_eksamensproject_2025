@@ -181,7 +181,7 @@ namespace UI
 
             if (player_trf.hasChanged) {
                 player_info.text = string.Format("stats: damage: {0} | attack-speed/-scale: {1: .00}/{2: .00}",
-                    player_attack_stats.damage, player_attack_stats.speed, player_attack_stats.scale);
+                    player_stats.attack_damage, player_stats.attack_speed, player_stats.attack_scale);
             }
 
         }
@@ -193,11 +193,10 @@ namespace UI
                 GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
                 GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
 
-                string descr = player_stats.learned_spells[i].GetComponent<SpellBaseStats>()
-                    .GetSpellDescriptionFull(player_caster_stats, player_stats.learned_spells[i], " ", Environment.NewLine);
+                string descr = player_stats.learned_spells[i].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
                 description.GetComponent<TextMeshProUGUI>().text = descr;
 
-                Sprite sprite = player_stats.learned_spells[i].GetComponent<SpellInfo>().icon;
+                Sprite sprite = player_stats.learned_spells[i].sprite;
                 icon.GetComponent<Image>().sprite = sprite;
 
                 if (player_stats.skill_points > 0) {

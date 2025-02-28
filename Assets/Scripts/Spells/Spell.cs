@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace Spells
 {
-    public abstract class Spell : MonoBehaviour
+    public abstract class Spell
     {
         public int prefab_index;
         public string name;

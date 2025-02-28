@@ -49,11 +49,8 @@ public class ActiveAttackButtonScript : MonoBehaviour
     void Toggle()
     {
         if (!open) {
-            for (int i = 0; i < GameData.attack_list.Count; i++) {
-                if (!player_stats.learned_attacks.Contains(i))
-                    continue;
-
-                Sprite icon = GameData.attack_list[i].GetComponent<AttackInfo>().icon;
+            for (int i = 0; i < player_stats.learned_attacks.Count; i++) {
+                Sprite icon = player_stats.learned_attacks[i].sprite;
                 GameObject ability = Instantiate(ability_button_prefab, Vector3.zero, Quaternion.identity, transform);
                 Image img = ability.GetComponent<Image>();
                 img.sprite = icon;

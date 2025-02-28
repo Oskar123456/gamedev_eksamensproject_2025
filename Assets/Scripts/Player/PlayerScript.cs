@@ -249,7 +249,7 @@ namespace Player
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
                     cast_time_left = cast_time_t / stats.spell_speed;
                     cast_cooldown_left = stats.active_spell.cooldown;
-                    animator.SetFloat("cast_speed", caster_stats.speed);
+                    animator.SetFloat("cast_speed", stats.spell_speed);
                     did_cast = true;
                     is_casting = true;
                     stats.active_spell.Use(transform);
@@ -387,7 +387,7 @@ namespace Player
             cam_trf.eulerAngles = new Vector3(cam_trf_angle_x, cam_trf_angle_y, 0);
         }
 
-        void OnHit(AttackHitInfo hit_info)
+        void OnHit(HitInfo hit_info)
         {
             TakeDamage(hit_info.damage);
             char_ctrl.Move(hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.damage), 1.0f));
@@ -453,8 +453,7 @@ namespace Player
             if (ui_active_attack != null) {
                 Image img_icon = ui_active_attack.GetComponent<Image>();
                 img_icon.sprite = stats.active_attack.sprite;
-                ui_active_attack_text.text = string.Format("{0}{1}Dmg: {2}",
-                        active_attack_info.name, Environment.NewLine, active_attack_stats.damage + attack_stats.damage);
+                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
             }
 
             // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
@@ -470,7 +469,7 @@ namespace Player
 
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
-                img_icon.sprite = active_spell.sprite;
+                img_icon.sprite = stats.active_spell.sprite;
                 ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
             }
 

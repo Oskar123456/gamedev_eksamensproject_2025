@@ -44,7 +44,7 @@ namespace Spells
 
         void Start()
         {
-            Destroy(gameObject, stats.GetDuration(caster_stats));
+            Destroy(gameObject, stats.duration);
             audio_source.Play();
         }
 
@@ -54,7 +54,7 @@ namespace Spells
 
         void OnTriggerStay(Collider collider)
         {
-            if (collider.gameObject.tag == caster_stats.caster_tag) {
+            if (collider.gameObject.tag == stats.caster.tag) {
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace Spells
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
-            Destroy(hit_effect, stats.hit_effect_duration);
+            Destroy(hit_effect, 0.4f);
             Destroy(hit_effect_sound, 1);
 
             collider.SendMessage("OnHit", new HitInfo(Vector3.zero, stats.caster, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
@@ -104,18 +104,16 @@ namespace Spells
             RaycastHit hit_info;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out hit_info, 500, 1 << 6)) {
-                Destroy(gameObject);
                 return;
             }
 
-            GameObject instance = Instantiate(GameData.spell_list[prefab_index], hit_info.point, Quaternion.identity);
+            GameObject instance = GameState.InstantiateGlobal(GameData.spell_list[prefab_index], hit_info.point, Quaternion.identity);
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
             spell_stats.scale = scale;
             spell_stats.duration = duration;
-            spell_stats.cooldown = cooldown;
             spell_stats.damage_type = damage_type;
-            spell_stats.attacker = parent.gameObject;
+            spell_stats.caster = parent.gameObject;
         }
 
         public override string GetDescriptionString(string delimiter)

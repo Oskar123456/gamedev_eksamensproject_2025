@@ -24,6 +24,7 @@ namespace Attacks
         public int damage;
         public float scale;
         public float duration;
+        public float base_duration;
         public DamageType damage_type;
         public GameObject attacker;
     }

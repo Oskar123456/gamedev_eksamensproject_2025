@@ -38,7 +38,7 @@ namespace Spells
             stats = GetComponent<SpellStats>();
             audio_source = GetComponent<AudioSource>();
             stats.caster.GetComponent<PlayerStats>().invulnerable = true;
-            transform.SetParent(caster_stats.caster.transform);
+            transform.SetParent(stats.caster.transform);
         }
 
         void Update()
@@ -69,18 +69,16 @@ namespace Spells
             RaycastHit hit_info;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out hit_info, 500, 1 << 6)) {
-                Destroy(gameObject);
                 return;
             }
 
-            GameObject instance = Instantiate(GameData.spell_list[prefab_index], parent.position + (Vector3.up * parent.lossyScale.y / 2), Quaternion.identity);
+            GameObject instance = GameState.InstantiateGlobal(GameData.spell_list[prefab_index], parent.position + (Vector3.up * parent.lossyScale.y / 2), Quaternion.identity);
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
             spell_stats.scale = scale;
             spell_stats.duration = duration;
-            spell_stats.cooldown = cooldown;
             spell_stats.damage_type = damage_type;
-            spell_stats.attacker = parent.gameObject;
+            spell_stats.caster = parent.gameObject;
         }
 
         public override string GetDescriptionString(string delimiter)
@@ -92,14 +90,14 @@ namespace Spells
 
         public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
         {
-            return string.Format("{0}{1}Current level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
+            string current = string.Format("{0}{1}Current level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
                     delimiter, level, delimiter,
                     delimiter, duration);
 
             level++;
             ScaleWithPlayerStats(ps);
 
-            return string.Format("{0}{1}Next level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
+            string next = string.Format("{0}{1}Next level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
                     delimiter, level, delimiter,
                     delimiter, duration + duration_per_level);
 

@@ -16,6 +16,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Attacks;
+using Spells;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -87,8 +89,8 @@ public class PlayerStats : MonoBehaviour
         this.active_attack = ps.active_attack;
         this.active_spell = ps.active_spell;
 
-        this.learned_attacks = new List<int>();
-        this.learned_spells = new List<int>();
+        this.learned_attacks = new List<Attack>();
+        this.learned_spells = new List<Spell>();
 
         for (int i = 0; i < ps.learned_attacks.Count; i++)
             this.learned_attacks.Add(ps.learned_attacks[i]);

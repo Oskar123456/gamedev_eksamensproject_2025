@@ -31,7 +31,10 @@ namespace Attacks
 
         Vector3 origin;
 
+        public float base_duration;
         float created_t, alive_t;
+        public float damage_begin_fraction_t, damage_end_fraction_t;
+        float damage_begin_t, damage_end_t;
 
         List<GameObject> was_damaged;
 
@@ -45,9 +48,10 @@ namespace Attacks
         void Start()
         {
             created_t = Time.time;
+            damage_begin_t = damage_begin_fraction_t * stats.duration;
+            damage_end_t = damage_end_fraction_t * stats.duration;
 
-            origin = attacker_stats.attacker.transform.position;
-            halfway_up_vec = Vector3.up * (attacker_stats.attacker.transform.lossyScale.y / 2.0f);
+            origin = stats.attacker.transform.position;
 
             ParticleSystem ps = GetComponent<ParticleSystem>();
             var main = ps.main;
@@ -63,10 +67,10 @@ namespace Attacks
 
         void OnTriggerStay(Collider collider)
         {
-            if (alive_t < stats.damage_begin_t || alive_t > stats.damage_end_t)
+            if (alive_t < damage_begin_t || alive_t > damage_end_t)
                 return;
 
-            if (collider.gameObject.tag == attacker_stats.attacker_tag) {
+            if (collider.gameObject.tag == stats.attacker.tag) {
                 return;
             }
 
@@ -81,7 +85,7 @@ namespace Attacks
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
-            Destroy(hit_effect, stats.hit_effect_duration);
+            Destroy(hit_effect, 0.4f);
             Destroy(hit_effect_sound, 1);
 
             collider.SendMessage("OnHit", new HitInfo(normal, stats.attacker, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
@@ -102,20 +106,18 @@ namespace Attacks
         {
             damage   = damage_base   + es.attack_damage;
             scale    = scale_base    * es.attack_scale;
-            duration = duration_base / esattack_speed;
+            duration = duration_base / es.attack_speed;
             cooldown = duration;
         }
 
         public override void Use(Transform parent)
         {
-            GameObject instance = Instantiate(GameData.attack_list[prefab_index],
-                    parent.position + Vector3.up * parent.lossyScale.y / 2,
-                    parent.rotation * Quaternion.Euler(0, 0, -10));
+            GameObject instance = GameState.InstantiateGlobal(GameData.attack_list[prefab_index],
+                    parent.position + Vector3.up * parent.lossyScale.y / 2, parent.rotation);
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
             attack_stats.scale = scale;
             attack_stats.duration = duration;
-            attack_stats.cooldown = cooldown;
             attack_stats.damage_type = damage_type;
             attack_stats.attacker = parent.gameObject;
         }

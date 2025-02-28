@@ -58,7 +58,7 @@ public class GameState : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         pf = player_prefab;
-        player_stats = GetComponent<PlayerStats>();
+        player_stats_saved = GetComponent<PlayerStats>();
         Reset();
         Destroy(GameObject.Find("Player"));
     }
@@ -100,5 +100,10 @@ public class GameState : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         PlayerStats ps = player.GetComponent<PlayerStats>();
         player_stats_saved.CopyFrom(ps);
+    }
+
+    public static GameObject InstantiateGlobal(GameObject g, Vector3 v, Quaternion q)
+    {
+        return Instantiate(g, v, q);
     }
 }
