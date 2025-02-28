@@ -138,14 +138,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0174639873adc7fb842c92fda57c8db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 1
+  name: Force Field
   base_damage: 0
-  base_scale: 1
-  base_duration: 1
   damage: 0
+  base_scale: 1
   scale: 0
+  base_duration: 1
+  duration: 1
   speed: 0
-  duration: 2
   cooldown: 4
   hit_effect_duration: 0
   damage_type: 0
@@ -192,6 +192,7 @@ MonoBehaviour:
   damage_bonus_ice: 0
   damage_bonus_fire: 0
   damage_bonus_normal: 0
+  spell_level: 0
 --- !u!82 &-735861661005143629
 AudioSource:
   m_ObjectHideFlags: 0

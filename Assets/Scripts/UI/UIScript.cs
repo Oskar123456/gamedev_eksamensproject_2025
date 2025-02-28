@@ -12,6 +12,7 @@
  *
  * */
 
+using System;
 using Attacks;
 using TMPro;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace UI
         public GameObject skill_tree_element;
         public GameObject skill_tree_element_icon;
         public GameObject skill_tree_element_button;
+        public GameObject skill_tree_element_description;
 
         GameObject player;
         GameObject skill_tree_plus_button;
@@ -77,6 +79,7 @@ namespace UI
             player_trf = player.GetComponent<Transform>();
             player_stats = player.GetComponent<PlayerStats>();
             player_attack_stats = player.GetComponent<AttackerStats>();
+            player_caster_stats = player.GetComponent<CasterStats>();
             player_info = GameObject.Find("PlayerInfo").GetComponent<TextMeshProUGUI>();
             debug_info = GameObject.Find("DebugInfo").GetComponent<TextMeshProUGUI>();
             hp_info = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
@@ -191,6 +194,12 @@ namespace UI
 
                 GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
                 GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
+                GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
+
+                string descr = GameData.spell_list[i].GetComponent<SpellBaseStats>()
+                    .GetSpellDescriptionFull(player_caster_stats, player_stats.spell_levels[i], " ", Environment.NewLine);
+                description.GetComponent<TextMeshProUGUI>().text = descr;
+
                 Sprite sprite = GameData.spell_list[i].GetComponent<SpellInfo>().icon;
                 icon.GetComponent<Image>().sprite = sprite;
 
@@ -200,20 +209,21 @@ namespace UI
                     Button b = button.GetComponent<Button>();
                     b.onClick.AddListener(() => {
                             player_stats.skill_points--;
-                            player_stats.spell_levels[ii]++;
                             player.SendMessage("OnLevelUpSpell", ii);
                             BuildSkillTree();
                             });
                     RectTransform rt_button = button.GetComponent<RectTransform>();
-                    rt_button.anchoredPosition = new Vector2(50, 0);
+                    rt_button.anchoredPosition = new Vector2(-100, 0);
                 }
 
 
                 RectTransform rt_container = container.GetComponent<RectTransform>();
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
+                RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(-130, 430 - (i + 1) * 150 - i * 20);
-                rt_icon.anchoredPosition = new Vector2(-50, 0);
+                rt_container.anchoredPosition = new Vector2(0, 430 - (i + 1) * 120 - i * 20);
+                rt_icon.anchoredPosition = new Vector2(-200, 0);
+                rt_text.anchoredPosition = new Vector2(110, -15);
             }
         }
     }
