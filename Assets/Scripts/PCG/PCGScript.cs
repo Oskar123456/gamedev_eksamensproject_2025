@@ -200,11 +200,6 @@ namespace PCG
 
                             GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
                             GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
-                            EnemyStats es = new_enemy.GetComponent<EnemyStats>();
-                            es.hp_max = 2 * GameState.level;
-                            es.hp = 2 * GameState.level;
-
-                            // new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f);
                         }
                     }
 

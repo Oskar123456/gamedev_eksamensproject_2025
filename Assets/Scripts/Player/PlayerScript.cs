@@ -26,27 +26,15 @@ namespace Player
 {
     public class PlayerScript : MonoBehaviour
     {
-        public GameObject active_attack;
-        public GameObject active_spell;
+        PlayerStats stats;
 
-        AttackInfo active_attack_info;
-        SpellInfo active_spell_info;
-
+        /* UI */
         GameObject ui_active_attack;
         TextMeshProUGUI ui_active_attack_text;
-
         GameObject ui_active_spell;
         TextMeshProUGUI ui_active_spell_text;
-
-        AttackBaseStats active_attack_stats;
-        SpellBaseStats active_spell_stats;
-
         GameObject skill_tree_plus_button;
         UITest ui_test;
-
-        PlayerStats stats;
-        AttackerStats attack_stats;
-        CasterStats caster_stats;
 
         GameObject game_controller;
         CharacterController char_ctrl;
@@ -56,21 +44,9 @@ namespace Player
         public float camera_dist = 0.5f;
         public float scroll_speed = 0.5f;
 
-        // float yaw, pitch;
         Transform cam_trf;
         float cam_trf_angle_x, cam_trf_angle_y;
         Vector3 cam_trf_dist = new Vector3(-10, 16.85f, -10);
-
-        public List<AudioClip> sounds;
-        AudioSource audio_source;
-
-        public GameObject bad_text_prefab;
-        public GameObject level_up_audio_prefab;
-        public GameObject level_up_text_prefab;
-        public GameObject level_up_prefab;
-        public float level_up_anim_t;
-        public float level_up_anim_scale;
-        GameObject level_up_effect;
 
         /* state flags */
         bool did_move = false;
@@ -83,12 +59,6 @@ namespace Player
         bool is_falling = false;
         bool is_mouse_hover_ui = false;
         /* state parameters */
-
-        // public float fall_init = -0.5f;
-        // public float fall_gravity = 30f;
-        // public float fall_max = 1f;
-        float fall_begin_t;
-
         float attack_time_left = 0;
         float cast_time_t = 2.33f;
         float cast_time_left = 0;
@@ -109,11 +79,20 @@ namespace Player
         float pitch_0, pitch;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
-        float[] anim_attack_time = { 1.0f, 1.333f };
         /* effects */
+        public List<AudioClip> sounds;
+        AudioSource audio_source;
+        public GameObject bad_text_prefab;
+        public GameObject level_up_audio_prefab;
+        public GameObject level_up_text_prefab;
+        public GameObject level_up_prefab;
+        GameObject level_up_effect;
         Renderer wizard_renderer;
-        Color color_original;
+
         Vector3 halfway_up_vec;
+        public float level_up_anim_t;
+        public float level_up_anim_scale;
+        Color color_original;
         float effect_blink_t = 0.5f;
         float effect_blink_left_t;
 
@@ -245,9 +224,9 @@ namespace Player
         {
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
-                    attack_time_left = active_attack_stats.duration / attack_stats.speed;
-                    animator.SetFloat("attack_speed", 1 / (active_attack_stats.duration / attack_stats.speed));
-                    Attack();
+                    attack_time_left = stats.active_attack.duration / stats.attack_speed;
+                    animator.SetFloat("attack_speed", 1 / (stats.active_attack.duration / stats.attack_speed));
+                    stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
                     // Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
@@ -270,14 +249,12 @@ namespace Player
         {
             if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
-                    cast_time_left = cast_time_t / caster_stats.speed;
-                    cast_cooldown_left = active_spell_stats.cooldown;
+                    cast_time_left = cast_time_t / stats.spell_speed;
+                    cast_cooldown_left = stats.active_spell.cooldown;
                     animator.SetFloat("cast_speed", caster_stats.speed);
                     did_cast = true;
                     is_casting = true;
-
-                    CastSpell();
-
+                    stats.active_spell.Use(transform);
                     return;
                 } else {
                     return;
@@ -460,40 +437,11 @@ namespace Player
             Destroy(level_up_effect, level_up_anim_t);
             Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
 
-            attack_stats.damage += 1;
-            attack_stats.speed += 0.15f;
-            attack_stats.scale += 0.15f;
-
-            ChangeActiveAttack(stats.active_attack);
-            ChangeActiveSpell(stats.active_spell);
+            stats.attack_damage += 1;
+            stats.attack_speed += 0.15f;
+            stats.attack_scale += 0.15f;
 
             skill_tree_plus_button.SetActive(true);
-        }
-
-        void Attack()
-        {
-            GameObject attack_obj = Instantiate(active_attack, transform.position, transform.rotation);
-            AttackerStats ats = attack_obj.GetComponent<AttackerStats>();
-            ats.attacker = gameObject;
-            ats.entity_type = EntityType.Player;
-            ats.attacker_tag = "Player";
-            ats.damage = attack_stats.damage;
-            ats.speed = attack_stats.speed;
-            ats.scale = attack_stats.scale;
-        }
-
-        void CastSpell()
-        {
-            GameObject spell_obj = Instantiate(active_spell, transform.position, transform.rotation);
-            spell_obj.transform.localScale = spell_obj.transform.localScale * active_spell_stats.GetScale(caster_stats);
-            CasterStats css = spell_obj.GetComponent<CasterStats>();
-            css.caster = gameObject;
-            css.entity_type = EntityType.Player;
-            css.caster_tag = "Player";
-            css.damage = caster_stats.damage;
-            css.speed = caster_stats.speed;
-            css.scale = caster_stats.scale;
-            css.spell_level = caster_stats.spell_level;
         }
 
         void ChangeActiveAttack(int i)
@@ -586,11 +534,9 @@ namespace Player
 
         void OnLevelUpSpell(int i)
         {
-            stats.spell_levels[i]++;
-            ChangeActiveSpell(i);
-            if (stats.skill_points < 1) {
-                skill_tree_plus_button.SetActive(false);
-            }
+            stats.skill_points--;
+            stats.learned_spells[i].level++;
+            stats.learned_spells[i].ScaleWithPlayerStats(stats);
         }
     }
 }
