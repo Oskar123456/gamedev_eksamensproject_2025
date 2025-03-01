@@ -56,6 +56,7 @@ public class EnemyStats : MonoBehaviour
     {
         xp = GameState.level * xp_per_level;
         hp_max = GameState.level * hp_max_per_level + base_hp_max;
+        hp = hp_max;
         attack_damage = GameState.level * attack_damage_per_level + base_attack_damage;
         attack_speed = GameState.level * attack_speed_per_level + base_attack_speed;
         attack_scale = GameState.level * attack_scale_per_level + base_attack_scale;

@@ -59,7 +59,10 @@ public class GameState : MonoBehaviour
 
         pf = player_prefab;
         player_stats_saved = GetComponent<PlayerStats>();
-        Reset();
+        if (first_load) {
+            Reset();
+            first_load = false;
+        }
     }
 
     void Start()
@@ -96,7 +99,16 @@ public class GameState : MonoBehaviour
         GameObject p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
         p.name = "Player";
         PlayerStats ps = p.GetComponent<PlayerStats>();
+
+        ps.learned_spells.Add(new BlizzardSpell());
+        ps.learned_spells.Add(new ForceFieldSpell());
+        ps.learned_attacks.Add(new SlashAttack());
+        ps.learned_attacks.Add(new IceSlashAttack());
+        ps.active_attack = ps.learned_attacks[0];
+        ps.active_spell = ps.learned_spells[0];
+
         player_stats_saved.CopyFrom(ps);
+        Destroy(p);
     }
 
     public static void SavePlayerStats()

@@ -29,6 +29,10 @@ namespace Spells
 
         SpellStats stats;
 
+        float created_t, alive_t;
+        float damage_begin_t, damage_end_t;
+        public float duration_t, begin_t, end_t;
+
         public float damage_cooldown = 0.5f;
 
         List<GameObject> was_damaged;
@@ -54,7 +58,7 @@ namespace Spells
 
         void OnTriggerStay(Collider collider)
         {
-            if (collider.gameObject.tag == stats.caster.tag) {
+            if (stats.caster == null || collider.gameObject.tag == stats.caster.tag) {
                 return;
             }
 
@@ -96,7 +100,7 @@ namespace Spells
             name = "Blizzard";
             level = 1;
             damage_base = 1; damage_per_level = 1;
-            duration_base = 2; duration_per_level = 0;
+            duration_base = 2; duration_per_level = 0.1f;
             cooldown_base = 4; cooldown_per_level = 0;
             scale_base = 0.25f; scale_per_level = 0.1f;
             damage_type = DamageType.Ice;

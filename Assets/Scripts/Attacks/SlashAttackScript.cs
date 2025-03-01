@@ -21,7 +21,6 @@ namespace Attacks
 {
     public class SlashAttackScript : MonoBehaviour
     {
-        public GameObject attack_effect_prefab;
         public GameObject hit_effect_prefab;
         public GameObject audio_hit_dummy;
 
@@ -29,10 +28,9 @@ namespace Attacks
 
         Vector3 origin;
 
-        public float base_duration;
         float created_t, alive_t;
-        public float damage_begin_fraction_t, damage_end_fraction_t;
         float damage_begin_t, damage_end_t;
+        public float duration_t, begin_t, end_t;
 
         List<GameObject> was_damaged;
 
@@ -46,16 +44,14 @@ namespace Attacks
             was_damaged = new List<GameObject>();
 
             created_t = Time.time;
-            damage_begin_t = damage_begin_fraction_t * stats.duration;
-            damage_end_t = damage_end_fraction_t * stats.duration;
+            damage_begin_t = begin_t * (stats.duration / duration_t);
+            damage_end_t = end_t * (stats.duration / duration_t);
 
             origin = stats.attacker.transform.position;
 
-            GameObject eff = Instantiate(attack_effect_prefab, transform.position, transform.rotation, transform);
-
-            ParticleSystem ps = eff.GetComponent<ParticleSystem>();
+            ParticleSystem ps = GetComponent<ParticleSystem>();
             var main = ps.main;
-            main.simulationSpeed = stats.base_duration / stats.duration;
+            main.simulationSpeed = duration_t / stats.duration;
 
             Destroy(gameObject, stats.duration);
         }
@@ -67,7 +63,7 @@ namespace Attacks
 
         void OnTriggerStay(Collider collider)
         {
-            if (collider.gameObject.tag == stats.attacker.tag) {
+            if (stats.attacker == null || collider.gameObject.tag == stats.attacker.tag) {
                 return;
             }
 
@@ -102,9 +98,9 @@ namespace Attacks
             name = "Slash";
             level = 1;
             damage_base = 1; damage_per_level = 1;
-            duration_base = 0.6f; duration_per_level = 0;
+            duration_base = 1; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
-            scale_base = 0.277f; scale_per_level = 0.0277f;
+            scale_base = 1; scale_per_level = 0.025f;
             damage_type = DamageType.Normal;
         }
 

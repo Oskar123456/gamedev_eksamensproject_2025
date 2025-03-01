@@ -27,6 +27,7 @@ namespace AI
     public class EnemyScript : MonoBehaviour
     {
         public GameObject text_prefab;
+        public GameObject bad_text_prefab;
         public GameObject basic_attack;
         public GameObject death_effect_prefab;
         public GameObject healthbar_prefab;
@@ -127,6 +128,11 @@ namespace AI
             healthbar_slider.value = (float)stats.hp / stats.hp_max;
             healthbar.SetActive(true);
             float hit_time_left = stats.stun_lock;
+
+            GameObject txt = Instantiate(bad_text_prefab, healthbar.transform.position, healthbar.transform.rotation, healthbar.transform);
+            txt.transform.localScale = new Vector3(healthbar.transform.localScale.y / healthbar.transform.localScale.x * txt.transform.localScale.x,
+                    txt.transform.localScale.y, txt.transform.localScale.z) * 5;
+            txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", damage);
         }
 
         void FixHealthBar()
@@ -134,7 +140,7 @@ namespace AI
             Vector3 p1 = player_cam_trf.position;
             Vector3 p2 = healthbar.transform.position;
             p1.y = 0; p2.y = 0;
-            healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p1 - p2);
+            healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p2 - p1);
         }
 
         void OnTriggerEnter(Collider collider) { }
@@ -186,7 +192,6 @@ namespace AI
                 normal.y = 0;
                 transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, normal);
 
-                attack_go = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation, transform);
                 stats.active_attack.Use(transform);
             }
         }

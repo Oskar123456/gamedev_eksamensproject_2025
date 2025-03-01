@@ -28,8 +28,9 @@ namespace Spells
 
         SpellStats stats;
 
-        float created_t;
-        float alive_t, left_t, left_t_fraction;
+        float created_t, alive_t;
+        float damage_begin_t, damage_end_t;
+        public float duration_t, begin_t, end_t;
 
         void Start()
         {

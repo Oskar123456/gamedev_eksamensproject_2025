@@ -60,7 +60,6 @@ namespace Player
         bool is_mouse_hover_ui = false;
         /* state parameters */
         float attack_time_left = 0;
-        float cast_time_t = 2.33f;
         float cast_time_left = 0;
         float cast_cooldown_left = 0;
         float hit_time_left = 0;
@@ -79,6 +78,8 @@ namespace Player
         float pitch_0, pitch;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
+        public float attack_anim_speed = 1.333f;
+        public float cast_anim_speed = 2.333f;
         /* effects */
         public List<AudioClip> sounds;
         AudioSource audio_source;
@@ -132,13 +133,8 @@ namespace Player
             if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
 
-            stats.learned_spells.Add(new BlizzardSpell());
-            stats.learned_spells.Add(new ForceFieldSpell());
-            stats.learned_attacks.Add(new SlashAttack());
-            stats.learned_attacks.Add(new IceSlashAttack());
-
-            ChangeActiveAttack(0);
-            ChangeActiveSpell(0);
+            UpdateActiveAttack();
+            UpdateActiveSpell();
         }
 
         void Update()
@@ -228,14 +224,10 @@ namespace Player
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = stats.active_attack.duration / stats.attack_speed;
-                    animator.SetFloat("attack_speed", stats.active_attack.duration_base / stats.active_attack.duration);
-                    Debug.Log(stats.active_attack.duration_base / stats.active_attack.duration);
-                    Debug.Log(stats.active_attack.duration / stats.attack_speed);
+                    animator.SetFloat("attack_speed", attack_anim_speed / (stats.active_attack.duration / stats.attack_speed));
                     stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
-                    // Debug.Log(string.Format("attacking: {0}, {1}, {2}, {3}", active_attack_stats.duration, attack_stats.speed,
-                    //             (1 / (active_attack_stats.duration / attack_stats.speed)), (active_attack_stats.duration / attack_stats.speed)));
                     return;
                 } else {
                     return;
@@ -254,7 +246,7 @@ namespace Player
         {
             if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
-                    cast_time_left = cast_time_t / stats.spell_speed;
+                    cast_time_left = cast_anim_speed / stats.spell_speed;
                     cast_cooldown_left = stats.active_spell.cooldown;
                     animator.SetFloat("cast_speed", stats.spell_speed);
                     did_cast = true;
@@ -443,10 +435,35 @@ namespace Player
             Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
 
             stats.attack_damage += 1;
-            stats.attack_speed += 0.15f;
-            stats.attack_scale += 0.15f;
+            stats.attack_speed += 0.1f;
+            stats.attack_scale += 0.05f;
+
+            UpdateActiveAttack();
+            UpdateActiveSpell();
 
             skill_tree_plus_button.SetActive(true);
+        }
+
+        void UpdateActiveAttack()
+        {
+            stats.active_attack.ScaleWithPlayerStats(stats);
+
+            if (ui_active_attack != null) {
+                Image img_icon = ui_active_attack.GetComponent<Image>();
+                img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
+                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
+            }
+        }
+
+        void UpdateActiveSpell()
+        {
+            stats.active_spell.ScaleWithPlayerStats(stats);
+
+            if (ui_active_spell != null) {
+                Image img_icon = ui_active_spell.GetComponent<Image>();
+                img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
+                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
+            }
         }
 
         void ChangeActiveAttack(int i)
@@ -536,6 +553,8 @@ namespace Player
             stats.skill_points--;
             stats.learned_spells[i].level++;
             stats.learned_spells[i].ScaleWithPlayerStats(stats);
+            if (stats.active_spell == stats.learned_spells[i])
+                UpdateActiveSpell();
         }
     }
 }

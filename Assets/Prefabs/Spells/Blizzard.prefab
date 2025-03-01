@@ -124,9 +124,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 1eb7cbaf61d23a64bbd36c0a38b5cb0c, type: 3}
+  m_Resource: {fileID: 8300000, guid: 1eb7cbaf61d23a64bbd36c0a38b5cb0c, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 0.13
   m_Pitch: 1
   Loop: 0
@@ -225,6 +225,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 4519e5606018ca09d89bb55d4bb0be5e, type: 3}
   hit_effect_prefab: {fileID: 4924508274929071776, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
+  duration_t: 0
+  begin_t: 0
+  end_t: 0
   damage_cooldown: 0.5
 --- !u!114 &8437151584212558955
 MonoBehaviour:

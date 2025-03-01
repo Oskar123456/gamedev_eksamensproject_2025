@@ -21,7 +21,6 @@ namespace Attacks
 {
     public class ShockWaveAttackScript : MonoBehaviour
     {
-        public GameObject attack_effect_prefab;
         public GameObject hit_effect_prefab;
         public GameObject audio_hit_dummy;
 
@@ -31,10 +30,9 @@ namespace Attacks
 
         Vector3 origin;
 
-        public float base_duration;
         float created_t, alive_t;
-        public float damage_begin_fraction_t, damage_end_fraction_t;
         float damage_begin_t, damage_end_t;
+        public float duration_t, begin_t, end_t;
 
         List<GameObject> was_damaged;
 
@@ -47,17 +45,17 @@ namespace Attacks
 
         void Start()
         {
+            was_damaged = new List<GameObject>();
+
             created_t = Time.time;
-            damage_begin_t = damage_begin_fraction_t * stats.duration;
-            damage_end_t = damage_end_fraction_t * stats.duration;
+            damage_begin_t = begin_t * (stats.duration / duration_t);
+            damage_end_t = end_t * (stats.duration / duration_t);
 
             origin = stats.attacker.transform.position;
 
-            GameObject eff = Instantiate(attack_effect_prefab, transform.position, transform.rotation, transform);
-
-            ParticleSystem ps = eff.GetComponent<ParticleSystem>();
+            ParticleSystem ps = GetComponent<ParticleSystem>();
             var main = ps.main;
-            main.simulationSpeed = stats.base_duration / stats.duration;
+            main.simulationSpeed = duration_t / stats.duration;
 
             Destroy(gameObject, stats.duration);
         }
@@ -72,7 +70,7 @@ namespace Attacks
             if (alive_t < damage_begin_t || alive_t > damage_end_t)
                 return;
 
-            if (collider.gameObject.tag == stats.attacker.tag) {
+            if (stats.attacker == null || collider.gameObject.tag == stats.attacker.tag) {
                 return;
             }
 

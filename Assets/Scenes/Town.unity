@@ -708,6 +708,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 5455162898685254899, guid: 0053d8d92569bde3bbf6bcd6a0e4a3f3, type: 3}
+      propertyPath: m_fontSize
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5455162898685254899, guid: 0053d8d92569bde3bbf6bcd6a0e4a3f3, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515849193219657204, guid: 0053d8d92569bde3bbf6bcd6a0e4a3f3, type: 3}
+      propertyPath: m_fontSize
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515849193219657204, guid: 0053d8d92569bde3bbf6bcd6a0e4a3f3, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6959669822986760052, guid: 0053d8d92569bde3bbf6bcd6a0e4a3f3, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

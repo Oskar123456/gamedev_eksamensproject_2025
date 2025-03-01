@@ -60,8 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attack_list_prefabs:
-  - {fileID: 7830924915545753900, guid: ac7e19246a17b9d9e9d4679cce2d6d2d, type: 3}
-  - {fileID: 3937297048887836661, guid: 6aff4bfc56811e49ab071a132610a12f, type: 3}
+  - {fileID: 6697311237542272127, guid: 6ec07a593382b17e3b3bad8ca9f464ef, type: 3}
+  - {fileID: 4234594349587254900, guid: c2dcdbb84707c2b9683c72af3cbd62a8, type: 3}
+  - {fileID: 363127035908328369, guid: e5d89578d9c4b8b82a65050710a12148, type: 3}
   spell_list_prefabs:
   - {fileID: 4426750551055592007, guid: 5c3ae7a57a4f1c8e892fa9b2240721b3, type: 3}
   - {fileID: 6506590698679266267, guid: 3a74865aa4ed02e9e8f3c5b24f3e7911, type: 3}

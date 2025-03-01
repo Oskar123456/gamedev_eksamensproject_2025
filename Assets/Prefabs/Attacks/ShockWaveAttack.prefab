@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9012878061096218681}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -123,12 +123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d9824aeacbe5d4f9c7b6161f93ee69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack_effect_prefab: {fileID: 3367314013316085171, guid: 8b20002c2b69a9d44ab5bae8e1d923cd, type: 3}
   hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
-  base_duration: 1
-  damage_begin_fraction_t: 0.4
-  damage_end_fraction_t: 0.6
+  duration_t: 0
+  begin_t: 0
+  end_t: 0
 --- !u!82 &6966115315083866661
 AudioSource:
   m_ObjectHideFlags: 0
@@ -142,7 +141,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   m_Resource: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.101
+  m_Volume: 0.242
   m_Pitch: 1
   Loop: 0
   Mute: 0
