@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5685265234022760397}
   - component: {fileID: 3008511371190921266}
   - component: {fileID: -6730507022652305995}
-  - component: {fileID: 8457900695540206404}
+  - component: {fileID: 2302265967904760699}
   m_Layer: 2
   m_Name: ShockWave
   m_TagString: Untagged
@@ -5037,7 +5037,7 @@ MonoBehaviour:
   duration_t: 1
   begin_t: 0.3
   end_t: 0.4
---- !u!114 &8457900695540206404
+--- !u!114 &2302265967904760699
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5046,7 +5046,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 363127035908328369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb8239af9abc144b69c126c84a7c9a32, type: 3}
+  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
