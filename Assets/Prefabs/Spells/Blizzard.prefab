@@ -24643,7 +24643,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6288382277645583362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0ef6c6846bbaedf3a426d007f238377, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e2b98f7e1f9aca6899bf886fbdaf01e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 4519e5606018ca09d89bb55d4bb0be5e, type: 3}
@@ -24661,7 +24661,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6288382277645583362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89785fd071b6fd3e2a48b65111830ba8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a1c855f3680d40b4b0ddc7faa7093a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0

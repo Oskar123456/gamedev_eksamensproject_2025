@@ -188,12 +188,14 @@ MonoBehaviour:
   a_vertical: -200
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
+  attack_anim_speed: 1.333
+  cast_anim_speed: 2.333
   sounds:
   - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
   - {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
   - {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
   - {fileID: 8300000, guid: 26c3c51fc9dc7624a86cb41f34d4f14b, type: 3}
-  bad_text_prefab: {fileID: 7759828847315582701, guid: 2779305fe4967a0799879d98f6ea5f6f, type: 3}
+  bad_text_prefab: {fileID: 7759828847315582701, guid: d19056f1ec6979922bbf0764d0583d2b, type: 3}
   level_up_audio_prefab: {fileID: 7201156227621268438, guid: c58445f7f05a04c0f8c26a87f3caf383, type: 3}
   level_up_text_prefab: {fileID: 7759828847315582701, guid: 09c3f77702d4130c1b2bb478e2d99d8c, type: 3}
   level_up_prefab: {fileID: 7986504087968017091, guid: 12a56ee4630040c4eb17ae9707ed4cef, type: 3}

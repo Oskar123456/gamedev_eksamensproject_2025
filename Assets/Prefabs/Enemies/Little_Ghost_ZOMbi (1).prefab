@@ -108,9 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12297fd0ef2072fab06daafb576c00f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text_prefab: {fileID: 7759828847315582701, guid: 2779305fe4967a0799879d98f6ea5f6f, type: 3}
-  bad_text_prefab: {fileID: 7759828847315582701, guid: 2779305fe4967a0799879d98f6ea5f6f, type: 3}
-  basic_attack: {fileID: 9012878061096218681, guid: 3421bc40a4ebadd04a6706a55acf3bd6, type: 3}
+  text_prefab: {fileID: 7759828847315582701, guid: 09c3f77702d4130c1b2bb478e2d99d8c, type: 3}
+  bad_text_prefab: {fileID: 7759828847315582701, guid: d19056f1ec6979922bbf0764d0583d2b, type: 3}
+  basic_attack: {fileID: 363127035908328369, guid: 157e2b192857362149dca8252df57c94, type: 3}
   death_effect_prefab: {fileID: 8510626178070770473, guid: 080aea53684e48292b3019050ec62823, type: 3}
   healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
   enemy_type: 0
