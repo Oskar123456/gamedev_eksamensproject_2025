@@ -27,14 +27,16 @@ public class ActiveAttackButtonScript : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
-        player_stats = player.GetComponent<PlayerStats>();
         button = GetComponent<Button>();
         button.onClick.AddListener(Toggle);
     }
 
     void Update()
     {
+        if (player == null || player_stats == null) {
+            player = GameObject.Find("Player");
+            player_stats = player.GetComponent<PlayerStats>();
+        }
         // TODO: Cooldown fade
     }
 

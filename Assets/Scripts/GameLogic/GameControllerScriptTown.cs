@@ -34,7 +34,6 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     GameObject player;
     Transform player_trf;
-    CharacterController player_char_ctrl;
 
     GameObject player_marker;
     Transform player_marker_trf;
@@ -49,12 +48,13 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void Awake()
     {
-        GameState.InstantiatePlayer();
-        GameState.level_name = "Town";
     }
 
     void Start()
     {
+        GameState.InstantiatePlayer();
+        GameState.level_name = "Town";
+
         Vector3 start_pos = new Vector3(0, 2, 0);
         player = GameObject.Find("Player");
         player.GetComponent<CharacterController>().enabled = false;
@@ -62,7 +62,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         player.GetComponent<CharacterController>().enabled = true;
 
         player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
 
         GameState.player_trf = player_trf;
 
@@ -92,6 +91,11 @@ public class GameControllerScriptMenu : MonoBehaviour
 
     void Update()
     {
+        if (player == null || player_trf == null) {
+            player = GameObject.Find("Player");
+            player_trf = player.GetComponent<Transform>();
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab)) {
             if (minimap_maximized) {
                 minimap_img.GetComponent<RectTransform>().anchoredPosition = minimap_img_pos;

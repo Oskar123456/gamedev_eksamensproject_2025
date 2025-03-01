@@ -59,10 +59,6 @@ public class GameState : MonoBehaviour
 
         pf = player_prefab;
         player_stats_saved = GetComponent<PlayerStats>();
-        if (first_load) {
-            Reset();
-            first_load = false;
-        }
     }
 
     void Start()
@@ -71,18 +67,33 @@ public class GameState : MonoBehaviour
 
     public static void InstantiatePlayer()
     {
+        GameObject p;
+        PlayerStats ps;
+
         if (first_load) {
             first_load = false;
-            return;
+            p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
+            ps = p.GetComponent<PlayerStats>();
+
+            ps.learned_spells.Add(new BlizzardSpell());
+            ps.learned_spells.Add(new ForceFieldSpell());
+            ps.learned_attacks.Add(new SlashAttack());
+            ps.learned_attacks.Add(new IceSlashAttack());
+            ps.active_attack = ps.learned_attacks[0];
+            ps.active_spell = ps.learned_spells[0];
+
+            player_stats_saved.CopyFrom(ps);
+            Destroy(p);
         }
 
-        if (GameObject.Find("Player") != null) {
-            Destroy(GameObject.Find("Player"));
+        if (GameObject.Find("Player") == null) {
+            p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
+            p.name = "Player";
+        } else {
+            p = GameObject.Find("Player");
         }
 
-        GameObject p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
-        p.name = "Player";
-        PlayerStats ps = p.GetComponent<PlayerStats>();
+        ps = p.GetComponent<PlayerStats>();
         ps.CopyFrom(player_stats_saved);
     }
 
@@ -92,12 +103,7 @@ public class GameState : MonoBehaviour
         level = 0;
         difficulty = 0;
 
-        if (GameObject.Find("Player") != null) {
-            Destroy(GameObject.Find("Player"));
-        }
-
         GameObject p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
-        p.name = "Player";
         PlayerStats ps = p.GetComponent<PlayerStats>();
 
         ps.learned_spells.Add(new BlizzardSpell());

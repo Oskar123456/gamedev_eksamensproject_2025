@@ -68,6 +68,10 @@ public class GameControllerScript : MonoBehaviour
 
     void Awake()
     {
+    }
+
+    void Start()
+    {
         GameState.InstantiatePlayer();
         player = GameObject.Find("Player");
 
@@ -80,10 +84,6 @@ public class GameControllerScript : MonoBehaviour
         GameState.level++;
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
             : "Cistern (" + GameState.level.ToString() + ")";
-    }
-
-    void Start()
-    {
         arena = GameObject.Find("Arena");
 
         PCG = arena.GetComponent<PCGScript>();
@@ -114,6 +114,11 @@ public class GameControllerScript : MonoBehaviour
 
     void Update()
     {
+        if (player == null || player_trf == null) {
+            player = GameObject.Find("Player");
+            player_trf = player.GetComponent<Transform>();
+        }
+
         if (Input.GetKeyDown(KeyCode.R)) {
             OnContinue();
         }

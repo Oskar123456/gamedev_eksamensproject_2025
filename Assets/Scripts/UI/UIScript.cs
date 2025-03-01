@@ -69,18 +69,12 @@ namespace UI
             screen_color_img = screen_color.GetComponent<Image>();
             screen_color_img.color = Color.black;
             level_intro_text = GameObject.Find("LevelIntroText").GetComponent<TextMeshProUGUI>();
-            level_intro_text.text = GameState.level_name;
             /* game UI */
             audio_source = GetComponent<AudioSource>();
 
             skill_tree = GameObject.Find("SkillTree");
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
             inventory = GameObject.Find("Inventory");
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
-            player_stats = player.GetComponent<PlayerStats>();
-
-            Debug.Log("UIScript: " + player + " " + player_trf + " " + player_stats);
 
             player_info = GameObject.Find("PlayerInfo").GetComponent<TextMeshProUGUI>();
             debug_info = GameObject.Find("DebugInfo").GetComponent<TextMeshProUGUI>();
@@ -90,16 +84,18 @@ namespace UI
             player_xp_bar = GameObject.Find("PlayerXPBar").GetComponent<Slider>();
 
             HideUI();
-            skill_tree_plus_button.SetActive(false);
-
-            player_hp_bar.value = player_stats.hp / player_stats.hp_max;
-            player_xp_bar.value = player_stats.xp / player_stats.xp_max;
 
             fade_in_left = fade_in;
         }
 
         void Update()
         {
+            if (player == null || player_trf == null || player_stats == null) {
+                player = GameObject.Find("Player");
+                player_trf = player.GetComponent<Transform>();
+                player_stats = player.GetComponent<PlayerStats>();
+            }
+
             DrawDebugInfo();
 
             hp_info.text = string.Format("{0}/{1} HP", player_stats.hp, player_stats.hp_max);
@@ -111,6 +107,7 @@ namespace UI
             }
 
             if (fade_in > 0) {
+                level_intro_text.text = GameState.level_name;
                 screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
                 fade_in_left -= Time.deltaTime;
                 if (fade_in_left <= 0) {

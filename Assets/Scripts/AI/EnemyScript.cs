@@ -64,8 +64,6 @@ namespace AI
             rb = GetComponent<Rigidbody>();
             nma = GetComponent<NavMeshAgent>();
 
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
             player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
 
             healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 1.0f), Quaternion.identity, transform);
@@ -80,6 +78,11 @@ namespace AI
 
         void Update()
         {
+            if (player == null || player_trf == null) {
+                player = GameObject.Find("Player");
+                player_trf = player.GetComponent<Transform>();
+            }
+
             if (hit_time_left >= 0) {
                 hit_time_left -= Time.deltaTime;
                 return;
@@ -168,7 +171,7 @@ namespace AI
                 nma.ResetPath();
 
             if (stats.hp < 1) {
-                player.SendMessage("OnRecXp", stats.xp);
+                hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
                 Destroy(death_effect, death_effect_delete_t);
