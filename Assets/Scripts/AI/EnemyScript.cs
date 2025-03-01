@@ -27,6 +27,7 @@ namespace AI
     public class EnemyScript : MonoBehaviour
     {
         public GameObject text_prefab;
+        public GameObject bad_text_prefab;
         public GameObject basic_attack;
         public GameObject death_effect_prefab;
         public GameObject healthbar_prefab;
@@ -52,8 +53,6 @@ namespace AI
         GameObject attack_go;
 
         EnemyStats stats;
-        AttackerStats attack_stats;
-        AttackBaseStats attack_base_stats;
 
         Vector3 halfway_up_vec;
         float attack_time_left;
@@ -65,8 +64,6 @@ namespace AI
             rb = GetComponent<Rigidbody>();
             nma = GetComponent<NavMeshAgent>();
 
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
             player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
 
             healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * (transform.lossyScale.y + 1.0f), Quaternion.identity, transform);
@@ -75,16 +72,17 @@ namespace AI
             halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
             stats = GetComponent<EnemyStats>();
-            attack_stats = GetComponent<AttackerStats>();
-            attack_base_stats = basic_attack.GetComponent<AttackBaseStats>();
 
             overlay_trf = GameObject.Find("Overlay").GetComponent<Transform>();
-
-            ScaleStatsToLevel();
         }
 
         void Update()
         {
+            if (player == null || player_trf == null) {
+                player = GameObject.Find("Player");
+                player_trf = player.GetComponent<Transform>();
+            }
+
             if (hit_time_left >= 0) {
                 hit_time_left -= Time.deltaTime;
                 return;
@@ -115,12 +113,12 @@ namespace AI
 
             RaycastHit hit_info = new RaycastHit();
             if (Physics.Raycast(transform.position + halfway_up_vec, player_trf.position - transform.position, out hit_info, 200)) {
-                if (hit_info.collider.gameObject.CompareTag("Player") && dist_to_player <= attack_base_stats.range) {
+                if (hit_info.collider.gameObject.CompareTag("Player") && dist_to_player <= stats.base_attack_range) {
                     nma.ResetPath();
                     Attack();
                 } else {
                     float dest_to_player_dist = Vector3.Distance(nma.destination, player_trf.position);
-                    if (dest_to_player_dist > attack_base_stats.range / 2.0f)
+                    if (dest_to_player_dist > stats.base_attack_range / 2.0f)
                         nma.SetDestination(player_trf.position);
                 }
             }
@@ -133,6 +131,11 @@ namespace AI
             healthbar_slider.value = (float)stats.hp / stats.hp_max;
             healthbar.SetActive(true);
             float hit_time_left = stats.stun_lock;
+
+            GameObject txt = Instantiate(bad_text_prefab, healthbar.transform.position, healthbar.transform.rotation, healthbar.transform);
+            txt.transform.localScale = new Vector3(healthbar.transform.localScale.y / healthbar.transform.localScale.x * txt.transform.localScale.x,
+                    txt.transform.localScale.y, txt.transform.localScale.z) * 5;
+            txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", damage);
         }
 
         void FixHealthBar()
@@ -140,7 +143,7 @@ namespace AI
             Vector3 p1 = player_cam_trf.position;
             Vector3 p2 = healthbar.transform.position;
             p1.y = 0; p2.y = 0;
-            healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p1 - p2);
+            healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p2 - p1);
         }
 
         void OnTriggerEnter(Collider collider) { }
@@ -156,9 +159,9 @@ namespace AI
             nma.enabled = true;
         }
 
-        void OnHit(AttackHitInfo hit_info)
+        void OnHit(HitInfo hit_info)
         {
-            if (hit_info.entity_type != EntityType.Player)
+            if (hit_info.parent.tag != "Player")
                 return;
 
             TakeDamage(hit_info.damage);
@@ -168,7 +171,7 @@ namespace AI
                 nma.ResetPath();
 
             if (stats.hp < 1) {
-                player.SendMessage("OnRecXp", GameState.level);
+                hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
                 Destroy(death_effect, death_effect_delete_t);
@@ -186,31 +189,14 @@ namespace AI
             if (!is_attacking) {
                 nma.enabled = false;
 
-                attack_time_left = attack_base_stats.duration / attack_stats.speed;
+                attack_time_left = stats.attack_cooldown;
 
                 Vector3 normal = Vector3.Normalize(player_trf.position - transform.position);
                 normal.y = 0;
                 transform.rotation = transform.rotation * Quaternion.FromToRotation(transform.forward, normal);
 
-                attack_go = Instantiate(basic_attack, transform.position + halfway_up_vec, transform.rotation, transform);
-
-                AttackerStats ats = attack_go.GetComponent<AttackerStats>();
-                ats.attacker = gameObject;
-                ats.entity_type = EntityType.Enemy;
-                ats.attacker_tag = "Enemy";
-                ats.damage = attack_stats.damage;
-                ats.speed = attack_stats.speed;
-                ats.scale = attack_stats.scale;
+                stats.active_attack.Use(transform);
             }
-        }
-
-        void ScaleStatsToLevel()
-        {
-            stats.hp += GameState.level * 5;
-            stats.hp_max += GameState.level * 5;
-            attack_stats.damage += GameState.level * 3;
-            attack_stats.speed += GameState.level * 0.05f;
-            attack_stats.scale += GameState.level * 0.05f;
         }
     }
 }

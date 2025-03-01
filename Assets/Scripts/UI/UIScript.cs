@@ -49,8 +49,6 @@ namespace UI
         GameObject inventory;
 
         PlayerStats player_stats;
-        AttackerStats player_attack_stats;
-        CasterStats player_caster_stats;
 
         public float fade_in = 1;
         float fade_in_left;
@@ -71,17 +69,13 @@ namespace UI
             screen_color_img = screen_color.GetComponent<Image>();
             screen_color_img.color = Color.black;
             level_intro_text = GameObject.Find("LevelIntroText").GetComponent<TextMeshProUGUI>();
-            level_intro_text.text = GameState.level_name;
             /* game UI */
             audio_source = GetComponent<AudioSource>();
+
             skill_tree = GameObject.Find("SkillTree");
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
             inventory = GameObject.Find("Inventory");
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
-            player_stats = player.GetComponent<PlayerStats>();
-            player_attack_stats = player.GetComponent<AttackerStats>();
-            player_caster_stats = player.GetComponent<CasterStats>();
+
             player_info = GameObject.Find("PlayerInfo").GetComponent<TextMeshProUGUI>();
             debug_info = GameObject.Find("DebugInfo").GetComponent<TextMeshProUGUI>();
             hp_info = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
@@ -90,16 +84,18 @@ namespace UI
             player_xp_bar = GameObject.Find("PlayerXPBar").GetComponent<Slider>();
 
             HideUI();
-            skill_tree_plus_button.SetActive(false);
-
-            player_hp_bar.value = player_stats.hp / player_stats.hp_max;
-            player_xp_bar.value = player_stats.xp / player_stats.xp_max;
 
             fade_in_left = fade_in;
         }
 
         void Update()
         {
+            if (player == null || player_trf == null || player_stats == null) {
+                player = GameObject.Find("Player");
+                player_trf = player.GetComponent<Transform>();
+                player_stats = player.GetComponent<PlayerStats>();
+            }
+
             DrawDebugInfo();
 
             hp_info.text = string.Format("{0}/{1} HP", player_stats.hp, player_stats.hp_max);
@@ -111,6 +107,7 @@ namespace UI
             }
 
             if (fade_in > 0) {
+                level_intro_text.text = GameState.level_name;
                 screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
                 fade_in_left -= Time.deltaTime;
                 if (fade_in_left <= 0) {
@@ -183,26 +180,22 @@ namespace UI
 
             if (player_trf.hasChanged) {
                 player_info.text = string.Format("stats: damage: {0} | attack-speed/-scale: {1: .00}/{2: .00}",
-                    player_attack_stats.damage, player_attack_stats.speed, player_attack_stats.scale);
+                    player_stats.attack_damage, player_stats.attack_speed, player_stats.attack_scale);
             }
 
         }
 
         void BuildSkillTree()
         {
-            for (int i = 0; i < GameData.spell_list.Count; i++) {
-                if (!player_stats.learned_spells.Contains(i))
-                    continue;
-
+            for (int i = 0; i < player_stats.learned_spells.Count; i++) {
                 GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
                 GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
                 GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
 
-                string descr = GameData.spell_list[i].GetComponent<SpellBaseStats>()
-                    .GetSpellDescriptionFull(player_caster_stats, player_stats.spell_levels[i], " ", Environment.NewLine);
+                string descr = player_stats.learned_spells[i].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
                 description.GetComponent<TextMeshProUGUI>().text = descr;
 
-                Sprite sprite = GameData.spell_list[i].GetComponent<SpellInfo>().icon;
+                Sprite sprite = GameData.spell_sprites[player_stats.learned_spells[i].sprite_index];
                 icon.GetComponent<Image>().sprite = sprite;
 
                 if (player_stats.skill_points > 0) {
@@ -210,10 +203,12 @@ namespace UI
                     int ii = i;
                     Button b = button.GetComponent<Button>();
                     b.onClick.AddListener(() => {
-                            player_stats.skill_points--;
                             player.SendMessage("OnLevelUpSpell", ii);
                             BuildSkillTree();
                             audio_source.Play();
+                            if (player_stats.skill_points < 1) {
+                                skill_tree_plus_button.SetActive(false);
+                            }
                             });
                     RectTransform rt_button = button.GetComponent<RectTransform>();
                     rt_button.anchoredPosition = new Vector2(-100, 0);

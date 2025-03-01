@@ -27,14 +27,16 @@ public class ActiveAttackButtonScript : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
-        player_stats = player.GetComponent<PlayerStats>();
         button = GetComponent<Button>();
         button.onClick.AddListener(Toggle);
     }
 
     void Update()
     {
+        if (player == null || player_stats == null) {
+            player = GameObject.Find("Player");
+            player_stats = player.GetComponent<PlayerStats>();
+        }
         // TODO: Cooldown fade
     }
 
@@ -49,11 +51,8 @@ public class ActiveAttackButtonScript : MonoBehaviour
     void Toggle()
     {
         if (!open) {
-            for (int i = 0; i < GameData.attack_list.Count; i++) {
-                if (!player_stats.learned_attacks.Contains(i))
-                    continue;
-
-                Sprite icon = GameData.attack_list[i].GetComponent<AttackInfo>().icon;
+            for (int i = 0; i < player_stats.learned_attacks.Count; i++) {
+                Sprite icon = GameData.attack_sprites[player_stats.learned_spells[i].sprite_index];
                 GameObject ability = Instantiate(ability_button_prefab, Vector3.zero, Quaternion.identity, transform);
                 Image img = ability.GetComponent<Image>();
                 img.sprite = icon;

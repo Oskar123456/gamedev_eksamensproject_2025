@@ -27,14 +27,16 @@ public class ActiveSpellButtonScript : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
-        player_stats = player.GetComponent<PlayerStats>();
         button = GetComponent<Button>();
         button.onClick.AddListener(Toggle);
     }
 
     void Update()
     {
+        if (player == null || player_stats == null) {
+            player = GameObject.Find("Player");
+            player_stats = player.GetComponent<PlayerStats>();
+        }
         // TODO: Cooldown fade
     }
 
@@ -49,11 +51,8 @@ public class ActiveSpellButtonScript : MonoBehaviour
     void Toggle()
     {
         if (!open) {
-            for (int i = 0; i < GameData.spell_list.Count; i++) {
-                if (!player_stats.learned_spells.Contains(i))
-                    continue;
-
-                Sprite icon = GameData.spell_list[i].GetComponent<SpellInfo>().icon;
+            for (int i = 0; i < player_stats.learned_spells.Count; i++) {
+                Sprite icon = GameData.spell_sprites[player_stats.learned_spells[i].sprite_index];
                 GameObject ability = Instantiate(ability_button_prefab, Vector3.zero, Quaternion.identity, transform);
                 Image img = ability.GetComponent<Image>();
                 img.sprite = icon;

@@ -51,9 +51,6 @@ namespace PCG
 
         void Awake()
         {
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
-
             level_builder = GetComponent<LevelBuilder>();
         }
 
@@ -72,6 +69,9 @@ namespace PCG
 
         public Level New(LevelType level_type)
         {
+            player = GameObject.Find("Player");
+            player_trf = player.GetComponent<Transform>();
+
             Clean();
             level_container = Instantiate(level_container_prefab, Vector3.zero, Quaternion.identity, transform);
             maze = new Maze(maze_width, maze_height);
@@ -200,11 +200,6 @@ namespace PCG
 
                             GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
                             GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
-                            EnemyStats es = new_enemy.GetComponent<EnemyStats>();
-                            es.hp_max = 2 * GameState.level;
-                            es.hp = 2 * GameState.level;
-
-                            // new_enemy.transform.localScale = new Vector3(LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f, LevelBuilder.voxel_scale * 0.5f);
                         }
                     }
 

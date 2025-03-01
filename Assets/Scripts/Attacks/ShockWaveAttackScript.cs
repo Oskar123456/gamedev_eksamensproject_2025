@@ -21,72 +21,42 @@ namespace Attacks
 {
     public class ShockWaveAttackScript : MonoBehaviour
     {
-        public GameObject attack_effect_prefab;
         public GameObject hit_effect_prefab;
         public GameObject audio_hit_dummy;
 
-        public float offs_collider, offs_effect;
-
         AudioSource audio_source;
 
-        AttackBaseStats stats;
-        AttackerStats attacker_stats;
+        AttackStats stats;
 
         Vector3 origin;
-        Vector3 halfway_up_vec;
 
-        float created_t;
-        float alive_t, left_t, left_t_fraction;
+        float created_t, alive_t;
+        float damage_begin_t, damage_end_t;
+        public float duration_t, begin_t, end_t;
 
         List<GameObject> was_damaged;
 
-        public void SetStats()
-        {
-            attacker_stats = GetComponent<AttackerStats>();
-
-            stats.damage = stats.damage + attacker_stats.damage;
-            stats.duration = stats.duration / attacker_stats.speed;
-            stats.damage_begin_t = stats.damage_begin_t / attacker_stats.speed;
-            stats.damage_end_t = stats.damage_end_t / attacker_stats.speed;
-            stats.scale = stats.scale * attacker_stats.scale;
-            stats.range = stats.range * attacker_stats.scale;
-        }
-
         void Awake()
         {
-            stats = GetComponent<AttackBaseStats>();
+            stats = GetComponent<AttackStats>();
             was_damaged = new List<GameObject>();
             audio_source = GetComponent<AudioSource>();
         }
 
         void Start()
         {
-            SetStats();
+            was_damaged = new List<GameObject>();
 
             created_t = Time.time;
-            left_t = stats.duration;
-            left_t_fraction = 1;
+            damage_begin_t = begin_t * (stats.duration / duration_t);
+            damage_end_t = end_t * (stats.duration / duration_t);
 
-            origin = attacker_stats.attacker.transform.position;
-            halfway_up_vec = Vector3.up * (attacker_stats.attacker.transform.lossyScale.y / 2.0f);
+            origin = stats.attacker.transform.position;
 
-            // transform.rotation = attacker_stats.attacker.transform.rotation;
-            transform.localScale = transform.localScale * stats.scale;
-
-            GameObject effect = Instantiate(attack_effect_prefab, transform.position + halfway_up_vec + (attacker_stats.attacker.transform.forward * offs_effect),
-                    attacker_stats.attacker.transform.rotation, transform);
-
-            transform.position = transform.position + (attacker_stats.attacker.transform.forward * offs_collider);
-
-            effect.transform.localScale = new Vector3(effect.transform.localScale.x * stats.scale / MathF.Max(transform.localScale.x, 1),
-                effect.transform.localScale.y * stats.scale / MathF.Max(transform.localScale.y, 1),
-                effect.transform.localScale.z * stats.scale / MathF.Max(transform.localScale.z, 1));
-
-            ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+            ParticleSystem ps = GetComponent<ParticleSystem>();
             var main = ps.main;
-            main.simulationSpeed = stats.base_duration / stats.duration;
+            main.simulationSpeed = duration_t / stats.duration;
 
-            Destroy(effect, stats.duration);
             Destroy(gameObject, stats.duration);
         }
 
@@ -97,10 +67,10 @@ namespace Attacks
 
         void OnTriggerStay(Collider collider)
         {
-            if (alive_t < stats.damage_begin_t || alive_t > stats.damage_end_t)
+            if (alive_t < damage_begin_t || alive_t > damage_end_t)
                 return;
 
-            if (collider.gameObject.tag == attacker_stats.attacker_tag) {
+            if (stats.attacker == null || collider.gameObject.tag == stats.attacker.tag) {
                 return;
             }
 
@@ -109,16 +79,91 @@ namespace Attacks
 
             was_damaged.Add(collider.gameObject);
 
+            Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
             Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
             normal.y = 0;
-            Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
-            Destroy(hit_effect, stats.hit_effect_duration);
+            Destroy(hit_effect, 0.4f);
             Destroy(hit_effect_sound, 1);
 
-            collider.SendMessage("OnHit", new AttackHitInfo(attacker_stats.entity_type, stats, Time.time, normal), SendMessageOptions.DontRequireReceiver);
+            collider.SendMessage("OnHit", new HitInfo(normal, stats.attacker, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+    public class ShockWaveAttack : Attack
+    {
+        public ShockWaveAttack()
+        {
+            prefab_index = 2;
+            sprite_index = 2;
+            name = "ShockWaveAttack";
+            level = 1;
+            damage_base = 1; damage_per_level = 1;
+            duration_base = 1; duration_per_level = 0;
+            cooldown_base = 1; cooldown_per_level = 0;
+            scale_base = 1; scale_per_level = 0.1f;
+            damage_type = DamageType.Normal;
+
+        }
+
+        public override void ScaleWithPlayerStats(PlayerStats ps)
+        {
+            damage   = (damage_per_level * level + damage_base) + ps.attack_damage;
+            scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
+            duration = duration_base     / ps.attack_speed;
+            cooldown = duration;
+        }
+
+        public override void ScaleWithEnemyStats(EnemyStats es)
+        {
+            damage   = damage_base   + es.attack_damage;
+            scale    = scale_base    * es.attack_scale;
+            duration = duration_base / es.attack_speed;
+            cooldown = duration;
+        }
+
+        public override void Use(Transform parent)
+        {
+            GameObject instance = GameState.InstantiateGlobal(GameData.attack_prefabs[prefab_index],
+                    parent.position + Vector3.up * parent.lossyScale.y / 2, parent.rotation);
+            AttackStats attack_stats = instance.GetComponent<AttackStats>();
+            attack_stats.damage = damage;
+            attack_stats.scale = scale;
+            attack_stats.duration = duration;
+            attack_stats.base_duration = 1;
+            attack_stats.damage_type = damage_type;
+            attack_stats.attacker = parent.gameObject;
+        }
+
+        public override string GetDescriptionString(string delimiter)
+        {
+            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
+                    delimiter, level, delimiter,
+                    delimiter, damage,
+                    delimiter, scale);
+        }
+
+        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        {
+            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
+                    delimiter, level, delimiter,
+                    delimiter, damage,
+                    delimiter, scale);
+
+            level++;
+            ScaleWithPlayerStats(ps);
+
+            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
+                    delimiter, level, delimiter,
+                    delimiter, damage,
+                    delimiter, scale);
+
+            level--;
+            ScaleWithPlayerStats(ps);
+
+            return current + string_delimiter + next;
         }
     }
 }
