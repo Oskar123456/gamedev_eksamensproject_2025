@@ -125,7 +125,7 @@ namespace Spells
             }
 
             GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], hit_info.point, Quaternion.identity);
-            instance.transform.localScale = instance.transform.localScale * scale;
+            instance.transform.localScale = new Vector3(instance.transform.localScale.x * scale, instance.transform.localScale.y, instance.transform.localScale.z * scale);
 
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
