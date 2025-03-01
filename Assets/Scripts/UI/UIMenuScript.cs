@@ -56,6 +56,9 @@ namespace UI
             GameState.has_died = false;
 
             fade_in_left = fade_in;
+
+            if (GameObject.Find("Player") != null)
+                Destroy(GameObject.Find("Player"));
         }
 
         void Update()

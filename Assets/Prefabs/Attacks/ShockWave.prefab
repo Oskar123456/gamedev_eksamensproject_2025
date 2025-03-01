@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1458672002284145344}
   - component: {fileID: 7043781582759284737}
   - component: {fileID: 5685265234022760397}
-  - component: {fileID: 2501966755059980175}
-  - component: {fileID: 379178366703020101}
   - component: {fileID: 3008511371190921266}
+  - component: {fileID: -6730507022652305995}
+  - component: {fileID: 8457900695540206404}
   m_Layer: 2
   m_Name: ShockWave
   m_TagString: Untagged
@@ -4923,41 +4923,6 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 3}
---- !u!114 &2501966755059980175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363127035908328369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05d9824aeacbe5d4f9c7b6161f93ee69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
-  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
-  duration_t: 1
-  begin_t: 0.3
-  end_t: 0.4
---- !u!114 &379178366703020101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363127035908328369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  scale: 0
-  duration: 0
-  base_duration: 0
-  damage_type: 0
-  attacker: {fileID: 0}
 --- !u!82 &3008511371190921266
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5055,6 +5020,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6730507022652305995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363127035908328369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d9824aeacbe5d4f9c7b6161f93ee69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
+  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
+  duration_t: 1
+  begin_t: 0.3
+  end_t: 0.4
+--- !u!114 &8457900695540206404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363127035908328369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  scale: 0
+  duration: 0
+  base_duration: 0
+  damage_type: 0
+  attacker: {fileID: 0}
 --- !u!1 &1331865647744301289
 GameObject:
   m_ObjectHideFlags: 0

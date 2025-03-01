@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5867697705458694510}
   - component: {fileID: 3123172674771560260}
   - component: {fileID: 4271174089187310139}
-  - component: {fileID: 4716872438491279376}
-  - component: {fileID: 2451656156274467024}
+  - component: {fileID: 2070188180529446256}
+  - component: {fileID: 9115422159921544974}
   m_Layer: 2
   m_Name: ForceField
   m_TagString: Untagged
@@ -209,7 +209,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4716872438491279376
+--- !u!114 &2070188180529446256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,7 +221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9230749407ab23aa6eda15ecdc09c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2451656156274467024
+  duration_t: 1
+  begin_t: 0
+  end_t: 1
+--- !u!114 &9115422159921544974
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
