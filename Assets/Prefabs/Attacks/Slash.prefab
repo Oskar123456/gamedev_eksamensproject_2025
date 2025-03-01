@@ -9870,9 +9870,9 @@ GameObject:
   - component: {fileID: 5002812783273910478}
   - component: {fileID: 822660263700958497}
   - component: {fileID: 2089886014513627775}
-  - component: {fileID: 3637150658103181995}
-  - component: {fileID: 5902096487626695300}
   - component: {fileID: 27429156174804052}
+  - component: {fileID: -4965322872671450349}
+  - component: {fileID: 4019147115772514624}
   m_Layer: 0
   m_Name: Slash
   m_TagString: Untagged
@@ -14780,41 +14780,6 @@ CapsuleCollider:
   m_Height: 0.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3637150658103181995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6697311237542272127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea9214b639d49ee19a6595f06a2bb2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hit_effect_prefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
-  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
-  duration_t: 0.4
-  begin_t: 0.05
-  end_t: 0.4
---- !u!114 &5902096487626695300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6697311237542272127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  scale: 0
-  duration: 0
-  base_duration: 0
-  damage_type: 0
-  attacker: {fileID: 0}
 --- !u!82 &27429156174804052
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14912,6 +14877,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-4965322872671450349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6697311237542272127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9214b639d49ee19a6595f06a2bb2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hit_effect_prefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
+  duration_t: 0.4
+  begin_t: 0.05
+  end_t: 0.3
+--- !u!114 &4019147115772514624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6697311237542272127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  scale: 0
+  duration: 0
+  base_duration: 0
+  damage_type: 0
+  attacker: {fileID: 0}
 --- !u!1 &6744723923226174421
 GameObject:
   m_ObjectHideFlags: 0

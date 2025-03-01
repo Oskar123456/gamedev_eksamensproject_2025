@@ -19603,9 +19603,9 @@ GameObject:
   - component: {fileID: 8811031806160573600}
   - component: {fileID: 7642658365209930346}
   - component: {fileID: 2598954078796033344}
-  - component: {fileID: 1522697925004545861}
-  - component: {fileID: 6239333035724471657}
   - component: {fileID: 3865171856722582597}
+  - component: {fileID: 888875821998498624}
+  - component: {fileID: 2065810260418319848}
   m_Layer: 0
   m_Name: Blizzard
   m_TagString: Untagged
@@ -24537,42 +24537,6 @@ CapsuleCollider:
   m_Height: 10.92
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1522697925004545861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6288382277645583362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89785fd071b6fd3e2a48b65111830ba8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  scale: 0
-  duration: 0
-  base_duration: 0
-  damage_type: 0
-  caster: {fileID: 0}
---- !u!114 &6239333035724471657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6288382277645583362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0ef6c6846bbaedf3a426d007f238377, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audio_hit_dummy: {fileID: 5578298940507306935, guid: 4519e5606018ca09d89bb55d4bb0be5e, type: 3}
-  hit_effect_prefab: {fileID: 4924508274929071776, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
-  duration_t: 2
-  begin_t: 0
-  end_t: 2
-  damage_cooldown: 0.5
 --- !u!82 &3865171856722582597
 AudioSource:
   m_ObjectHideFlags: 0
@@ -24670,6 +24634,42 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &888875821998498624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6288382277645583362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0ef6c6846bbaedf3a426d007f238377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio_hit_dummy: {fileID: 5578298940507306935, guid: 4519e5606018ca09d89bb55d4bb0be5e, type: 3}
+  hit_effect_prefab: {fileID: 4924508274929071776, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
+  duration_t: 2
+  begin_t: 0
+  end_t: 2
+  damage_cooldown: 0.5
+--- !u!114 &2065810260418319848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6288382277645583362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89785fd071b6fd3e2a48b65111830ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  scale: 0
+  duration: 0
+  base_duration: 0
+  damage_type: 0
+  caster: {fileID: 0}
 --- !u!1 &6382518059007405946
 GameObject:
   m_ObjectHideFlags: 0

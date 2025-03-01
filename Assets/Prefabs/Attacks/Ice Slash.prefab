@@ -4912,9 +4912,9 @@ GameObject:
   - component: {fileID: 528425042188819638}
   - component: {fileID: 8456751733937580549}
   - component: {fileID: 4810454924623003590}
-  - component: {fileID: 5202780875396031013}
-  - component: {fileID: 5901599179185972314}
   - component: {fileID: 6007262803450118832}
+  - component: {fileID: 1867937908435143757}
+  - component: {fileID: -7731779283905743792}
   m_Layer: 0
   m_Name: Ice Slash
   m_TagString: Untagged
@@ -9821,41 +9821,6 @@ CapsuleCollider:
   m_Height: 0.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5202780875396031013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4234594349587254900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93935daaa1396f66b8e8dade8d355daa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hit_effect_prefab: {fileID: 4924508274929071776, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
-  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
-  duration_t: 0.4
-  begin_t: 0.05
-  end_t: 0.4
---- !u!114 &5901599179185972314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4234594349587254900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  scale: 0
-  duration: 0
-  base_duration: 0
-  damage_type: 0
-  attacker: {fileID: 0}
 --- !u!82 &6007262803450118832
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9953,6 +9918,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1867937908435143757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4234594349587254900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93935daaa1396f66b8e8dade8d355daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hit_effect_prefab: {fileID: 4924508274929071776, guid: 0edef91621bb6b34384ccc9dbb98729c, type: 3}
+  audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
+  duration_t: 0.4
+  begin_t: 0.05
+  end_t: 0.3
+--- !u!114 &-7731779283905743792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4234594349587254900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f61071819ec898fb94b0ca4aad1911, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  scale: 0
+  duration: 0
+  base_duration: 0
+  damage_type: 0
+  attacker: {fileID: 0}
 --- !u!1 &4587592930389291207
 GameObject:
   m_ObjectHideFlags: 0
