@@ -149,7 +149,8 @@ namespace Player
 
             if (effect_blink_left_t > 0) {
                 effect_blink_left_t -= Time.deltaTime;
-                wizard_renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
+                if (wizard_renderer != null)
+                    wizard_renderer.material.color = new Color(color_original.r + MathF.Abs(MathF.Sin(effect_blink_left_t * 20)), color_original.g, color_original.b, color_original.a);
             }
 
             if (hit_time_left <= 0) {
