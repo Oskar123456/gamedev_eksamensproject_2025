@@ -18,18 +18,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Attacks;
 using Spells;
+using Loot;
 
 public class PlayerStats : MonoBehaviour
 {
     public int level = 1;
     public int xp = 0;
     public int xp_max = 1;
+    public int gold = 0;
 
     public int hp = 100;
     public int hp_max = 100;
     public bool invulnerable;
     public float stun_lock = 0.15f;
     public float move_speed_bonus = 0;
+
+    public List<Item> items = new List<Item>();
 
     public int skill_points = 0;
     public List<Attack> learned_attacks = new List<Attack>();
@@ -54,6 +58,32 @@ public class PlayerStats : MonoBehaviour
     public float spell_scale;
     public float spell_duration;
     public float spell_cooldown;
+
+    public Helmet helmet;
+    public Jewelry jewelry;
+    public Armor armor;
+    public Weapon weapon;
+    public Boots boots;
+
+    public int inventory_size = 25;
+    public int inventory_space = 25;
+    public Item[] inventory;
+    public Item currently_held_item;
+
+    public override string ToString()
+    {
+        return string.Format("Level: {0}{1}XP: {2}/{3}{4}HP: {5}/{6}{7}Skill Points: {8}{9}Attack Damage: {10}/{11}/{12}/{13}{14}Attack Speed: {15}%{16}Attack AoE: {17}%{18}Spell Damage: {19}/{20}/{21}/{22}{23}Cast Speed: {24}%{25}Spell AoE: {26}%{27}",
+                level, Environment.NewLine,
+                xp, xp_max, Environment.NewLine,
+                hp, hp_max, Environment.NewLine,
+                skill_points, Environment.NewLine,
+                attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire, Environment.NewLine,
+                attack_speed, Environment.NewLine,
+                attack_scale, Environment.NewLine,
+                spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire, Environment.NewLine,
+                spell_speed, Environment.NewLine,
+                spell_scale, Environment.NewLine);
+    }
 
     public bool AddXp(int xp)
     {
@@ -89,9 +119,12 @@ public class PlayerStats : MonoBehaviour
         this.active_attack = ps.active_attack;
         this.active_spell = ps.active_spell;
 
+        this.items = new List<Item>();
         this.learned_attacks = new List<Attack>();
         this.learned_spells = new List<Spell>();
 
+        for (int i = 0; i < ps.items.Count; i++)
+            this.items.Add(ps.items[i]);
         for (int i = 0; i < ps.learned_attacks.Count; i++)
             this.learned_attacks.Add(ps.learned_attacks[i]);
         for (int i = 0; i < ps.learned_spells.Count; i++)
@@ -114,5 +147,15 @@ public class PlayerStats : MonoBehaviour
         this.spell_scale = ps.spell_scale;
         this.spell_duration = ps.spell_duration;
         this.spell_cooldown = ps.spell_cooldown;
+
+        this.currently_held_item = new Staff();
+        this.inventory_size = ps.inventory_size;
+        this.inventory_space = ps.inventory_space;
+        this.inventory = new Item[this.inventory_size];
+        if (ps.inventory != null) {
+            for (int i = 0; i < ps.inventory_size; i++) {
+                this.inventory[i] = ps.inventory[i];
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@
 
 using System;
 using Attacks;
+using Loot;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ namespace AI
         public GameObject basic_attack;
         public GameObject death_effect_prefab;
         public GameObject healthbar_prefab;
-        public EnemyType enemy_type;
+        public float drop_chance = 0.5f;
 
         Rigidbody rb;
         NavMeshAgent nma;
@@ -47,8 +48,8 @@ namespace AI
         public float death_effect_delete_t = 1f;
         public float death_effect_scale = 1f;
 
-        float nav_update_t = 0.1f;
-        float nav_update_t_left;
+        // float nav_update_t = 0.1f;
+        // float nav_update_t_left;
         /* combat */
         GameObject attack_go;
 
@@ -171,6 +172,11 @@ namespace AI
                 nma.ResetPath();
 
             if (stats.hp < 1) {
+                if (GameState.rng.Next(101) / 100f < drop_chance) {
+                    Item item_dropped = GameData.GenerateLoot();
+                    item_dropped.Drop(transform.position);
+                }
+
                 hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;

@@ -1,0 +1,121 @@
+/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
+
+using System;
+using System.Collections.Generic;
+using Attacks;
+using Spells;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+namespace Player
+{
+
+public class InventoryScript : MonoBehaviour
+{
+    public GameObject inventory_slot_prefab;
+    public GameObject inventory_slot_image_prefab;
+    public Sprite placeholder_sprite;
+
+    Sprite helmet_sprite;
+    Sprite armor_sprite;
+    Sprite jewelry_sprite;
+    Sprite weapon_sprite;
+    Sprite boot_sprite;
+
+    GameObject player;
+    PlayerStats player_stats;
+
+    GameObject equipment_slots;
+    GameObject helmet_slot;
+    GameObject armor_slot;
+    GameObject jewelry_slot;
+    GameObject weapon_slot;
+    GameObject boot_slot;
+    GameObject inventory;
+
+    void Awake()
+    {
+        equipment_slots = GameObject.Find("EquipmentSlots");
+        inventory = GameObject.Find("InventorySlots");
+        helmet_slot = GameObject.Find("HelmetIcon");
+        armor_slot = GameObject.Find("ArmorIcon");
+        jewelry_slot = GameObject.Find("JewelryIcon");
+        weapon_slot = GameObject.Find("WeaponIcon");
+        boot_slot = GameObject.Find("BootIcon");
+        helmet_sprite = helmet_slot.GetComponent<Image>().sprite;
+        armor_sprite = armor_slot.GetComponent<Image>().sprite;
+        jewelry_sprite = jewelry_slot.GetComponent<Image>().sprite;
+        weapon_sprite = weapon_slot.GetComponent<Image>().sprite;
+        boot_sprite = boot_slot.GetComponent<Image>().sprite;
+    }
+
+    void Start()
+    {
+    }
+
+    void Update()
+    {
+    }
+
+    public void Draw()
+    {
+        if (player == null || player_stats == null) {
+            player = GameObject.Find("Player");
+            player_stats = player.GetComponent<PlayerStats>();
+        }
+
+        foreach (Transform t in inventory.transform) {
+            Destroy(t.gameObject);
+        }
+
+        RectTransform inventory_rect = inventory.GetComponent<RectTransform>();
+        float padding = 10;
+        float i_slot_width = (inventory_rect.rect.size.x - 6 * padding) / 5;
+        float i_slot_height = (inventory_rect.rect.size.y - 6 * padding) / 5;
+        Debug.Log("rect size: " + inventory_rect.rect.ToString());
+        float min_wh = MathF.Min(i_slot_width, i_slot_height);
+        i_slot_width = min_wh; i_slot_height = min_wh;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                GameObject i_slot = Instantiate(inventory_slot_prefab, Vector3.zero, Quaternion.identity, inventory.transform);
+                RectTransform i_slot_rt = i_slot.GetComponent<RectTransform>();
+                i_slot_rt.sizeDelta = new Vector2(i_slot_width, i_slot_height);
+                i_slot_rt.anchoredPosition = new Vector2(j * i_slot_width + (j + 1) * padding - inventory_rect.rect.size.x / 2 + i_slot_width / 2,
+                        -i * i_slot_height + -(i + 1) * padding + inventory_rect.rect.size.y / 2 - i_slot_width / 2);
+
+                ItemSlotScript iss = i_slot.GetComponent<ItemSlotScript>();
+                iss.inventory_index = i * 5 + j;
+                iss.item = player_stats.inventory[iss.inventory_index];
+
+                // Debug.Log("inventory slot no." + iss.inventory_index + " : "
+                //         + (player_stats.inventory[iss.inventory_index] == null ? "null" : player_stats.inventory[iss.inventory_index].name));
+
+                if (player_stats.inventory[i * 5 + j] != null) {
+                    GameObject iss_img = Instantiate(inventory_slot_image_prefab, Vector3.zero, Quaternion.identity, i_slot.transform);
+                    RectTransform rt = iss_img.GetComponent<RectTransform>();
+                    rt.sizeDelta = i_slot_rt.sizeDelta * 0.85f;
+                    rt.anchoredPosition = Vector2.zero;
+                    Image img = iss_img.GetComponent<Image>();
+                    img.sprite = GameData.item_sprites[player_stats.inventory[i * 5 + j].sprite_index];
+                }
+            }
+        }
+    }
+}
+
+}

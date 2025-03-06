@@ -54,13 +54,9 @@ namespace PCG
             level_builder = GetComponent<LevelBuilder>();
         }
 
-        void Start()
-        {
-        }
+        void Start() { }
 
-        void Update()
-        {
-        }
+        void Update() { }
 
         void Clean()
         {

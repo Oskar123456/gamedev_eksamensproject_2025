@@ -43,6 +43,7 @@ public class GameState : MonoBehaviour
     public static string level_name;
     public static int level = 0;
     public static int difficulty = 0;
+    public static System.Random rng = new System.Random();
 
     public static bool has_died;
     public static bool first_load = true;

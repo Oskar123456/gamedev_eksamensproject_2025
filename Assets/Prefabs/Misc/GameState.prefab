@@ -66,6 +66,9 @@ MonoBehaviour:
   spell_list_prefabs:
   - {fileID: 6288382277645583362, guid: 57427e8cf56a4e48982fe1bed2ff86d8, type: 3}
   - {fileID: 6506590698679266267, guid: 3a74865aa4ed02e9e8f3c5b24f3e7911, type: 3}
+  item_list_prefabs:
+  - {fileID: 5264415709313204818, guid: 162ef7aeee7b5f7cc9f0c99c042ac1e4, type: 3}
+  - {fileID: 6342236199507492437, guid: 8c273dff492bc931098627eed30d3ae9, type: 3}
   _spell_sprites:
   - {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
   - {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
@@ -73,6 +76,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c890dd06d4a350946ab11e4778bf47d8, type: 3}
   - {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
   - {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
+  _item_sprites:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: 72bca99913f9f5f4a860528b7f77cce8, type: 3}
+  - {fileID: 21300000, guid: e9426e5a33e4e2c41b4fb4eeb7b9b79f, type: 3}
+  - {fileID: 21300000, guid: 9b7afa97fe210a147a93161c718e2b89, type: 3}
+  - {fileID: 21300000, guid: af9a5415b95ad4242a7ff42fcdb41530, type: 3}
+  - {fileID: 21300000, guid: d31e0f15092fcfb47bd6e1a8defa5cbc, type: 3}
+  - {fileID: 21300000, guid: 8794f68f5b2e269468cafe17f9a0ad39, type: 3}
+  - {fileID: 21300000, guid: 719c2201c2f5f6c4aafffaeb5abdf5f9, type: 3}
 --- !u!114 &2844560547324050661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +100,7 @@ MonoBehaviour:
   level: 1
   xp: 0
   xp_max: 1
+  gold: 0
   hp: 100
   hp_max: 100
   invulnerable: 0
@@ -110,3 +123,5 @@ MonoBehaviour:
   spell_scale: 0
   spell_duration: 0
   spell_cooldown: 0
+  inventory_size: 40
+  inventory_space: 40

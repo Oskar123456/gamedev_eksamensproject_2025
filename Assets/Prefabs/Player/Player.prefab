@@ -190,6 +190,7 @@ MonoBehaviour:
   anim_mul_move_speed: 25
   attack_anim_speed: 1.333
   cast_anim_speed: 2.333
+  pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
   - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
   - {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
@@ -383,6 +384,7 @@ MonoBehaviour:
   level: 1
   xp: 0
   xp_max: 1
+  gold: 0
   hp: 100
   hp_max: 100
   invulnerable: 0

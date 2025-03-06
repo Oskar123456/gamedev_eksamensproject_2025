@@ -232,7 +232,7 @@ namespace PCG
                     return GetVoxelWorldCenter(x, z);
                 }
             }
-            return Vector3.zero;
+            // return Vector3.zero;
         }
 
         public Vector3 GetVoxelWorldCenter(int x, int z)
