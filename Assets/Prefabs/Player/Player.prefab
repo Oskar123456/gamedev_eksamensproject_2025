@@ -389,7 +389,7 @@ MonoBehaviour:
   hp_max: 100
   invulnerable: 0
   stun_lock: 0.15
-  move_speed_bonus: 1
+  move_speed_bonus: 0
   skill_points: 0
   attack_damage: 0
   attack_damage_normal: 0

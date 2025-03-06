@@ -37,6 +37,7 @@ namespace Loot
         RectTransform canvas_rt;
         GameObject UI;
         RectTransform UI_rt;
+        GameObject ui_loot_layer;
 
         GameObject player;
         Transform player_trf;
@@ -44,6 +45,7 @@ namespace Loot
 
         void Start()
         {
+            ui_loot_layer = GameObject.Find("LootLayer");
             UI = GameObject.Find("UI");
             UI_rt = UI.GetComponent<RectTransform>();
             player = GameObject.Find("Player");
@@ -51,12 +53,13 @@ namespace Loot
             player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
 
             Vector3 screen_space_pos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 0.5f);
-            canvas = Instantiate(loot_button_prefab, screen_space_pos, Quaternion.identity, GameObject.Find("UI").transform);
+            canvas = Instantiate(loot_button_prefab, screen_space_pos, Quaternion.identity, ui_loot_layer.transform);
             canvas_rt = canvas.GetComponent<RectTransform>();
             button = canvas.GetComponent<Button>();
             button.onClick.AddListener(OnPickUp);
             button_text = canvas.transform.GetChild(0).gameObject;
             button_text.GetComponent<TextMeshProUGUI>().text = item.name;
+            button_text.GetComponent<TextMeshProUGUI>().color = (item.text_color != null) ? item.text_color : Color.white;
         }
 
         void Update()

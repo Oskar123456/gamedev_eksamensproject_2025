@@ -80,6 +80,11 @@ public class GameData : MonoBehaviour
         item_list = new List<Item>();
         item_list.Add(new Gold());
         item_list.Add(new Staff());
+        item_list.Add(new Axe());
+        item_list.Add(new LeatherArmor());
+        item_list.Add(new LeatherHelmet());
+        item_list.Add(new LeatherBoots());
+        item_list.Add(new Amulet());
 
         foreach (Item i in item_list) {
             item_total_weights += i.weight;

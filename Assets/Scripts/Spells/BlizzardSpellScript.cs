@@ -138,7 +138,7 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,
@@ -147,7 +147,7 @@ namespace Spells
 
         public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,
@@ -156,7 +156,7 @@ namespace Spells
             level++;
             ScaleWithPlayerStats(ps);
 
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,

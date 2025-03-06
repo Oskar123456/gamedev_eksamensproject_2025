@@ -120,17 +120,6 @@ namespace UI
 
         void Update()
         {
-            if (fade_in_left > 0) {
-                level_intro_text.text = GameState.level_name;
-                screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
-                fade_in_left -= Time.deltaTime;
-                if (fade_in_left <= 0) {
-                    screen_color_img.color = new Color(1, 1, 1, 0);
-                    screen_color.SetActive(false);
-                }
-                return;
-            }
-
             if (player == null || player_trf == null || player_stats == null) {
                 player = GameObject.Find("Player");
                 player_trf = player.GetComponent<Transform>();
@@ -149,7 +138,18 @@ namespace UI
             if (is_inventory_active) {
                 Vector3 mouse_pos = Input.mousePosition;
                 player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
-                item_tooltip_rt.position = new Vector3(mouse_pos.x - 125, mouse_pos.y, 0);
+                item_tooltip_rt.position = new Vector3(mouse_pos.x - 225, mouse_pos.y, 0);
+            }
+
+            if (fade_in_left > 0) {
+                level_intro_text.text = GameState.level_name;
+                screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
+                fade_in_left -= Time.deltaTime;
+                if (fade_in_left <= 0) {
+                    screen_color_img.color = new Color(1, 1, 1, 0);
+                    screen_color.SetActive(false);
+                }
+                return;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -335,6 +335,10 @@ namespace UI
         {
             stats_text.text = player_stats.ToString();
             SetHeldItem();
+
+            if (is_inventory_active && player_stats.currently_held_item != null) {
+                player_cursor_img.SetActive(true);
+            }
         }
 
         void DrawDebugInfo()

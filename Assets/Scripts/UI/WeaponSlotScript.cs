@@ -79,24 +79,23 @@ public class WeaponSlotScript : MonoBehaviour
             return;
         }
 
+        if (player_stats.weapon != null) {
+            player_stats.weapon.UnEquip(player_stats);
+        }
+
         Item temp_item = item;
         item = player_stats.currently_held_item;
         player_stats.weapon = (Weapon)item;
         player_stats.currently_held_item = temp_item;
-
-        if (player_stats.currently_held_item != null) {
-            player_stats.currently_held_item.UnEquip(player_stats);
-        }
 
         if (player_stats.weapon != null) {
             player_stats.weapon.Equip(player_stats);
         }
 
         player_script.SyncStats();
+        ui_script.SetHeldItem();
         ui_script.Sync();
 
         image.sprite = (item != null) ? GameData.item_sprites[item.sprite_index] : placeholder_sprite;
-
-        ui_script.SetHeldItem();
     }
 }

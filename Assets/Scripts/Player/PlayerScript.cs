@@ -307,10 +307,10 @@ namespace Player
 
             if (Input.GetKey(KeyCode.LeftShift)) {
                 did_sprint = true;
-                move_speed = move_speed_normal * move_speed_sprint_multi;
+                move_speed = move_speed_normal * move_speed_sprint_multi * (1 + stats.move_speed_bonus);
             } else {
                 did_sprint = false;
-                move_speed = move_speed_normal;
+                move_speed = move_speed_normal * (1 + stats.move_speed_bonus);
             }
 
             if (Input.GetKey(KeyCode.W)) {
@@ -462,9 +462,8 @@ namespace Player
             Destroy(level_up_effect, level_up_anim_t);
             Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
 
-            stats.attack_damage += 1;
-            stats.attack_speed += 0.1f;
-            stats.attack_scale += 0.05f;
+            stats.hp_max += 5;
+            stats.hp += 5;
 
             SyncStats();
 
@@ -571,6 +570,8 @@ namespace Player
                 item.Drop(transform.position + (GameState.rng.Next(10) / 10.0f) * transform.forward
                         + (GameState.rng.Next(10) / 10.0f) * transform.right);
                 Debug.Log("No room, dropping " + item.name);
+                ui_script.Sync();
+                ui_script.ShowInventory();
             }
         }
 

@@ -41,7 +41,6 @@ namespace AI
         GameObject healthbar;
         Slider healthbar_slider;
         Transform player_cam_trf;
-        Transform overlay_trf;
 
         /* effects */
         GameObject death_effect;
@@ -73,8 +72,6 @@ namespace AI
             halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
             stats = GetComponent<EnemyStats>();
-
-            overlay_trf = GameObject.Find("Overlay").GetComponent<Transform>();
         }
 
         void Update()
