@@ -31,7 +31,7 @@ namespace Loot
         public Staff()
         {
             should_show = true;
-            weight = 5500;
+            weight = 500;
             prefab_index = 1;
             sprite_index = 7;
             name = "staff";

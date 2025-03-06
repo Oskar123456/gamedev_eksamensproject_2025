@@ -93,5 +93,6 @@ public class ItemSlotScript : MonoBehaviour
         Debug.Log("SwapItem: " + held + " -- " + in_slot);
 
         ui_script.Sync();
+        ui_script.ShowInventory();
     }
 }

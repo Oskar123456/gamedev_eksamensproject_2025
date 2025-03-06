@@ -148,6 +148,12 @@ public class PlayerStats : MonoBehaviour
         this.spell_duration = ps.spell_duration;
         this.spell_cooldown = ps.spell_cooldown;
 
+        this.helmet = ps.helmet;
+        this.armor = ps.armor;
+        this.jewelry = ps.jewelry;
+        this.weapon = ps.weapon;
+        this.boots = ps.boots;
+
         this.currently_held_item = new Staff();
         this.inventory_size = ps.inventory_size;
         this.inventory_space = ps.inventory_space;

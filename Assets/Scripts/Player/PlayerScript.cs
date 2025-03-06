@@ -221,6 +221,21 @@ namespace Player
                     ChangeActiveAttack(1);
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.F)) {
+                if (stats.currently_held_item != null) {
+                    RaycastHit hit_info;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (!Physics.Raycast(ray, out hit_info, 500, 1 << 6)) {
+                        return;
+                    }
+
+                    stats.currently_held_item.Drop(hit_info.point);
+                    stats.currently_held_item = null;
+
+                    ui_script.Sync();
+                }
+            }
         }
 
         void PollMouse()
@@ -539,15 +554,11 @@ namespace Player
                 txt.GetComponent<TextMeshProUGUI>().text = item.EffectString();
                 item.Consume(stats);
                 SyncStats();
-                // Debug.Log("Player's gold: " + stats.gold);
             }
 
-            else if (stats.inventory_space > 0) {
+            else if (stats.inventory_space > 0 && stats.currently_held_item == null) {
                 for (int i = 0; i < stats.inventory_size; i++) {
                     if (stats.inventory[i] == null) {
-                        // stats.inventory[i] = item;
-                        // stats.inventory_space--;
-                        // Debug.Log("picked up " + item.name + " " + stats.inventory_space + " itemslots left in inventory");
                         stats.currently_held_item = item;
                         ui_script.Sync();
                         ui_script.ShowInventory();

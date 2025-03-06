@@ -263,6 +263,8 @@ namespace UI
             if (player_stats != null && player_stats.currently_held_item != null && player_stats.currently_held_item.should_show) {
                 SetHeldItem();
                 player_cursor_img.SetActive(true);
+            } else {
+                player_cursor_img.SetActive(false);
             }
         }
 
@@ -327,20 +329,12 @@ namespace UI
 
             Image img = player_cursor_img.GetComponent<Image>();
             img.sprite = GameData.item_sprites[player_stats.currently_held_item.sprite_index];
-
-            if (!inventory_toggled) {
-                player_cursor_img.SetActive(false);
-            } else {
-                player_cursor_img.SetActive(true);
-            }
-
         }
 
         public void Sync()
         {
             stats_text.text = player_stats.ToString();
             SetHeldItem();
-            inventory_script.Draw();
         }
 
         void DrawDebugInfo()

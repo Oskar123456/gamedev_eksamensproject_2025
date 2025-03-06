@@ -67,6 +67,7 @@ namespace Loot
             is_consumed_on_pickup = true;
             duration = 0;
             amount = (GameState.rng.Next(GameState.level * 3)) + 1;
+            name = amount.ToString() + " gold";
         }
 
         public override float Consume(PlayerStats ps) { ps.gold += amount; amount = 0; return 0; }

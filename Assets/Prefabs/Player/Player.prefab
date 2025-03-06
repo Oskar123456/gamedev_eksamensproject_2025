@@ -189,7 +189,7 @@ MonoBehaviour:
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
   attack_anim_speed: 1.333
-  cast_anim_speed: 2.333
+  cast_anim_speed: 1.4
   pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
   - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
@@ -407,6 +407,8 @@ MonoBehaviour:
   spell_scale: 1
   spell_duration: 1
   spell_cooldown: 1
+  inventory_size: 40
+  inventory_space: 40
 --- !u!1 &486168225807429162
 GameObject:
   m_ObjectHideFlags: 0
