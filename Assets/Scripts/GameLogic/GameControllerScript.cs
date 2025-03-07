@@ -84,6 +84,7 @@ public class GameControllerScript : MonoBehaviour
         // current_level_type = LevelType.Water;
 
         GameState.level++;
+        GameState.NextLevelSeed();
         GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
             : "Cistern (" + GameState.level.ToString() + ")";
         arena = GameObject.Find("Arena");

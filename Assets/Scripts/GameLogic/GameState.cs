@@ -42,6 +42,7 @@ public class GameState : MonoBehaviour
 
     public static string level_name;
     public static int level = 0;
+    public static Vector2Int level_seed;
     public static int difficulty = 0;
     public static System.Random rng = new System.Random();
 
@@ -123,6 +124,11 @@ public class GameState : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         PlayerStats ps = player.GetComponent<PlayerStats>();
         player_stats_saved.CopyFrom(ps);
+    }
+
+    public static void NextLevelSeed()
+    {
+        level_seed = new Vector2Int(rng.Next(1000), rng.Next(1000));
     }
 
     public static GameObject InstantiateGlobal(GameObject g, Vector3 v, Quaternion q)

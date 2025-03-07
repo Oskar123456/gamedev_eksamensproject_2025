@@ -170,6 +170,39 @@ namespace PCG
 
         void AddEnemies(Level level, LevelType level_type)
         {
+            int enemy_target_num = (int)(MathF.Sqrt(GameState.level) * 100.0f);
+
+            Debug.Log("enemy_target_num : " + enemy_target_num);
+
+            Vector2Int noise_seeds = new Vector2Int(GameState.rng.Next(1000), GameState.rng.Next(1000));
+            float[,] noise_array = new float[level.voxel_width, level.voxel_height];
+            float[] noise_levels = new float[level.voxel_width * level.voxel_height];
+            string ss = "";
+            for (int x = 0; x < level.voxel_width; x++) {
+                for (int z = 0; z < level.voxel_height; z++) {
+                    if (level.IsWall(x, z)) {
+                        noise_array[x, z] = 0;
+                    } else {
+                        noise_array[x, z] = Utils.MultiLayerNoise(x + noise_seeds.x, z + noise_seeds.y);
+                    }
+                    noise_levels[x * level.voxel_height + z] = noise_array[x, z];
+                    ss += noise_array[x, z] + ",";
+                }
+            }
+
+            Array.Sort(noise_levels);
+            string ss2 = "";
+            foreach (float f in noise_levels) {
+                ss2 += f + ",";
+            }
+            Debug.Log(ss2);
+
+            float noise_min = noise_levels[noise_levels.Length - enemy_target_num];
+
+            Debug.Log(ss);
+
+            int enemy_num = 0;
+
             for (int x = 0; x < level.width; x++) {
                 for (int z = 0; z < level.height; z++) {
                     if (level.maze.walls[z, x])
@@ -183,24 +216,47 @@ namespace PCG
                     Vector3 enemy_pos = Vector3.zero;
                     RaycastHit hit_info;
 
-                    for (int i = 0; i < n_enemies; i++) {
-                        int cell_x = Utils.rng.Next() % level.column_widths[x];
-                        int cell_z = Utils.rng.Next() % level.row_heights[z];
-                        if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
-                            continue;
-                        level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
-                        enemy_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+                    for (int cell_x = 0; cell_x < level.column_widths[x]; ++cell_x) {
+                        for (int cell_z = 0; cell_z < level.row_heights[z]; ++cell_z) {
+                            if (level.occupied[voxel_offs.x + cell_x, voxel_offs.y + cell_z]) {
+                                continue;
+                            }
+                            if (noise_array[voxel_offs.x + cell_x, voxel_offs.y + cell_z] < noise_min) {
+                                continue;
+                            }
 
-                        if (Physics.Raycast(enemy_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
-                            enemy_pos = hit_info.point;
+                            enemy_num++;
 
-                            GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
-                            GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+                            enemy_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+                            if (Physics.Raycast(enemy_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                                enemy_pos = hit_info.point;
+
+                                GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
+                                GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+                                // Debug.Log("Spawn enemy at: " + enemy_pos);
+                            }
                         }
                     }
 
+                    // for (int i = 0; i < n_enemies; i++) {
+                    //     int cell_x = Utils.rng.Next() % level.column_widths[x];
+                    //     int cell_z = Utils.rng.Next() % level.row_heights[z];
+                    //     if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
+                    //         continue;
+                    //     level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
+                    //     enemy_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+
+                    //     if (Physics.Raycast(enemy_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                    //         enemy_pos = hit_info.point;
+
+                    //         GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
+                    //         GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+                    //     }
+                    // }
+
                 }
             }
+            Debug.Log("Spawned " + enemy_num + " enemies");
         }
 
         void Decorate(Level level, LevelType level_type)
