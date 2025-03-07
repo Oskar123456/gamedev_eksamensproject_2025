@@ -70,7 +70,8 @@ namespace PCG
 
             Clean();
             level_container = Instantiate(level_container_prefab, Vector3.zero, Quaternion.identity, transform);
-            maze = new Maze(maze_width, maze_height);
+            maze = new Maze(maze_width + (GameState.rng.Next() % (int)MathF.Sqrt(GameState.level + 1)),
+                    maze_height + (GameState.rng.Next() % (int)MathF.Sqrt(GameState.level + 1)));
             Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>(), level_type);
 
             level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
@@ -183,7 +184,7 @@ namespace PCG
                     if (level.IsWall(x, z)) {
                         noise_array[x, z] = 0;
                     } else {
-                        noise_array[x, z] = Utils.MultiLayerNoise(x + noise_seeds.x, z + noise_seeds.y);
+                        noise_array[x, z] = Utils.MultiLayerNoise((x + noise_seeds.x) * 1.87f, (z + noise_seeds.y) * 1.87f);
                     }
                     noise_levels[x * level.voxel_height + z] = noise_array[x, z];
                     ss += noise_array[x, z] + ",";
@@ -233,6 +234,8 @@ namespace PCG
 
                                 GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
                                 GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
+
+                                level.occupied[voxel_offs.x + cell_x, voxel_offs.y + cell_z] = true;
                                 // Debug.Log("Spawn enemy at: " + enemy_pos);
                             }
                         }
