@@ -57,6 +57,15 @@ namespace Attacks
             var main = ps.main;
             main.simulationSpeed = duration_t / stats.duration;
 
+            Debug.Log("sim speed: " + main.simulationSpeed);
+
+            foreach (Transform t in transform) {
+                ps = t.GetComponent<ParticleSystem>();
+                main = ps.main;
+                main.simulationSpeed = duration_t / stats.duration;
+                Debug.Log("sim speed: " + main.simulationSpeed);
+            }
+
             Destroy(gameObject, stats.duration);
         }
 
@@ -127,7 +136,7 @@ namespace Attacks
         public override void Use(Transform parent)
         {
             GameObject instance = GameState.InstantiateGlobal(GameData.attack_prefabs[prefab_index],
-                    parent.position + Vector3.up * parent.lossyScale.y / 2, parent.rotation);
+                    parent.position + Vector3.up * (parent.lossyScale.y / 2) + parent.forward * (parent.lossyScale.y / 1.5f), parent.rotation);
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
             attack_stats.scale = scale;

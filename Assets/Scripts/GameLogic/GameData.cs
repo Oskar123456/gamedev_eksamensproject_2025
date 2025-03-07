@@ -81,6 +81,7 @@ public class GameData : MonoBehaviour
         item_list.Add(new Gold());
         item_list.Add(new Staff());
         item_list.Add(new Axe());
+        item_list.Add(new SteelAxe());
         item_list.Add(new LeatherArmor());
         item_list.Add(new LeatherHelmet());
         item_list.Add(new LeatherBoots());

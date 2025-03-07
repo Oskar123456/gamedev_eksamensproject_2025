@@ -49,7 +49,7 @@ namespace Loot
         public void Drop(Vector3 position)
         {
             GameObject go = GameState.InstantiateGlobal(GameData.item_prefabs[prefab_index], position, Quaternion.identity);
-            Debug.Log("Drop " + name + " with prefab: " + prefab_index);
+            // Debug.Log("Drop " + name + " with prefab: " + prefab_index);
             DropScript ds = go.GetComponent<DropScript>();
             ds.item = this;
         }

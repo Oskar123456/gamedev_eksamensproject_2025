@@ -72,17 +72,14 @@ public class PlayerStats : MonoBehaviour
 
     public override string ToString()
     {
-        return string.Format("Level: {0}{1}XP: {2}/{3}{4}HP: {5}/{6}{7}Skill Points: {8}{9}Attack Damage: {10}/{11}/{12}/{13}{14}Attack Speed: {15}%{16}Attack AoE: {17}%{18}Spell Damage: {19}/{20}/{21}/{22}{23}Cast Speed: {24}%{25}Spell AoE: {26}%{27}",
-                level, Environment.NewLine,
-                xp, xp_max, Environment.NewLine,
-                hp, hp_max, Environment.NewLine,
-                skill_points, Environment.NewLine,
-                attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire, Environment.NewLine,
-                attack_speed, Environment.NewLine,
-                attack_scale, Environment.NewLine,
-                spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire, Environment.NewLine,
-                spell_speed, Environment.NewLine,
-                spell_scale, Environment.NewLine);
+        string str = "";
+        str += string.Format("Level: {0}{1}XP: {2}/{3}{4}HP: {5}/{6}{7}", level, Environment.NewLine, xp, xp_max, Environment.NewLine, hp, hp_max, Environment.NewLine);
+        str += string.Format("Gold: {0}{1}", gold, Environment.NewLine);
+        str += string.Format("Attack Damage: {0}/n:{1}/f:{2}/c:{3}{4}", attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire, Environment.NewLine);
+        str += string.Format("Attack Speed: {0}%{1}Attack AoE: {2}%{3}", attack_speed, Environment.NewLine, attack_scale, Environment.NewLine);
+        str += string.Format("Spell Damage: {0}/{1}/{2}/{3}{4}", spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire, Environment.NewLine);
+        str += string.Format("Cast Speed: {0}%{1}Spell AoE: {2}%", spell_speed, Environment.NewLine, spell_scale);
+        return str;
     }
 
     public bool AddXp(int xp)

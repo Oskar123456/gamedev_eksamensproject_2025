@@ -38,9 +38,11 @@ public class HelmetSlotScript : MonoBehaviour
     GameObject player;
     PlayerStats player_stats;
     PlayerScript player_script;
+    AudioSource audio_source;
 
     void Awake()
     {
+        audio_source = GetComponent<AudioSource>();
         image = GameObject.Find("HelmetIcon").GetComponent<Image>();
         button = GetComponent<Button>();
         button.onClick.AddListener(SwapItem);
@@ -80,6 +82,7 @@ public class HelmetSlotScript : MonoBehaviour
         }
 
         if (player_stats.currently_held_item != null && !(player_stats.currently_held_item is Helmet)) {
+            ui_script.PlaySwapFailSound();
             return;
         }
 
@@ -100,6 +103,7 @@ public class HelmetSlotScript : MonoBehaviour
         ui_script.SetHeldItem();
         ui_script.Sync();
 
+        audio_source.Play();
         UpdateSprite();
     }
 

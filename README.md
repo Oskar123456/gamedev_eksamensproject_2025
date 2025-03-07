@@ -42,6 +42,11 @@
 
 ## TODO:
 
+  - Spawn enemies in clusters, more types of ghosts.
+  - Enemy spawn weights, like with item drops.
+  - A new type of enemy, different from the rest.
+  - More decorations, also in clusters, some wall decos.
+  - A new player attack and a new player spell.
   - ... rest of the game...
 
 

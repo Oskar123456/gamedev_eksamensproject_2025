@@ -5035,8 +5035,8 @@ MonoBehaviour:
   hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
   duration_t: 1
-  begin_t: 0.3
-  end_t: 0.4
+  begin_t: 0.55
+  end_t: 0.69
 --- !u!114 &2302265967904760699
 MonoBehaviour:
   m_ObjectHideFlags: 0

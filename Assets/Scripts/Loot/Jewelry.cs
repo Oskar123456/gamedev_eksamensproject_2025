@@ -36,9 +36,9 @@ namespace Loot
             sprite_index = 12;
             name = "Amulet";
             description = "A mysterious heirloom";
-            spell_damage = GameState.rng.Next() % 5 + 1;
-            spell_speed = (GameState.rng.Next() % 5 + 1) * 0.1f;
-            spell_scale = (GameState.rng.Next() % 5 + 1) * 0.1f;
+            spell_damage = GameState.rng.Next() % 3 + 1;
+            spell_speed = (GameState.rng.Next() % 3 + 1) * 0.1f;
+            spell_scale = (GameState.rng.Next() % 3 + 1) * 0.1f;
         }
     }
 

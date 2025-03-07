@@ -41,13 +41,20 @@ public class ItemSlotScript : MonoBehaviour
     UIScript ui_script;
     PlayerStats player_stats;
 
-    void Start()
+    void Awake()
     {
         image = GetComponent<Image>();
         button = GetComponent<Button>();
         button.onClick.AddListener(SwapItem);
         ui_script = GameObject.Find("UI").GetComponent<UIScript>();
 
+        foreach (Transform t in transform) {
+            child = t.gameObject;
+        }
+    }
+
+    void Start()
+    {
         foreach (Transform t in transform) {
             child = t.gameObject;
         }
@@ -71,7 +78,6 @@ public class ItemSlotScript : MonoBehaviour
 
     void SwapItem()
     {
-        Debug.Log("SwapItem");
         if (player_stats == null) {
             GameObject player = GameObject.Find("Player");
             if (player == null) {
@@ -80,17 +86,14 @@ public class ItemSlotScript : MonoBehaviour
             player_stats = player.GetComponent<PlayerStats>();
         }
 
+        if (player_stats.currently_held_item != null || item != null) {
+            ui_script.PlaySwapSound();
+        }
+
         Item temp_item = item;
         item = player_stats.currently_held_item;
         player_stats.inventory[inventory_index] = item;
         player_stats.currently_held_item = temp_item;
-
-        // image.sprite = (item != null) ? GameData.item_sprites[item.sprite_index] : placeholder_sprite;
-
-        string held = (player_stats.currently_held_item == null) ? "null" : player_stats.currently_held_item.name;
-        string in_slot = (item == null) ? "null" : item.name;
-
-        Debug.Log("SwapItem: " + held + " -- " + in_slot);
 
         ui_script.Sync();
         ui_script.ShowInventory();

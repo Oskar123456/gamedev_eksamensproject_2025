@@ -30,6 +30,7 @@ namespace UI
         public GameObject skill_tree_element_description;
 
         AudioSource audio_source;
+        public AudioClip[] audio_clips;
         GameObject player;
         GameObject player_cursor_img;
         RectTransform player_cursor_img_rt;
@@ -294,6 +295,7 @@ namespace UI
                     b.onClick.AddListener(() => {
                             player.SendMessage("OnLevelUpSpell", ii);
                             BuildSkillTree();
+                            audio_source.clip = audio_clips[0];
                             audio_source.Play();
                             if (player_stats.skill_points < 1) {
                                 skill_tree_plus_button.SetActive(false);
@@ -355,6 +357,18 @@ namespace UI
                     player_stats.attack_damage, player_stats.attack_speed, player_stats.attack_scale);
             }
 
+        }
+
+        public void PlaySwapSound()
+        {
+            audio_source.clip = audio_clips[2];
+            audio_source.Play();
+        }
+
+        public void PlaySwapFailSound()
+        {
+            audio_source.clip = audio_clips[1];
+            audio_source.Play();
         }
     }
 }

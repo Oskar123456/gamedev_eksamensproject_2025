@@ -72,6 +72,7 @@ namespace AI
             halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
             stats = GetComponent<EnemyStats>();
+            stats.active_attack.ScaleWithEnemyStats(stats);
         }
 
         void Update()
