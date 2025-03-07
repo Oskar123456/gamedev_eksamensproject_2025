@@ -47,6 +47,11 @@ public class InventoryScript : MonoBehaviour
     GameObject weapon_slot;
     GameObject boot_slot;
     GameObject inventory;
+    WeaponSlotScript weapon_slot_script;
+    HelmetSlotScript helmet_slot_script;
+    ArmorSlotScript armor_slot_script;
+    BootSlotScript boot_slot_script;
+    JewelrySlotScript jewelry_slot_script;
 
     void Awake()
     {
@@ -62,6 +67,11 @@ public class InventoryScript : MonoBehaviour
         jewelry_sprite = jewelry_slot.GetComponent<Image>().sprite;
         weapon_sprite = weapon_slot.GetComponent<Image>().sprite;
         boot_sprite = boot_slot.GetComponent<Image>().sprite;
+        weapon_slot_script = GameObject.Find("InventoryWeaponSlot").GetComponent<WeaponSlotScript>();
+        helmet_slot_script = GameObject.Find("InventoryHelmetSlot").GetComponent<HelmetSlotScript>();
+        jewelry_slot_script = GameObject.Find("InventoryJewelrySlot").GetComponent<JewelrySlotScript>();
+        armor_slot_script = GameObject.Find("InventoryArmorSlot").GetComponent<ArmorSlotScript>();
+        boot_slot_script = GameObject.Find("InventoryBootSlot").GetComponent<BootSlotScript>();
     }
 
     void Start()
@@ -83,11 +93,21 @@ public class InventoryScript : MonoBehaviour
             Destroy(t.gameObject);
         }
 
+        weapon_slot_script.item = player_stats.weapon;
+        boot_slot_script.item = player_stats.boots;
+        armor_slot_script.item = player_stats.armor;
+        helmet_slot_script.item = player_stats.helmet;
+        jewelry_slot_script.item = player_stats.jewelry;
+        weapon_slot_script.UpdateSprite();
+        jewelry_slot_script.UpdateSprite();
+        helmet_slot_script.UpdateSprite();
+        armor_slot_script.UpdateSprite();
+        boot_slot_script.UpdateSprite();
+
         RectTransform inventory_rect = inventory.GetComponent<RectTransform>();
         float padding = 10;
         float i_slot_width = (inventory_rect.rect.size.x - 6 * padding) / 5;
         float i_slot_height = (inventory_rect.rect.size.y - 6 * padding) / 5;
-        Debug.Log("rect size: " + inventory_rect.rect.ToString());
         float min_wh = MathF.Min(i_slot_width, i_slot_height);
         i_slot_width = min_wh; i_slot_height = min_wh;
         for (int i = 0; i < 5; i++) {

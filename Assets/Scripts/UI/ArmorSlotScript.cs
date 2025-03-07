@@ -39,7 +39,7 @@ public class ArmorSlotScript : MonoBehaviour
     PlayerStats player_stats;
     PlayerScript player_script;
 
-    void Start()
+    void Awake()
     {
         image = GameObject.Find("ArmorIcon").GetComponent<Image>();
         button = GetComponent<Button>();
@@ -50,6 +50,10 @@ public class ArmorSlotScript : MonoBehaviour
         foreach (Transform t in transform) {
             children.Add(t.gameObject);
         }
+    }
+
+    void Start()
+    {
     }
 
     void Update()
@@ -96,6 +100,20 @@ public class ArmorSlotScript : MonoBehaviour
         ui_script.SetHeldItem();
         ui_script.Sync();
 
+        UpdateSprite();
+    }
+
+    public void UpdateSprite()
+    {
+        if (player_stats == null) {
+            player = GameObject.Find("Player");
+            if (player == null) {
+                return;
+            }
+            player_stats = player.GetComponent<PlayerStats>();
+            player_script = player.GetComponent<PlayerScript>();
+        }
+        item = player_stats.armor;
         image.sprite = (item != null) ? GameData.item_sprites[item.sprite_index] : placeholder_sprite;
     }
 }

@@ -217,7 +217,6 @@ namespace UI
 
         void ToggleStats()
         {
-            Debug.Log("ToggleStats");
             stats_toggled = !stats_toggled;
             stats.SetActive(stats_toggled);
             Sync();
@@ -255,7 +254,7 @@ namespace UI
 
         public void ShowInventory()
         {
-            HideUI();
+            // HideUI();
             inventory.SetActive(true);
             inventory_script.Draw();
             is_inventory_active = true;

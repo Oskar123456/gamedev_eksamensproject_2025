@@ -154,7 +154,7 @@ public class PlayerStats : MonoBehaviour
         this.weapon = ps.weapon;
         this.boots = ps.boots;
 
-        this.currently_held_item = new Staff();
+        this.currently_held_item = ps.currently_held_item;
         this.inventory_size = ps.inventory_size;
         this.inventory_space = ps.inventory_space;
         this.inventory = new Item[this.inventory_size];
