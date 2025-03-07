@@ -270,7 +270,7 @@ namespace PCG
                         continue;
 
                     Vector2Int voxel_offs = level.MapCellToVoxelOffset(x, z);
-                    int n_decos = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z]));
+                    int n_decos = Utils.rng.Next() % ((int)Math.Sqrt(level.column_widths[x] * level.row_heights[z])) + 2;
 
                     Vector3 deco_pos = Vector3.zero;
                     RaycastHit hit_info;
@@ -318,9 +318,9 @@ namespace PCG
                             deco_pos = hit_info.point;
 
                             GameObject deco  = medieval_deco_prefabs[Utils.rng.Next() % medieval_deco_prefabs.Count];
-                            GameObject new_deco = Instantiate(deco, deco_pos, Quaternion.identity, level_container.transform);
+                            GameObject new_deco = Instantiate(deco, deco_pos + Vector3.up * 0.06f, Quaternion.identity, level_container.transform);
 
-                            new_deco.transform.localScale = new Vector3(LevelBuilder.voxel_scale, LevelBuilder.voxel_scale, LevelBuilder.voxel_scale);
+                            new_deco.transform.localScale = new_deco.transform.localScale * LevelBuilder.voxel_scale;
                         }
                     }
 
