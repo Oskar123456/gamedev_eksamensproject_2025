@@ -47,6 +47,7 @@
   - A new type of enemy, different from the rest.
   - More decorations, also in clusters, some wall decos.
   - A new player attack and a new player spell.
+  - Is currently possible to jump while attacking in same frame, maybe change.
   - ... rest of the game...
 
 
