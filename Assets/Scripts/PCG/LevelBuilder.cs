@@ -45,6 +45,7 @@ namespace PCG
         public void Init()
         {
             voxel_scale = scale;
+            noise_scale = floor_noise_scale;
         }
 
         public Level Medieval(Maze maze, Transform parent, LevelType level_type)

@@ -89,7 +89,7 @@ namespace AI
 
             float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
 
-            if (dist_to_player > 20)
+            if (dist_to_player > 30)
                 return;
 
             if (player_trf.hasChanged) {

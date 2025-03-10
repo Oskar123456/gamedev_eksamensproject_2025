@@ -24,6 +24,7 @@ namespace PCG
         public GameObject level_container_prefab;
         public List<GameObject> medieval_pillar_prefabs;
         public List<GameObject> medieval_deco_prefabs;
+        public List<GameObject> medieval_deco_large_prefabs;
         public List<GameObject> medieval_light_prefabs;
         public List<GameObject> medieval_enemy_prefabs;
         public GameObject water_volume;
@@ -78,6 +79,9 @@ namespace PCG
 
             if (level_type == LevelType.Water) {
                 AddWater(level, level_type);
+            }
+            if (level_type != LevelType.Water) {
+                DecorateLarge(level, level_type);
             }
             AddPillars(level, level_type);
             Decorate(level, level_type);
@@ -178,7 +182,6 @@ namespace PCG
             Vector2Int noise_seeds = new Vector2Int(GameState.rng.Next(1000), GameState.rng.Next(1000));
             float[,] noise_array = new float[level.voxel_width, level.voxel_height];
             float[] noise_levels = new float[level.voxel_width * level.voxel_height];
-            string ss = "";
             for (int x = 0; x < level.voxel_width; x++) {
                 for (int z = 0; z < level.voxel_height; z++) {
                     if (level.IsWall(x, z)) {
@@ -187,21 +190,11 @@ namespace PCG
                         noise_array[x, z] = Utils.MultiLayerNoise((x + noise_seeds.x) * 1.87f, (z + noise_seeds.y) * 1.87f);
                     }
                     noise_levels[x * level.voxel_height + z] = noise_array[x, z];
-                    ss += noise_array[x, z] + ",";
                 }
             }
 
             Array.Sort(noise_levels);
-            string ss2 = "";
-            foreach (float f in noise_levels) {
-                ss2 += f + ",";
-            }
-            Debug.Log(ss2);
-
             float noise_min = noise_levels[noise_levels.Length - enemy_target_num];
-
-            Debug.Log(ss);
-
             int enemy_num = 0;
 
             for (int x = 0; x < level.width; x++) {
@@ -236,34 +229,99 @@ namespace PCG
                                 GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
 
                                 level.occupied[voxel_offs.x + cell_x, voxel_offs.y + cell_z] = true;
-                                // Debug.Log("Spawn enemy at: " + enemy_pos);
                             }
                         }
                     }
-
-                    // for (int i = 0; i < n_enemies; i++) {
-                    //     int cell_x = Utils.rng.Next() % level.column_widths[x];
-                    //     int cell_z = Utils.rng.Next() % level.row_heights[z];
-                    //     if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
-                    //         continue;
-                    //     level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
-                    //     enemy_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
-
-                    //     if (Physics.Raycast(enemy_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
-                    //         enemy_pos = hit_info.point;
-
-                    //         GameObject enemy  = medieval_enemy_prefabs[Utils.rng.Next() % medieval_enemy_prefabs.Count];
-                    //         GameObject new_enemy = Instantiate(enemy, enemy_pos, Quaternion.identity, level_container.transform);
-                    //     }
-                    // }
-
                 }
             }
             Debug.Log("Spawned " + enemy_num + " enemies");
         }
 
+        void DecorateLarge(Level level, LevelType level_type)
+        {
+            int n = 0;
+            for (int x = 0; x < level.width; x++) {
+                for (int z = 0; z < level.height; z++) {
+                    if (level.maze.walls[x, z]) {
+                        continue;
+                    }
+                    if (Utils.rng.Next() % 4 == 0) {
+                        continue;
+                    }
+
+                    Vector2Int cell_offs = level.MapCellToVoxelOffset(x, z);
+                    Vector2Int voxel_coord = new Vector2Int((Utils.rng.Next() % (level.column_widths[x] - 2)) + 1, (Utils.rng.Next() % (level.row_heights[z] - 2)) + 1);
+                    Vector3 pos = level.MapCellVoxelToWorld(x, z, voxel_coord.x, voxel_coord.y);
+                    pos.x += LevelBuilder.voxel_scale / 2;
+                    pos.y = LevelBuilder.voxel_scale * 2;
+                    pos.z += LevelBuilder.voxel_scale / 2;
+
+                    RaycastHit hit_info;
+                    for (int dir = 0; dir < 4; dir++) {
+                        // Vector2Int dir_vec = Utils.DirVec2D(dir);
+                        float ray_length = (dir == 0 || dir == 2) ? level.row_heights[z] : level.column_widths[x];
+                        Vector3 dir_vec = Utils.DirVec3DF(dir);
+                        Vector3Int dir_vec_perp_i = Utils.DirVec3D((dir + 1) % 4);
+                        if (Physics.Raycast(pos, dir_vec, out hit_info, ray_length * 1.1f * LevelBuilder.voxel_scale)) {
+                            Debug.DrawRay(pos, dir_vec, Color.red, 1000);
+
+                            int r = Utils.rng.Next(medieval_deco_large_prefabs.Count);
+                            GameObject new_deco = Instantiate(medieval_deco_large_prefabs[r], hit_info.point,
+                                    Quaternion.Euler(0, (dir + 1) * 90, 0), level_container.transform);
+
+                            Vector3 p = hit_info.point;
+                            new_deco.transform.position = new_deco.transform.position - dir_vec * (new_deco.transform.lossyScale.x * 1.5f);
+
+                            Vector2Int point_voxel_coord = level.MapWorldPosToVoxel(new_deco.transform.position.x, new_deco.transform.position.z);
+                            Vector2Int point_voxel_neighbor_coord = new Vector2Int(point_voxel_coord.x + dir_vec_perp_i.x, point_voxel_coord.y + dir_vec_perp_i.z);
+
+                            float min_noise = MathF.Min(level.noise_levels[point_voxel_coord.x, point_voxel_coord.y],
+                                    level.noise_levels[point_voxel_neighbor_coord.x, point_voxel_neighbor_coord.y]);
+
+                            new_deco.transform.position = new Vector3(new_deco.transform.position.x,
+                                    min_noise * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale, new_deco.transform.position.z);
+
+                            Debug.DrawRay(new Vector3(point_voxel_coord.x * LevelBuilder.voxel_scale, 0,
+                                        point_voxel_coord.y * LevelBuilder.voxel_scale), Vector3.up * 10, Color.red, 1000);
+                            Debug.DrawRay(new Vector3(point_voxel_neighbor_coord.x * LevelBuilder.voxel_scale, 0,
+                                        point_voxel_neighbor_coord.y * LevelBuilder.voxel_scale), Vector3.up * 10, Color.red, 1000);
+
+                            n++;
+
+                            level.occupied[point_voxel_coord.x, point_voxel_coord.y] = true;
+                            level.occupied[point_voxel_neighbor_coord.x, point_voxel_neighbor_coord.y] = true;
+
+                            Debug.Log("New Large Deco at: " + hit_info.point.ToString() + " and marking: " + point_voxel_coord + " and " + point_voxel_neighbor_coord + " as occupied");
+                            break;
+                        }
+                    }
+                }
+            }
+            Debug.Log("Added " + n + " large decos");
+        }
+
         void Decorate(Level level, LevelType level_type)
         {
+            int deco_target_num = (int)MathF.Sqrt(level.voxel_width * level.voxel_height) * 2;
+
+            Vector2Int noise_seeds = new Vector2Int(GameState.rng.Next(1000), GameState.rng.Next(1000));
+            float[,] noise_array = new float[level.voxel_width, level.voxel_height];
+            float[] noise_levels = new float[level.voxel_width * level.voxel_height];
+            for (int x = 0; x < level.voxel_width; x++) {
+                for (int z = 0; z < level.voxel_height; z++) {
+                    if (level.IsWall(x, z)) {
+                        noise_array[x, z] = 0;
+                    } else {
+                        noise_array[x, z] = Utils.MultiLayerNoise((x + noise_seeds.x) * 3.577f, (z + noise_seeds.y) * 3.577f);
+                    }
+                    noise_levels[x * level.voxel_height + z] = noise_array[x, z];
+                }
+            }
+
+            Array.Sort(noise_levels);
+            float noise_min = noise_levels[noise_levels.Length - deco_target_num];
+
+            int deco_num = 0;
             for (int x = 0; x < level.width; x++) {
                 for (int z = 0; z < level.height; z++) {
                     if (level.maze.walls[z, x])
@@ -278,14 +336,14 @@ namespace PCG
 
                     if (light_count < max_lights && Utils.rng.Next() % 2 == 0 && z < level.height - 1 && level.maze.walls[z + 1, x]) {
                         Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
-                        pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
+                        pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.65f;
                         // Debug.DrawRay(pos, Vector3.forward * 3f * level.row_heights[z] * LevelBuilder.voxel_scale, Color.red, 1000);
                         // Debug.DrawRay(pos, Vector3.right * 3f * level.column_widths[x] * LevelBuilder.voxel_scale, Color.red, 1000);
                         if (Physics.Raycast(pos, Vector3.forward, out hit_info, 10f * level.row_heights[z] * LevelBuilder.voxel_scale)) {
                             deco_pos = hit_info.point;
 
                             GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
-                                deco_pos, Quaternion.Euler(0, 180, 0), level_container.transform);
+                                    deco_pos, Quaternion.Euler(0, 180, 0), level_container.transform);
 
                             light_count++;
                         }
@@ -293,12 +351,12 @@ namespace PCG
 
                     if (light_count < max_lights && Utils.rng.Next() % 2 == 0 && x < level.width - 1 && level.maze.walls[z, x + 1]) {
                         Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
-                        pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.75f;
+                        pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.65f;
                         if (Physics.Raycast(pos, Vector3.right, out hit_info, 10f * level.column_widths[x] * LevelBuilder.voxel_scale)) {
                             deco_pos = hit_info.point;
 
                             GameObject new_deco = Instantiate(medieval_light_prefabs[Utils.rng.Next() % medieval_light_prefabs.Count],
-                                deco_pos, Quaternion.Euler(0, 270, 0), level_container.transform);
+                                    deco_pos, Quaternion.Euler(0, 270, 0), level_container.transform);
                             light_count++;
                         }
                     }
@@ -306,26 +364,34 @@ namespace PCG
                     if ((x == maze.start.x && z == maze.start.y) || (x == maze.finish.x && z == maze.finish.y))
                         continue;
 
-                    for (int i = 0; i < n_decos; i++) {
-                        int cell_x = Utils.rng.Next() % level.column_widths[x];
-                        int cell_z = Utils.rng.Next() % level.row_heights[z];
-                        if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y])
-                            continue;
-                        level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
-                        deco_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
+                    for (int cell_x = 0; cell_x < level.column_widths[x]; ++cell_x) {
+                        for (int cell_z = 0; cell_z < level.row_heights[z]; ++cell_z) {
+                            if (level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y]) {
+                                continue;
+                            }
+                            if (noise_array[voxel_offs.x + cell_x, voxel_offs.y + cell_z] < noise_min) {
+                                continue;
+                            }
 
-                        if (Physics.Raycast(deco_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
-                            deco_pos = hit_info.point;
+                            level.occupied[cell_x + voxel_offs.x, cell_z + voxel_offs.y] = true;
+                            deco_pos = level.MapCellVoxelToWorld(x, z, cell_x, cell_z);
 
-                            GameObject deco  = medieval_deco_prefabs[Utils.rng.Next() % medieval_deco_prefabs.Count];
-                            GameObject new_deco = Instantiate(deco, deco_pos + Vector3.up * 0.06f, Quaternion.identity, level_container.transform);
+                            if (Physics.Raycast(deco_pos + Vector3.up * 100, Vector3.down, out hit_info, 200)) {
+                                deco_pos = hit_info.point;
 
-                            new_deco.transform.localScale = new_deco.transform.localScale * LevelBuilder.voxel_scale;
+                                GameObject deco  = medieval_deco_prefabs[Utils.rng.Next() % medieval_deco_prefabs.Count];
+                                GameObject new_deco = Instantiate(deco, deco_pos + Vector3.up * 0.06f, Quaternion.identity, level_container.transform);
+
+                                new_deco.transform.rotation = Quaternion.Euler(0, Utils.rng.Next(360), 0);
+                                new_deco.transform.localScale = new_deco.transform.localScale * LevelBuilder.voxel_scale;
+
+                                deco_num++;
+                            }
                         }
                     }
-
                 }
             }
+            Debug.Log(deco_num + " decos added");
             Debug.Log(light_count + " lights added");
         }
     }
@@ -357,6 +423,8 @@ namespace PCG
         public static Vector2Int DirVec2D(int dir) { return dirs_2D[dir]; }
         public static Vector3Int DirVec3D(Direction3D dir) { return dirs_3D[(int)dir]; }
         public static Vector3Int DirVec3D(int dir) { return dirs_3D[dir]; }
+        public static Vector3 DirVec3DF(Direction3D dir) { Vector3Int d = dirs_3D[(int)dir]; return new Vector3(d.x, d.y, d.z); }
+        public static Vector3 DirVec3DF(int dir) { Vector3Int d = dirs_3D[dir]; return new Vector3(d.x, d.y, d.z); }
 
         public static float MultiLayerNoise(float x, float z)
         {

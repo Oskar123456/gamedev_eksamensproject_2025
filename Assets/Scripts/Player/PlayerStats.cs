@@ -103,6 +103,7 @@ public class PlayerStats : MonoBehaviour
     public void CopyFrom(PlayerStats ps)
     {
         this.level = ps.level;
+        this.gold = ps.gold;
         this.xp = ps.xp;
         this.xp_max = ps.xp_max;
 

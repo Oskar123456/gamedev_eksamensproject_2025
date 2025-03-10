@@ -57,13 +57,10 @@ namespace Attacks
             var main = ps.main;
             main.simulationSpeed = duration_t / stats.duration;
 
-            Debug.Log("sim speed: " + main.simulationSpeed);
-
             foreach (Transform t in transform) {
                 ps = t.GetComponent<ParticleSystem>();
                 main = ps.main;
                 main.simulationSpeed = duration_t / stats.duration;
-                Debug.Log("sim speed: " + main.simulationSpeed);
             }
 
             Destroy(gameObject, stats.duration);

@@ -407,8 +407,8 @@ MonoBehaviour:
   spell_scale: 1
   spell_duration: 1
   spell_cooldown: 1
-  inventory_size: 40
-  inventory_space: 40
+  inventory_size: 25
+  inventory_space: 25
 --- !u!1 &486168225807429162
 GameObject:
   m_ObjectHideFlags: 0
