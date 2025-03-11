@@ -391,7 +391,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -433,7 +433,7 @@ MonoBehaviour:
   hp: 5
   hp_max: 5
   invulnerable: 0
-  stun_lock: 0.1
+  stun_lock: 0.15
   attack_damage: 1
   attack_speed: 4
   attack_scale: 1
@@ -441,19 +441,19 @@ MonoBehaviour:
   attack_duration: 1
   attack_cooldown: 1
   collision_damage: 1
-  base_hp_max: 10
-  base_attack_damage: 10
-  base_attack_speed: 0.5
+  base_hp_max: 5
+  base_attack_damage: 5
+  base_attack_speed: 0.4
   base_attack_scale: 1.5
   base_attack_duration: 1
   base_attack_cooldown: 1
   base_collision_damage: 1
   base_attack_range: 5
-  xp_per_level: 1
-  hp_max_per_level: 5
-  attack_damage_per_level: 5
-  attack_speed_per_level: 0.1
-  attack_scale_per_level: 0.1
+  xp_per_level: 3
+  hp_max_per_level: 1
+  attack_damage_per_level: 1
+  attack_speed_per_level: 0.05
+  attack_scale_per_level: 0.05
   attack_duration_per_level: 0
   attack_cooldown_per_level: 0
   collision_damage_per_level: 0
