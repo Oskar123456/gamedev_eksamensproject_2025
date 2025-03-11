@@ -189,7 +189,8 @@ MonoBehaviour:
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
   attack_anim_speed: 1.333
-  cast_anim_speed: 2.333
+  cast_anim_speed: 1.4
+  pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
   - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
   - {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
@@ -383,11 +384,12 @@ MonoBehaviour:
   level: 1
   xp: 0
   xp_max: 1
+  gold: 0
   hp: 100
   hp_max: 100
   invulnerable: 0
   stun_lock: 0.15
-  move_speed_bonus: 1
+  move_speed_bonus: 0
   skill_points: 0
   attack_damage: 0
   attack_damage_normal: 0
@@ -405,6 +407,8 @@ MonoBehaviour:
   spell_scale: 1
   spell_duration: 1
   spell_cooldown: 1
+  inventory_size: 25
+  inventory_space: 25
 --- !u!1 &486168225807429162
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,8 +2159,8 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 0.846819, b: 0.6416407, a: 1}
-  m_Intensity: 8
-  m_Range: 30
+  m_Intensity: 5
+  m_Range: 20
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

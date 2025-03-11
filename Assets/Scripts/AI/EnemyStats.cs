@@ -30,6 +30,7 @@ public class EnemyStats : MonoBehaviour
     public int attack_damage;
     public float attack_speed;
     public float attack_scale;
+    public float attack_range;
     public float attack_duration;
     public float attack_cooldown;
     public int collision_damage;
@@ -65,6 +66,7 @@ public class EnemyStats : MonoBehaviour
         collision_damage = GameState.level * collision_damage_per_level + base_collision_damage;
         active_attack = new ShockWaveAttack();
         active_attack.ScaleWithEnemyStats(this);
+        attack_range = base_attack_range * attack_scale;
     }
 }
 

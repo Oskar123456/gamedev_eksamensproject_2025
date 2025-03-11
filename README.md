@@ -39,9 +39,16 @@
   - [UX Icons](https://assetstore.unity.com/packages/2d/gui/icons/ux-flat-icons-free-202525)
   - [RPG UI mix](https://assetstore.unity.com/packages/tools/gui/extensible-inventory-system-283656)
   - [RPG UI inventory](https://assetstore.unity.com/packages/2d/gui/icons/gui-parts-159068)
+  - [Medieval Props](https://assetstore.unity.com/packages/3d/props/medieval-props-41540)
 
 ## TODO:
 
+  - Spawn enemies in clusters, more types of ghosts.
+  - Enemy spawn weights, like with item drops.
+  - A new type of enemy, different from the rest.
+  - More decorations, also in clusters, some wall decos.
+  - A new player attack and a new player spell.
+  - Is currently possible to jump while attacking in same frame, maybe change.
   - ... rest of the game...
 
 

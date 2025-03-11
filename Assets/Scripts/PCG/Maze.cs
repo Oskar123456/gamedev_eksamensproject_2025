@@ -128,8 +128,8 @@ namespace PCG
             walls[start.y, start.x] = false;
             walls[finish.y, finish.x] = false;
 
-            Debug.Log(_start.ToString() + " --> " + _finish.ToString());
-            Debug.Log(start.ToString() + " --> " + finish.ToString());
+            // Debug.Log(_start.ToString() + " --> " + _finish.ToString());
+            // Debug.Log(start.ToString() + " --> " + finish.ToString());
 
         }
     }

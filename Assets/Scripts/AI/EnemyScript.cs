@@ -14,6 +14,7 @@
 
 using System;
 using Attacks;
+using Loot;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -21,8 +22,8 @@ using TMPro;
 
 namespace AI
 {
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(CapsuleCollider))]
+    // [RequireComponent(typeof(Rigidbody))]
+    // [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyScript : MonoBehaviour
     {
@@ -31,24 +32,22 @@ namespace AI
         public GameObject basic_attack;
         public GameObject death_effect_prefab;
         public GameObject healthbar_prefab;
-        public EnemyType enemy_type;
+        public float drop_chance = 0.5f;
 
-        Rigidbody rb;
         NavMeshAgent nma;
         GameObject player;
         Transform player_trf;
         GameObject healthbar;
         Slider healthbar_slider;
         Transform player_cam_trf;
-        Transform overlay_trf;
 
         /* effects */
         GameObject death_effect;
         public float death_effect_delete_t = 1f;
         public float death_effect_scale = 1f;
 
-        float nav_update_t = 0.1f;
-        float nav_update_t_left;
+        // float nav_update_t = 0.1f;
+        // float nav_update_t_left;
         /* combat */
         GameObject attack_go;
 
@@ -61,7 +60,6 @@ namespace AI
 
         void Start()
         {
-            rb = GetComponent<Rigidbody>();
             nma = GetComponent<NavMeshAgent>();
 
             player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
@@ -72,8 +70,7 @@ namespace AI
             halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
             stats = GetComponent<EnemyStats>();
-
-            overlay_trf = GameObject.Find("Overlay").GetComponent<Transform>();
+            stats.active_attack.ScaleWithEnemyStats(stats);
         }
 
         void Update()
@@ -90,7 +87,7 @@ namespace AI
 
             float dist_to_player = Vector3.Distance(transform.position, player_trf.position);
 
-            if (dist_to_player > 20)
+            if (dist_to_player > 30)
                 return;
 
             if (player_trf.hasChanged) {
@@ -171,6 +168,11 @@ namespace AI
                 nma.ResetPath();
 
             if (stats.hp < 1) {
+                if (GameState.rng.Next(101) / 100f < drop_chance) {
+                    Item item_dropped = GameData.GenerateLoot();
+                    item_dropped.Drop(transform.position);
+                }
+
                 hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;

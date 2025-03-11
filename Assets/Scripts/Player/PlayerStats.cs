@@ -18,18 +18,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Attacks;
 using Spells;
+using Loot;
 
 public class PlayerStats : MonoBehaviour
 {
     public int level = 1;
     public int xp = 0;
     public int xp_max = 1;
+    public int gold = 0;
 
     public int hp = 100;
     public int hp_max = 100;
     public bool invulnerable;
     public float stun_lock = 0.15f;
     public float move_speed_bonus = 0;
+
+    public List<Item> items = new List<Item>();
 
     public int skill_points = 0;
     public List<Attack> learned_attacks = new List<Attack>();
@@ -55,6 +59,29 @@ public class PlayerStats : MonoBehaviour
     public float spell_duration;
     public float spell_cooldown;
 
+    public Helmet helmet;
+    public Jewelry jewelry;
+    public Armor armor;
+    public Weapon weapon;
+    public Boots boots;
+
+    public int inventory_size = 25;
+    public int inventory_space = 25;
+    public Item[] inventory;
+    public Item currently_held_item;
+
+    public override string ToString()
+    {
+        string str = "";
+        str += string.Format("Level: {0}{1}XP: {2}/{3}{4}HP: {5}/{6}{7}", level, Environment.NewLine, xp, xp_max, Environment.NewLine, hp, hp_max, Environment.NewLine);
+        str += string.Format("Gold: {0}{1}", gold, Environment.NewLine);
+        str += string.Format("Attack Damage: {0}/n:{1}/f:{2}/c:{3}{4}", attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire, Environment.NewLine);
+        str += string.Format("Attack Speed: {0}%{1}Attack AoE: {2}%{3}", attack_speed, Environment.NewLine, attack_scale, Environment.NewLine);
+        str += string.Format("Spell Damage: {0}/{1}/{2}/{3}{4}", spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire, Environment.NewLine);
+        str += string.Format("Cast Speed: {0}%{1}Spell AoE: {2}%", spell_speed, Environment.NewLine, spell_scale);
+        return str;
+    }
+
     public bool AddXp(int xp)
     {
         bool did_level = false;
@@ -76,6 +103,7 @@ public class PlayerStats : MonoBehaviour
     public void CopyFrom(PlayerStats ps)
     {
         this.level = ps.level;
+        this.gold = ps.gold;
         this.xp = ps.xp;
         this.xp_max = ps.xp_max;
 
@@ -89,9 +117,12 @@ public class PlayerStats : MonoBehaviour
         this.active_attack = ps.active_attack;
         this.active_spell = ps.active_spell;
 
+        this.items = new List<Item>();
         this.learned_attacks = new List<Attack>();
         this.learned_spells = new List<Spell>();
 
+        for (int i = 0; i < ps.items.Count; i++)
+            this.items.Add(ps.items[i]);
         for (int i = 0; i < ps.learned_attacks.Count; i++)
             this.learned_attacks.Add(ps.learned_attacks[i]);
         for (int i = 0; i < ps.learned_spells.Count; i++)
@@ -114,5 +145,21 @@ public class PlayerStats : MonoBehaviour
         this.spell_scale = ps.spell_scale;
         this.spell_duration = ps.spell_duration;
         this.spell_cooldown = ps.spell_cooldown;
+
+        this.helmet = ps.helmet;
+        this.armor = ps.armor;
+        this.jewelry = ps.jewelry;
+        this.weapon = ps.weapon;
+        this.boots = ps.boots;
+
+        this.currently_held_item = ps.currently_held_item;
+        this.inventory_size = ps.inventory_size;
+        this.inventory_space = ps.inventory_space;
+        this.inventory = new Item[this.inventory_size];
+        if (ps.inventory != null) {
+            for (int i = 0; i < ps.inventory_size; i++) {
+                this.inventory[i] = ps.inventory[i];
+            }
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace PCG
         public void Init()
         {
             voxel_scale = scale;
+            noise_scale = floor_noise_scale;
         }
 
         public Level Medieval(Maze maze, Transform parent, LevelType level_type)
@@ -186,7 +187,7 @@ namespace PCG
                         }
 
                         if (noise_levels[x, z] == 0)
-                            noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f, z + 0.013f) * LevelBuilder.noise_scale;
+                            noise_levels[x, z] = Utils.MultiLayerNoise(x + 0.015f + GameState.level_seed.x, z + 0.013f + GameState.level_seed.y) * LevelBuilder.noise_scale;
 
                         if (!IsWall(x, z) && y == 0) {
                             voxels[x, y, z] = Voxel.Floor;
@@ -232,7 +233,7 @@ namespace PCG
                     return GetVoxelWorldCenter(x, z);
                 }
             }
-            return Vector3.zero;
+            // return Vector3.zero;
         }
 
         public Vector3 GetVoxelWorldCenter(int x, int z)
@@ -327,8 +328,8 @@ namespace PCG
                     }
                 }
             }
-            Debug.Log("wall counts: " + wall_vertices.Count);
-            Debug.Log("floor counts: " + floor_vertices.Count);
+            // Debug.Log("wall counts: " + wall_vertices.Count);
+            // Debug.Log("floor counts: " + floor_vertices.Count);
         }
 
         bool IsCubeVisible(int x, int y, int z)

@@ -26,8 +26,6 @@ public class GameControllerScriptMenu : MonoBehaviour
     public Vector3 finish_pos;
 
     GameObject UI;
-    GameObject active_attack_button;
-    GameObject active_spell_button;
     GameObject minimap_img;
     Camera minimap_cam;
     Transform minimap_cam_trf;
@@ -72,8 +70,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
         UI = GameObject.Find("UI");
-        active_attack_button = GameObject.Find("ActiveAttackButton");
-        active_spell_button = GameObject.Find("ActiveSpellButton");
 
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
@@ -110,20 +106,6 @@ public class GameControllerScriptMenu : MonoBehaviour
         if (player_trf.hasChanged) {
             player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
             UpdateMiniMapCam();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            UI.SendMessage("HideUI");
-            active_attack_button.SendMessage("Hide");
-            active_spell_button.SendMessage("Hide");
-        }
-
-        if (Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.C)) {
-            UI.SendMessage("ToggleSkillTree");
-        }
-
-        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
-            UI.SendMessage("ToggleInventory");
         }
     }
 

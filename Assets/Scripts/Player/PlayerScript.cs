@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using Attacks;
 using Spells;
+using UI;
+using Loot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -36,6 +38,7 @@ namespace Player
         GameObject skill_tree_plus_button;
         UITest ui_test;
 
+        UIScript ui_script;
         GameObject game_controller;
         CharacterController char_ctrl;
         Animator animator;
@@ -81,6 +84,7 @@ namespace Player
         public float attack_anim_speed = 1.333f;
         public float cast_anim_speed = 2.333f;
         /* effects */
+        public GameObject pickup_audio_dummy;
         public List<AudioClip> sounds;
         AudioSource audio_source;
         public GameObject bad_text_prefab;
@@ -125,6 +129,10 @@ namespace Player
             UpdateCam();
             halfway_up_vec = Vector3.up * transform.localScale.y / 2.0f;
 
+            GameObject UI = GameObject.Find("UI");
+            if (UI != null) {
+                ui_script = UI.GetComponent<UIScript>();
+            }
             game_controller = GameObject.Find("GameController");
 
             audio_source = GetComponent<AudioSource>();
@@ -136,8 +144,7 @@ namespace Player
             if (ui_active_spell != null)
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
 
-            UpdateActiveAttack();
-            UpdateActiveSpell();
+            SyncStats();
         }
 
         void Update()
@@ -187,11 +194,13 @@ namespace Player
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
 
             ChooseAnimation();
+        }
 
+        void LateUpdate()
+        {
             if (trf.hasChanged) {
                 UpdateCam();
             }
-
             ResetState();
         }
 
@@ -210,6 +219,21 @@ namespace Player
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha2)) {
                     ChangeActiveAttack(1);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.F)) {
+                if (stats.currently_held_item != null) {
+                    RaycastHit hit_info;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (!Physics.Raycast(ray, out hit_info, 500, 1 << 6)) {
+                        return;
+                    }
+
+                    stats.currently_held_item.Drop(hit_info.point);
+                    stats.currently_held_item = null;
+
+                    ui_script.Sync();
                 }
             }
         }
@@ -283,10 +307,10 @@ namespace Player
 
             if (Input.GetKey(KeyCode.LeftShift)) {
                 did_sprint = true;
-                move_speed = move_speed_normal * move_speed_sprint_multi;
+                move_speed = move_speed_normal * move_speed_sprint_multi * (1 + stats.move_speed_bonus);
             } else {
                 did_sprint = false;
-                move_speed = move_speed_normal;
+                move_speed = move_speed_normal * (1 + stats.move_speed_bonus);
             }
 
             if (Input.GetKey(KeyCode.W)) {
@@ -438,36 +462,12 @@ namespace Player
             Destroy(level_up_effect, level_up_anim_t);
             Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
 
-            stats.attack_damage += 1;
-            stats.attack_speed += 0.1f;
-            stats.attack_scale += 0.05f;
+            stats.hp_max += 5;
+            stats.hp += 5;
 
-            UpdateActiveAttack();
-            UpdateActiveSpell();
+            SyncStats();
 
             skill_tree_plus_button.SetActive(true);
-        }
-
-        void UpdateActiveAttack()
-        {
-            stats.active_attack.ScaleWithPlayerStats(stats);
-
-            if (ui_active_attack != null) {
-                Image img_icon = ui_active_attack.GetComponent<Image>();
-                img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
-                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
-            }
-        }
-
-        void UpdateActiveSpell()
-        {
-            stats.active_spell.ScaleWithPlayerStats(stats);
-
-            if (ui_active_spell != null) {
-                Image img_icon = ui_active_spell.GetComponent<Image>();
-                img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
-                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
-            }
         }
 
         void ChangeActiveAttack(int i)
@@ -477,15 +477,7 @@ namespace Player
             }
 
             stats.active_attack = stats.learned_attacks[i];
-            stats.active_attack.ScaleWithPlayerStats(stats);
-
-            if (ui_active_attack != null) {
-                Image img_icon = ui_active_attack.GetComponent<Image>();
-                img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
-                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
-            }
-
-            // Debug.Log("ChangeActiveAttack to " + active_attack_info.name);
+            SyncStats();
         }
 
         void ChangeActiveSpell(int i)
@@ -495,15 +487,7 @@ namespace Player
             }
 
             stats.active_spell = stats.learned_spells[i];
-            stats.active_spell.ScaleWithPlayerStats(stats);
-
-            if (ui_active_spell != null) {
-                Image img_icon = ui_active_spell.GetComponent<Image>();
-                img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
-                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
-            }
-
-            // Debug.Log("ChangeActiveSpell to " + active_spell_info.name);
+            SyncStats();
         }
 
         void UpdateVelocity()
@@ -556,9 +540,62 @@ namespace Player
         {
             stats.skill_points--;
             stats.learned_spells[i].level++;
-            stats.learned_spells[i].ScaleWithPlayerStats(stats);
-            if (stats.active_spell == stats.learned_spells[i])
-                UpdateActiveSpell();
+            SyncStats();
+        }
+
+        void OnPickUp(Item item)
+        {
+            Instantiate(pickup_audio_dummy, transform.position + halfway_up_vec, Quaternion.identity, transform);
+
+            if (item.is_consumed_on_pickup) {
+                GameObject txt = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+                txt.transform.localScale = txt.transform.localScale;
+                txt.GetComponent<TextMeshProUGUI>().text = item.EffectString();
+                item.Consume(stats);
+                SyncStats();
+            }
+
+            else if (stats.inventory_space > 0 && stats.currently_held_item == null) {
+                for (int i = 0; i < stats.inventory_size; i++) {
+                    if (stats.inventory[i] == null) {
+                        stats.currently_held_item = item;
+                        ui_script.Sync();
+                        ui_script.ShowInventory();
+                        break;
+                    }
+                }
+            }
+
+            else {
+                item.Drop(transform.position + (GameState.rng.Next(10) / 10.0f) * transform.forward
+                        + (GameState.rng.Next(10) / 10.0f) * transform.right);
+                Debug.Log("No room, dropping " + item.name);
+                ui_script.Sync();
+                ui_script.ShowInventory();
+            }
+        }
+
+        public void SyncStats()
+        {
+            foreach (Attack a in stats.learned_attacks) {
+                a.ScaleWithPlayerStats(stats);
+            }
+
+            foreach (Spell s in stats.learned_spells) {
+                s.ScaleWithPlayerStats(stats);
+            }
+
+            if (ui_active_attack != null) {
+                Image img_icon = ui_active_attack.GetComponent<Image>();
+                img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
+                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
+            }
+
+            if (ui_active_spell != null) {
+                Image img_icon = ui_active_spell.GetComponent<Image>();
+                img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
+                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
+            }
         }
     }
 }

@@ -124,7 +124,7 @@ namespace Spells
                 return;
             }
 
-            GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], hit_info.point, Quaternion.identity);
+            GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], hit_info.point + Vector3.up * 0.25f, Quaternion.identity);
             instance.transform.localScale = new Vector3(instance.transform.localScale.x * scale, instance.transform.localScale.y, instance.transform.localScale.z * scale);
 
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
@@ -138,7 +138,7 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,
@@ -147,7 +147,7 @@ namespace Spells
 
         public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,
@@ -156,7 +156,7 @@ namespace Spells
             level++;
             ScaleWithPlayerStats(ps);
 
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}{8}Duration: {9}", name,
+            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
                     delimiter, level, delimiter,
                     delimiter, damage,
                     delimiter, scale,
