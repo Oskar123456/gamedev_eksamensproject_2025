@@ -511,6 +511,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameState
       objectReference: {fileID: 0}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: _attack_sprites.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: '_attack_sprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: attack_list_prefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: 'attack_list_prefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1637110239806522569, guid: 74fe3be91fcba97ce947ea48641786d2, type: 3}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: 'attack_list_prefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2706022499547128120, guid: 38fc4da56aa06934a9346e249050dcc6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

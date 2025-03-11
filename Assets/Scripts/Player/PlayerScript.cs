@@ -464,7 +464,8 @@ namespace Player
 
             stats.hp_max += 5;
             stats.hp += 5;
-            stats.attack_speed += 0.3f;
+            stats.attack_speed += 0.05f;
+            stats.attack_scale += 0.05f;
 
             SyncStats();
 

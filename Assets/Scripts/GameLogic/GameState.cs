@@ -81,6 +81,7 @@ public class GameState : MonoBehaviour
             ps.learned_spells.Add(new ForceFieldSpell());
             ps.learned_attacks.Add(new SlashAttack());
             ps.learned_attacks.Add(new IceSlashAttack());
+            ps.learned_attacks.Add(new MeleeChargeAttack());
             ps.active_attack = ps.learned_attacks[0];
             ps.active_spell = ps.learned_spells[0];
 

@@ -63,6 +63,7 @@ MonoBehaviour:
   - {fileID: 1637110239806522569, guid: 74fe3be91fcba97ce947ea48641786d2, type: 3}
   - {fileID: 4234594349587254900, guid: c2dcdbb84707c2b9683c72af3cbd62a8, type: 3}
   - {fileID: 363127035908328369, guid: e5d89578d9c4b8b82a65050710a12148, type: 3}
+  - {fileID: 2706022499547128120, guid: 38fc4da56aa06934a9346e249050dcc6, type: 3}
   spell_list_prefabs:
   - {fileID: 6288382277645583362, guid: 57427e8cf56a4e48982fe1bed2ff86d8, type: 3}
   - {fileID: 6506590698679266267, guid: 3a74865aa4ed02e9e8f3c5b24f3e7911, type: 3}
@@ -76,6 +77,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c890dd06d4a350946ab11e4778bf47d8, type: 3}
   - {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
   - {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
+  - {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
   _item_sprites:
   - {fileID: 0}
   - {fileID: 21300000, guid: 72bca99913f9f5f4a860528b7f77cce8, type: 3}

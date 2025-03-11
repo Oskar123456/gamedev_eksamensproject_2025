@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 389316886313511383}
   - component: {fileID: 2664502613051547049}
+  - component: {fileID: -5665312220160603877}
   m_Layer: 0
   m_Name: AudioDummySlashHit
   m_TagString: Untagged
@@ -129,3 +130,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-5665312220160603877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5578298940507306935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9cc4338ed5d4c1f9b42188b4e5617c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ttl: 1
