@@ -10,7 +10,7 @@
   - WASD : Movement
   - Shift : Sprint
   - Space : Jump
-  - Mouse Buttons: Attack
+  - Left Mouse Button: Attack
   - Right Mouse Button: Cast Spell
   - Number Keys : Switch Active Attack
   - [Left-Shift+]Number Keys : Switch Active Spell
