@@ -43,11 +43,12 @@
 
 ## TODO:
 
+  - Prettier UI
   - Spawn enemies in clusters, more types of ghosts [x].
   - Enemy spawn weights, like with item drops [x].
   - A new type of enemy, different from the rest.
   - More decorations, also in clusters, some wall decos [x].
-  - A new player attack and a new player spell.
+  - A new player attack and a new player spell [x?].
   - Is currently possible to jump while attacking in same frame, maybe change.
   - ... rest of the game...
 
