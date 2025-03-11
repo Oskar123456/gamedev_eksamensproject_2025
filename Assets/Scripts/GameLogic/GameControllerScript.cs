@@ -79,8 +79,8 @@ public class GameControllerScript : MonoBehaviour
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
 
-        // current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
-        current_level_type = LevelType.Medieval;
+        current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
+        // current_level_type = LevelType.Medieval;
         // current_level_type = LevelType.Water;
 
         GameState.level++;

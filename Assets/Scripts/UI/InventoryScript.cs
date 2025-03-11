@@ -105,7 +105,7 @@ public class InventoryScript : MonoBehaviour
         boot_slot_script.UpdateSprite();
 
         RectTransform inventory_rect = inventory.GetComponent<RectTransform>();
-        float padding = 10;
+        float padding = 0;
         float i_slot_width = (inventory_rect.rect.size.x - 6 * padding) / 5;
         float i_slot_height = (inventory_rect.rect.size.y - 6 * padding) / 5;
         float min_wh = MathF.Min(i_slot_width, i_slot_height);

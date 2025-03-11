@@ -22,8 +22,8 @@ using TMPro;
 
 namespace AI
 {
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(CapsuleCollider))]
+    // [RequireComponent(typeof(Rigidbody))]
+    // [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyScript : MonoBehaviour
     {
@@ -34,7 +34,6 @@ namespace AI
         public GameObject healthbar_prefab;
         public float drop_chance = 0.5f;
 
-        Rigidbody rb;
         NavMeshAgent nma;
         GameObject player;
         Transform player_trf;
@@ -61,7 +60,6 @@ namespace AI
 
         void Start()
         {
-            rb = GetComponent<Rigidbody>();
             nma = GetComponent<NavMeshAgent>();
 
             player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
