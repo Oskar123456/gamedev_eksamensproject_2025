@@ -17,6 +17,7 @@
   - Tab : [Maximize] Minimap
   - T : Open Skill Tree
   - I/E : Open Inventory
+  - F : Drop item on cursor
   - Escape : Close UI
 
 ## Third Party Assets List
