@@ -16,6 +16,7 @@
   - [Left-Shift+]Number Keys : Switch Active Spell
   - Tab : [Maximize] Minimap
   - T : Open Skill Tree
+  - C : Open Character Sheet
   - I/E : Open Inventory
   - F : Drop item on cursor
   - Escape : Close UI
