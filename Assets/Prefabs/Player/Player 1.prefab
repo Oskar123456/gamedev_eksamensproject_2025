@@ -319,7 +319,7 @@ MonoBehaviour:
   a_vertical: -200
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
-  attack_anim_speed: 1.333
+  attack_anim_time: 1.333
   cast_anim_speed: 1.4
   pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
@@ -741,7 +741,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 0
-  m_Color: {r: 1, g: 0.84552574, b: 0.4477712, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 15
   m_Range: 30
   m_SpotAngle: 113.44136
