@@ -135,4 +135,9 @@ public class GameState : MonoBehaviour
     {
         return Instantiate(g, v, q);
     }
+
+    public static GameObject InstantiateParented(GameObject g, Vector3 v, Quaternion q, Transform p)
+    {
+        return Instantiate(g, v, q, p);
+    }
 }

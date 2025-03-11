@@ -288,6 +288,10 @@ PrefabInstance:
       propertyPath: '_item_sprites.Array.data[0]'
       value: 
       objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
+      propertyPath: 'attack_list_prefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1637110239806522569, guid: 74fe3be91fcba97ce947ea48641786d2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

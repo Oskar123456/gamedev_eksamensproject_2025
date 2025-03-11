@@ -81,7 +81,7 @@ namespace Player
         float pitch_0, pitch;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
-        public float attack_anim_speed = 1.333f;
+        public float attack_anim_time = 1.333f;
         public float cast_anim_speed = 2.333f;
         /* effects */
         public GameObject pickup_audio_dummy;
@@ -251,8 +251,8 @@ namespace Player
         {
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
-                    attack_time_left = stats.active_attack.duration / stats.attack_speed;
-                    animator.SetFloat("attack_speed", attack_anim_speed / (stats.active_attack.duration / stats.attack_speed));
+                    attack_time_left = attack_anim_time / stats.attack_speed;
+                    animator.SetFloat("attack_speed", attack_anim_time / attack_time_left);
                     stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
@@ -464,6 +464,7 @@ namespace Player
 
             stats.hp_max += 5;
             stats.hp += 5;
+            stats.attack_speed += 0.3f;
 
             SyncStats();
 

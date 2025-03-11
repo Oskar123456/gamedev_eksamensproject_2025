@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attack_list_prefabs:
-  - {fileID: 6697311237542272127, guid: 6ec07a593382b17e3b3bad8ca9f464ef, type: 3}
+  - {fileID: 1637110239806522569, guid: 74fe3be91fcba97ce947ea48641786d2, type: 3}
   - {fileID: 4234594349587254900, guid: c2dcdbb84707c2b9683c72af3cbd62a8, type: 3}
   - {fileID: 363127035908328369, guid: e5d89578d9c4b8b82a65050710a12148, type: 3}
   spell_list_prefabs:
