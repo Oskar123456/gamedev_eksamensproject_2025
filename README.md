@@ -10,13 +10,15 @@
   - WASD : Movement
   - Shift : Sprint
   - Space : Jump
-  - Mouse Buttons: Attack
+  - Left Mouse Button: Attack
   - Right Mouse Button: Cast Spell
   - Number Keys : Switch Active Attack
   - [Left-Shift+]Number Keys : Switch Active Spell
   - Tab : [Maximize] Minimap
   - T : Open Skill Tree
+  - C : Open Character Sheet
   - I/E : Open Inventory
+  - F : Drop item on cursor
   - Escape : Close UI
 
 ## Third Party Assets List
