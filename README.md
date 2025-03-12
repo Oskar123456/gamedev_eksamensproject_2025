@@ -44,8 +44,8 @@
   - [Medieval Props](https://assetstore.unity.com/packages/3d/props/medieval-props-41540)
   - [SkyBox (arena)](https://assetstore.unity.com/packages/3d/environments/sci-fi/real-stars-skybox-lite-116333)
   - [SkyBox (Boss1)](https://assetstore.unity.com/packages/2d/textures-materials/galaxy-fire-skybox-10976)
-   -[UndeadBoss (Boss1)](https://assetstore.unity.com/packages/3d/characters/creatures/monster-mutant-7-188552)
-
+  -[Fantasy Icons (Boss1)](https://assetstore.unity.com/packages/2d/gui/icons/fantasy-inventory-icons-free-143805)
+  -[UndeadBoss (Boss1)](https://assetstore.unity.com/packages/3d/characters/creatures/monster-mutant-7-188552)
 ## TODO:
 
   - Visual cooldown effect on active skill/attack button.

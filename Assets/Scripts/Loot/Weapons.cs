@@ -73,5 +73,25 @@ namespace Loot
             attack_scale = (GameState.rng.Next() % 6 + 1) * 0.1f;
         }
     }
+     
+     public class DivineDemonStaff : Weapon
+    {
+        public DivineDemonStaff()
+        {
+            should_show = true;
+            weight = 500;
+            prefab_index = 1;
+            sprite_index = 0;
+            name = "DivineDemonStaff";
+            description = "a legendary staff";
+            spell_damage = GameState.rng.Next() % 10 + 5;
+            spell_speed = (GameState.rng.Next() % 10 + 5) * 0.1f;
+            spell_scale = (GameState.rng.Next() % 10 + 5) * 0.1f;
+        }
+    }
+
+
+
+
 
 }

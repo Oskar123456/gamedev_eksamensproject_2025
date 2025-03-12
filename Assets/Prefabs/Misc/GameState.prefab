@@ -79,7 +79,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
   - {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
   _item_sprites:
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 4ebc70b29cf84034aa52eafdbca3951d, type: 3}
   - {fileID: 21300000, guid: 72bca99913f9f5f4a860528b7f77cce8, type: 3}
   - {fileID: 21300000, guid: e9426e5a33e4e2c41b4fb4eeb7b9b79f, type: 3}
   - {fileID: 21300000, guid: 9b7afa97fe210a147a93161c718e2b89, type: 3}

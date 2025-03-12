@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.AI;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using Attacks;
+using UnityEngine.UI;
+using Loot;
 
 
 public class BossScript : MonoBehaviour
@@ -15,9 +17,7 @@ public class BossScript : MonoBehaviour
     public float moveSpeed = 6f;  // Gå-hastighed
     public float stopDistance = 5f;  // Stop ved denne afstand
     public float attackCooldown = 2.5f;
-    private bool isAttacking = false;
-    private float nextAttackTime = 0f;
-    
+
     private float attackTime = 2.167f;
 
     private float attackTimeLift = 0f;
@@ -26,10 +26,14 @@ public class BossScript : MonoBehaviour
 
     private BossStats stats;
 
-    private bool isMoving = true;
-
     public GameObject arm_attack_spell;
     public GameObject spine_attack_spell;
+
+    public GameObject healthbar_prefab;
+    GameObject healthbar;
+    Slider healthbar_slider;
+    Transform player_cam_trf;
+    public GameObject portal_exit_prefab;
 
 
     void Start()
@@ -44,6 +48,17 @@ public class BossScript : MonoBehaviour
         nma = GetComponent<NavMeshAgent>();
         stats = GetComponent<BossStats>();
          
+        player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
+
+            healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * 5, Quaternion.identity, transform);
+            healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();
+            Transform upSlider = healthbar_slider.GetComponent<Transform>();
+            upSlider.position += Vector3.up * 5;
+             
+            healthbar.SetActive(false);
+         
+
+
         nma.speed = moveSpeed; 
 
         player_trf = GameObject.FindWithTag("Player")?.transform;
@@ -64,7 +79,12 @@ public class BossScript : MonoBehaviour
             player_trf = GameObject.FindWithTag("Player")?.transform;
               Debug.Log(player_trf.position);
         }
-      
+         
+        if (player_trf.hasChanged) {
+              if (stats.hp < stats.hp_max) {
+                 FixHealthBar();
+              }
+        }
         
         float distanceToPlayer = Vector3.Distance(transform.position, player_trf.position);
         if(attackTimeLift <= 0) {
@@ -109,7 +129,7 @@ public class BossScript : MonoBehaviour
 
         nma.SetDestination(player_trf.position);
 
-        animator.SetBool("isWalking", true);
+        
     }
 
     void OnHit(HitInfo hit_info)
@@ -117,8 +137,10 @@ public class BossScript : MonoBehaviour
             if (hit_info.parent.tag != "Player")
                 return;
 
-             stats.TakeDamage(hit_info.damage);
-
+            TakeDamage(hit_info.damage);
+            healthbar_slider.value = (float)stats.hp / stats.hp_max;
+            healthbar.SetActive(true);
+            
             /* TODO: refactor as "pushback()" or something */
             if (nma.enabled)
                 nma.ResetPath();
@@ -225,7 +247,7 @@ void ApplyAttackStats(GameObject projectile)
      void PerformAttack()
     {
         attackTimeLift = attackTime; 
-        isAttacking = true;
+       
        
        // Finder højre hånd og venstre hånd 
        Transform rightHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_RightShoulder/Character1_Ctrl_RightArm/Character1_Ctrl_RightForeArm/Character1_Ctrl_RightHand");
@@ -257,11 +279,43 @@ void ApplyAttackStats(GameObject projectile)
             attack_statsLeft.damage_type = DamageType.Normal;
             attack_statsLeft.attacker = gameObject; 
             
-
-
-        isAttacking = false;
-        nextAttackTime = Time.time + attackCooldown;
     }
+
+
+     void FixHealthBar()
+        {
+            Vector3 p1 = player_cam_trf.position;
+            Vector3 p2 = healthbar.transform.position;
+            p1.y = 0; p2.y = 0;
+            healthbar.transform.rotation = Quaternion.FromToRotation(Vector3.forward, p2 - p1);
+        }
+
+
+
+      public void TakeDamage(int damage)
+    {
+        stats.hp -= damage;
+        Debug.Log($"🔥 Boss took {damage} damage! HP: {stats.hp}/{stats.hp_max}");
+
+        if (stats.hp <= 0)
+        {
+            Die();
+        }
+    }
+
+
+
+    private void Die()
+    {
+        Debug.Log("💀 Boss is dead!");
+        GameObject portal_exit = Instantiate(portal_exit_prefab, transform.position, Quaternion.identity);
+        portal_exit.transform.position += Vector3.up * 3.5f;
+        Destroy(gameObject); // Fjern bossen fra spillet
+ 
+        Item item_dropped = GameData.GenerateBossLoot();
+                    item_dropped.Drop(transform.position);
+    }
+
 }  
   
 

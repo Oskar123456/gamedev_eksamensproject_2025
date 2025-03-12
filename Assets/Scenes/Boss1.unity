@@ -672,6 +672,8 @@ MonoBehaviour:
   attackCooldown: 2.5
   arm_attack_spell: {fileID: 2706022499547128120, guid: 83403629c51d6494b80f6f179d79c201, type: 3}
   spine_attack_spell: {fileID: 0}
+  healthbar_prefab: {fileID: 9177006098800023230, guid: f2003d1e0dcde46aabcfb23489887fb5, type: 3}
+  portal_exit_prefab: {fileID: 6227429834635096751, guid: a7cdf8ad66611dc6ab3aa8968a9edc2f, type: 3}
 --- !u!136 &1762519134
 CapsuleCollider:
   m_ObjectHideFlags: 0
