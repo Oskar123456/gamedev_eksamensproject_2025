@@ -37,7 +37,7 @@ namespace Loot
             name = "Leather Boots";
             description = "Simply boots";
             hp = GameState.rng.Next() % 5 + 1;
-            move_speed_bonus = (GameState.rng.Next() % 35 + 1) / 100.0f;
+            move_speed_bonus = (GameState.rng.Next() % 35 + 1) / 100.0f + 0.1f;
         }
     }
 

@@ -53,7 +53,7 @@ namespace Loot
             name = "Axe";
             description = "A simple axe";
             attack_damage = GameState.rng.Next() % 3 + 1;
-            attack_speed = (GameState.rng.Next() % 3 + 1) * 0.1f;
+            attack_speed = (GameState.rng.Next() % 6 + 1) * 0.1f;
             attack_scale = (GameState.rng.Next() % 3 + 1) * 0.1f;
         }
     }

@@ -526,7 +526,7 @@ MonoBehaviour:
   attack_damage_normal: 0
   attack_damage_ice: 0
   attack_damage_fire: 0
-  attack_speed: 1
+  attack_speed: 1.5
   attack_scale: 1
   attack_duration: 1
   attack_cooldown: 1

@@ -16,9 +16,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
 using PCG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -155,8 +152,7 @@ public class GameControllerScript : MonoBehaviour
         Vector3 finish_pos = current_level.GetFinishPosition();
 
         Instantiate(portal_entrance_prefab, start_pos + Vector3.up * -1f, Quaternion.identity, level_object_container.transform);
-        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 4, Quaternion.identity, level_object_container.transform);
-        portal_exit.GetComponent<Transform>().localScale *= 4.0f;
+        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 2.75f, Quaternion.identity, level_object_container.transform);
 
         finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);

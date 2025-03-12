@@ -232,7 +232,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1af562075e04f85c3865455274639fa6, type: 3}
---- !u!1001 &421097305
+--- !u!1001 &493314894
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -284,14 +284,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameState
       objectReference: {fileID: 0}
-    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
-      propertyPath: '_item_sprites.Array.data[0]'
-      value: 
-      objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 8359355049980494737, guid: b3449ef75a6fe52e9877cfe6f1a25053, type: 3}
-      propertyPath: 'attack_list_prefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1637110239806522569, guid: 74fe3be91fcba97ce947ea48641786d2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -790,11 +782,11 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 493314894}
   - {fileID: 1918983736}
   - {fileID: 621691032}
   - {fileID: 1775436962}
   - {fileID: 3940701871229770242}
   - {fileID: 1691406440}
   - {fileID: 878207881}
-  - {fileID: 421097305}
   - {fileID: 25898038}

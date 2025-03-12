@@ -35,7 +35,6 @@ namespace Attacks
         float created_t, alive_t;
         bool created = false;
         public float delay = 0.33f;
-        public float radius = 1.75f;
         public float degrees_orig;
         public float degrees_start = -90f;
         public float degrees_end = 180f;
@@ -53,14 +52,21 @@ namespace Attacks
 
         void Start()
         {
+            Transform t = transform.parent;
+            bool is_player = (transform.parent.gameObject.tag == "Player");
+            if (is_player) {
+                t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
+                transform.parent = t;
+                transform.localPosition = (Vector3.up * -0.6f) * stats.scale;
+                transform.localScale *= stats.scale;
+                transform.localRotation = Quaternion.identity;
+            }
+
             was_damaged = new List<GameObject>();
 
             created_t = Time.time;
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
-
-            radius *= stats.scale;
-            transform.localScale *= stats.scale;
 
             origin = stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2);
             degrees_orig = transform.rotation.eulerAngles.y;
@@ -80,21 +86,25 @@ namespace Attacks
 
             if (!created) {
                 Instantiate(audio_dummy, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2), transform.rotation, stats.attacker.transform);
+
+                Quaternion rot = Quaternion.Euler(stats.attacker.transform.rotation.eulerAngles.x,
+                        stats.attacker.transform.rotation.eulerAngles.y,
+                        stats.attacker.transform.rotation.eulerAngles.z - 10);
+
                 GameObject effect = Instantiate(effect_prefab, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2),
-                        transform.rotation, stats.attacker.transform);
+                        rot, stats.attacker.transform);
                 Destroy(effect, effect_duration);
-                effect.transform.localScale *= stats.scale;
+                effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
                 ParticleSystem ps = effect.GetComponent<ParticleSystem>();
                 var main = ps.main;
                 main.simulationSpeed = stats.base_duration / stats.duration;
-                audio_source.Play();
                 coll.enabled = true;
                 created = true;
             }
 
-            float degrees_current = Mathf.Lerp(degrees_orig + degrees_start, degrees_orig + degrees_end, alive_t_frac) % 360f;
-            float degrees_current_rad = degrees_current * ((2 * MathF.PI) / 360f);
-            transform.position = new Vector3(radius * MathF.Cos(360 - degrees_current_rad) + origin.x, origin.y, radius * MathF.Sin(360 - degrees_current_rad) + origin.z);
+            // float degrees_current = Mathf.Lerp(degrees_orig + degrees_start, degrees_orig + degrees_end, alive_t_frac) % 360f;
+            // float degrees_current_rad = degrees_current * ((2 * MathF.PI) / 360f);
+            // transform.position = new Vector3(radius * MathF.Cos(360 - degrees_current_rad) + origin.x, origin.y, radius * MathF.Sin(360 - degrees_current_rad) + origin.z);
         }
 
         void OnTriggerStay(Collider collider)
@@ -127,9 +137,9 @@ namespace Attacks
     {
         public SlashIce()
         {
-            prefab_index = 0;
-            sprite_index = 0;
-            name = "Slash";
+            prefab_index = 1;
+            sprite_index = 1;
+            name = "Ice Slash";
             level = 1;
             damage_base = 1; damage_per_level = 1;
             duration_base = 1; duration_per_level = 0;
@@ -150,10 +160,9 @@ namespace Attacks
 
         public override void Use(Transform parent)
         {
-            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index],
-                    parent.position + Vector3.up * parent.lossyScale.y / 2,
-                    parent.rotation * Quaternion.Euler(0, 0, -5), parent);
-            instance.transform.localScale = instance.transform.localScale * scale;
+            Transform t = parent;
+
+            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
 
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
