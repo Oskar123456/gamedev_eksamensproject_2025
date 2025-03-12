@@ -19,29 +19,36 @@ using UnityEngine;
 
 namespace Attacks
 {
-    public class MeleeChargeAttackScript : MonoBehaviour
+    public class GhostAttackScript : MonoBehaviour
     {
         public GameObject effect_prefab;
         public GameObject hit_effect_prefab;
         public GameObject audio_dummy;
         public GameObject audio_hit_dummy;
 
-        SphereCollider coll;
+        AudioSource audio_source;
+        CapsuleCollider coll;
         AttackStats stats;
+
         Vector3 origin;
 
         float created_t, alive_t;
-        public float delay = 0.33f;
-        public float effect_duration = 1f;
         bool created = false;
+        public float delay = 0.55f;
+        public float degrees_orig;
+        public float offs_start = 0.5f;
+        public float offs_end = 5f;
+        public float effect_duration = 0.20f;
 
         List<GameObject> was_damaged;
 
         void Awake()
         {
+            audio_source = GetComponent<AudioSource>();
             stats = GetComponent<AttackStats>();
-            coll = GetComponent<SphereCollider>();
+            coll = GetComponent<CapsuleCollider>();
             coll.enabled = false;
+            origin = transform.position;
         }
 
         void Start()
@@ -52,14 +59,7 @@ namespace Attacks
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
-            origin = stats.attacker.transform.position;
-
-            transform.position = transform.parent.position + transform.parent.up * -1f;
-            transform.localScale *= 1 + ((stats.scale - 1) / 2);
-
-            Destroy(gameObject, stats.duration);
-
-            Debug.Log("duration : " + stats.duration + " scale: " + stats.scale + " pos: " + transform.position);
+            Destroy(gameObject, delay + effect_duration);
         }
 
         void Update()
@@ -73,25 +73,23 @@ namespace Attacks
             float alive_t_frac = (alive_t - delay) / effect_duration;
 
             if (!created) {
-                GameObject sound_effect = Instantiate(audio_dummy, transform.position, transform.rotation, stats.attacker.transform);
-                Destroy(sound_effect, effect_duration);
+                Instantiate(audio_dummy, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2), transform.rotation, stats.attacker.transform);
+
                 GameObject effect = Instantiate(effect_prefab, transform.position, transform.rotation, transform);
                 Destroy(effect, effect_duration);
                 effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
-
                 ParticleSystem ps = effect.GetComponent<ParticleSystem>();
                 var main = ps.main;
                 main.simulationSpeed = stats.base_duration / stats.duration;
-                foreach (Transform t in transform) {
-                    t.localScale *= 1 + (stats.scale - 1) / 2;
-                    ps = t.GetComponent<ParticleSystem>();
-                    main = ps.main;
-                    main.simulationSpeed = stats.base_duration / stats.duration;
-                }
-
                 coll.enabled = true;
                 created = true;
             }
+
+            // Vector3 pos_current = Vector3.Lerp();
+
+            // float degrees_current = Mathf.Lerp(degrees_orig + degrees_start, degrees_orig + degrees_end, alive_t_frac) % 360f;
+            // float degrees_current_rad = degrees_current * ((2 * MathF.PI) / 360f);
+            // transform.position = new Vector3(radius * MathF.Cos(360 - degrees_current_rad) + origin.x, origin.y, radius * MathF.Sin(360 - degrees_current_rad) + origin.z);
         }
 
         void OnTriggerStay(Collider collider)
@@ -104,62 +102,52 @@ namespace Attacks
                 return;
             }
 
-            was_damaged.Add(collider.gameObject);
-
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
-            Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
-            normal.y = 0;
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
             Destroy(hit_effect, 0.4f);
             Destroy(hit_effect_sound, 1);
 
+            was_damaged.Add(collider.gameObject);
+
+            Vector3 normal = Vector3.Normalize(collider.transform.position - origin);
+            normal.y = 0;
+
             collider.SendMessage("OnHit", new HitInfo(normal, stats.attacker, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
         }
     }
 
-    public class MeleeChargeAttack : Attack
+    public class GhostAttackNormal : Attack
     {
-        public MeleeChargeAttack()
+        public GhostAttackNormal()
         {
-            prefab_index = 3;
-            sprite_index = 3;
-            name = "Charge Attack";
+            prefab_index = 0;
+            sprite_index = 0;
+            name = "Slash";
             level = 1;
             damage_base = 1; damage_per_level = 1;
-            duration_base = 0.8f; duration_per_level = 0;
+            duration_base = 1; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
-            scale_base = 1; scale_per_level = 0.1f;
+            scale_base = 1; scale_per_level = 0.025f;
             damage_type = DamageType.Normal;
-
         }
 
         public override void ScaleWithPlayerStats(PlayerStats ps)
         {
-            damage   = (damage_per_level * level + damage_base) + ps.attack_damage;
+            damage   = (damage_per_level * level + damage_base) + ps.attack_damage + ps.attack_damage_normal;
             scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
             duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }
 
-        public override void ScaleWithEnemyStats(EnemyStats es)
-        {
-            damage   = damage_base   + es.attack_damage;
-            scale    = scale_base    * es.attack_scale;
-            duration = duration_base / es.attack_speed;
-            cooldown = duration;
-        }
+        public override void ScaleWithEnemyStats(EnemyStats es) { }
 
         public override void Use(Transform parent)
         {
             Transform t = parent;
-            bool is_player = (parent.gameObject.tag == "Player");
-            if (is_player) {
-                t = parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
-            }
 
-            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
+            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position + parent.forward, parent.rotation, t);
 
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
