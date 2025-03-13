@@ -34,6 +34,9 @@ public class BossScript : MonoBehaviour
     Slider healthbar_slider;
     Transform player_cam_trf;
     public GameObject portal_exit_prefab;
+    
+    private float hitTimeLift = 0f; // Timer to track the hit animation duration 
+    private float hitDuration = 1f; // Duration for which the hit animation should play
 
 
     void Start()
@@ -107,18 +110,28 @@ public class BossScript : MonoBehaviour
         ChooseAnimation();
     }
      
-      void ChooseAnimation()
-        {
-           if(attackTimeLift > 0) {
-              animator.Play("attack1");
-           }
-            else if(nma.velocity.magnitude > 0) {
-            animator.Play("walk2");
-           } else {
-             animator.Play("idle1");
-           }
-               
-        }
+     void ChooseAnimation()
+{
+    if (hitTimeLift > 0)  // Prioritize "gethit1" a timer that tells us if the boss is still in the hit animation state.
+    { 
+        animator.Play("gethit1");
+        hitTimeLift -= Time.deltaTime; // Count down hit time
+        return; // Prevents any other animations from playing
+    }
+    else if (attackTimeLift > 0) 
+    {
+        animator.Play("attack1");
+    } 
+    else if (nma.velocity.magnitude > 0) 
+    {
+        animator.Play("walk2");
+    } 
+    else 
+    {
+        animator.Play("idle1");
+    }
+}
+
 
     void MoveTowardsPlayer()
     {
@@ -296,6 +309,10 @@ void ApplyAttackStats(GameObject projectile)
     {
         stats.hp -= damage;
         Debug.Log($"🔥 Boss took {damage} damage! HP: {stats.hp}/{stats.hp_max}");
+       
+        attackTimeLift = 0f; 
+        hitTimeLift = hitDuration; // Setting hit animation timer
+       
 
         if (stats.hp <= 0)
         {
