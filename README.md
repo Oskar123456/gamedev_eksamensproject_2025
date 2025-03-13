@@ -46,6 +46,8 @@
   - [SkyBox (Boss1)](https://assetstore.unity.com/packages/2d/textures-materials/galaxy-fire-skybox-10976)
   - [Fantasy Icons (Boss1)](https://assetstore.unity.com/packages/2d/gui/icons/fantasy-inventory-icons-free-143805)
   - [UndeadBoss (Boss1)](https://assetstore.unity.com/packages/3d/characters/creatures/monster-mutant-7-188552)
+  - [Shopkeeper](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/stylized-npc-peasant-nolant-demo-252440)
+
 ## TODO:
 
   - Visual cooldown effect on active skill/attack button.
