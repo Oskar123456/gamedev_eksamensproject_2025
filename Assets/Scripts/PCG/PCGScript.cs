@@ -242,7 +242,7 @@ namespace PCG
             int n = 0;
             for (int x = 0; x < level.width; x++) {
                 for (int z = 0; z < level.height; z++) {
-                    if (level.maze.walls[x, z]) {
+                    if (level.IsWall(x, z)) {
                         continue;
                     }
                     if (Utils.rng.Next() % 4 == 0) {
