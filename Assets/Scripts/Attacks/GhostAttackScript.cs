@@ -175,8 +175,6 @@ namespace Attacks
 
             GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
 
-            Debug.Log("Use Ghostattack at " + parent.position);
-
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
             attack_stats.scale = scale;
