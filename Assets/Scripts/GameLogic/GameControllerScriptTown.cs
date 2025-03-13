@@ -127,7 +127,11 @@ public class GameControllerScriptMenu : MonoBehaviour
     {
         if (p == Portal.Exit) {
             GameState.SavePlayerStats();
-            SceneManager.LoadScene("Arena");
+            if (GameState.level > 1 && (GameState.level + 1) % 3 == 0) {
+                SceneManager.LoadScene("Boss1");
+            } else {
+                SceneManager.LoadScene("Arena");
+            }
         }
     }
 

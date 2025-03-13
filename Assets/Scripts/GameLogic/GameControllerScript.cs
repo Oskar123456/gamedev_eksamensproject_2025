@@ -82,8 +82,7 @@ public class GameControllerScript : MonoBehaviour
 
         GameState.level++;
         GameState.NextLevelSeed();
-        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
-            : "Cistern (" + GameState.level.ToString() + ")";
+        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Level " + GameState.level.ToString() + ": Dungeon" : "Level " + GameState.level.ToString() + ": Cistern";
         arena = GameObject.Find("Arena");
 
         PCG = arena.GetComponent<PCGScript>();
