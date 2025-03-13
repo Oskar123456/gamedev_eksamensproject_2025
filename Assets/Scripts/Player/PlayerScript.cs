@@ -149,6 +149,11 @@ namespace Player
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.PageUp)) {
+                stats.attack_scale += 0.25f;
+                SyncStats();
+            }
+
             if (stats.hp < 1) {
                 game_controller.SendMessage("OnDeath");
                 return;

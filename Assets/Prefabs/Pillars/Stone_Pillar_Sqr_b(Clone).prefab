@@ -98,7 +98,8 @@ GameObject:
   - component: {fileID: 2269896400494071444}
   - component: {fileID: 1000745328038989439}
   - component: {fileID: -5250778998602883438}
-  m_Layer: 0
+  - component: {fileID: -1156532384887601015}
+  m_Layer: 3
   m_Name: Stone_Pillar_Sqr_b(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,6 +194,20 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.45, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &-1156532384887601015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2768277267152961284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffa19a8eb74e7cff8b3fab59be70be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mat_opaque: {fileID: 2100000, guid: af8d5f16f780b514796e689d192e6803, type: 2}
+  mat_transparent: {fileID: 2100000, guid: c6719fa6489f90936a174c4a3e7ed0ec, type: 2}
 --- !u!1 &4696466055836894177
 GameObject:
   m_ObjectHideFlags: 0

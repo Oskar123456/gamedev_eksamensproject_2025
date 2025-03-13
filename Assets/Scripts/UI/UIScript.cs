@@ -12,13 +12,17 @@
  *
  * */
 
+using System.Collections;
+using System.Collections.Generic;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Spells;
 using Attacks;
 using Player;
+using Misc;
 
 namespace UI
 {
@@ -59,6 +63,8 @@ namespace UI
         GameObject inventory;
         GameObject stats;
         InventoryScript inventory_script;
+
+        List<GameObject> occluding_gameobjects = new List<GameObject>();
 
         public GameObject current_ui_object_hovered;
         public bool is_ui_object_hovered;
@@ -127,6 +133,17 @@ namespace UI
                 player_stats = player.GetComponent<PlayerStats>();
             }
 
+            if (fade_in_left > 0) {
+                level_intro_text.text = GameState.level_name;
+                screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
+                fade_in_left -= Time.deltaTime;
+                if (fade_in_left <= 0) {
+                    screen_color_img.color = new Color(1, 1, 1, 0);
+                    screen_color.SetActive(false);
+                }
+                return;
+            }
+
             DrawDebugInfo();
 
             item_tooltip.SetActive(false);
@@ -140,17 +157,6 @@ namespace UI
                 Vector3 mouse_pos = Input.mousePosition;
                 player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
                 item_tooltip_rt.position = new Vector3(mouse_pos.x - 225, mouse_pos.y, 0);
-            }
-
-            if (fade_in_left > 0) {
-                level_intro_text.text = GameState.level_name;
-                screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
-                fade_in_left -= Time.deltaTime;
-                if (fade_in_left <= 0) {
-                    screen_color_img.color = new Color(1, 1, 1, 0);
-                    screen_color.SetActive(false);
-                }
-                return;
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -170,6 +176,8 @@ namespace UI
             if (Input.GetKeyDown(KeyCode.I)) {
                 ToggleInventory();
             }
+
+            RemovePlayerOcclusion();
         }
 
         void LateUpdate()
@@ -370,5 +378,35 @@ namespace UI
             audio_source.clip = audio_clips[1];
             audio_source.Play();
         }
+
+        void RemovePlayerOcclusion()
+        {
+            RaycastHit hit_info;
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            Physics.Raycast(ray, out hit_info, 500, 1 << 3);
+
+            List<GameObject> occluding_gameobjects_new = new List<GameObject>();
+
+            Collider hit_c = hit_info.collider;
+            GameObject hit_g = (hit_c != null) ? hit_c.gameObject : null;
+
+            foreach (GameObject g in occluding_gameobjects) {
+                if (hit_c == null || hit_g == null || hit_g != g) {
+                    StonePillarScript sps = g.GetComponent<StonePillarScript>();
+                    sps.UnHide();
+                } else {
+                    occluding_gameobjects_new.Add(g);
+                }
+            }
+
+            if (hit_c != null && hit_g != null && !occluding_gameobjects_new.Contains(hit_g)) {
+                StonePillarScript sps = hit_g.GetComponent<StonePillarScript>();
+                sps.Hide();
+                occluding_gameobjects_new.Add(hit_g);
+            }
+
+            occluding_gameobjects = occluding_gameobjects_new;
+        }
+
     }
 }

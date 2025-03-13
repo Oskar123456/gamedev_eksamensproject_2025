@@ -98,7 +98,8 @@ GameObject:
   - component: {fileID: 5308134588029592003}
   - component: {fileID: 5434567689927643227}
   - component: {fileID: -7117913528433617694}
-  m_Layer: 0
+  - component: {fileID: -5510943773524319266}
+  m_Layer: 3
   m_Name: Stone_Pillar_Rnd_b(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,6 +196,20 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.5, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &-5510943773524319266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752345949207136049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffa19a8eb74e7cff8b3fab59be70be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mat_opaque: {fileID: 2100000, guid: 15530fda17560ef45b9551faa042c358, type: 2}
+  mat_transparent: {fileID: 2100000, guid: 49c47f36dbac94f878fe394f2a54b21c, type: 2}
 --- !u!1 &2450018829988639583
 GameObject:
   m_ObjectHideFlags: 0
