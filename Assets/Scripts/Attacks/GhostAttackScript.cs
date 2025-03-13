@@ -31,6 +31,8 @@ namespace Attacks
         AttackStats stats;
 
         Vector3 origin;
+        Vector3 pos_start;
+        Vector3 pos_end;
 
         float created_t, alive_t;
         bool created = false;
@@ -59,7 +61,36 @@ namespace Attacks
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
+            offs_start *= stats.scale;
+            offs_end *= stats.scale;
+
+            Vector3 halfway_up_vec = Vector3.up * (stats.attacker.transform.lossyScale.y / 2);
+
+            transform.localScale *= 1 + ((stats.scale - 1) / 2);
+
+            Instantiate(audio_dummy, stats.attacker.transform.position + halfway_up_vec, transform.rotation, stats.attacker.transform);
+
+            GameObject effect = Instantiate(effect_prefab, transform.position + transform.forward * offs_start + halfway_up_vec,
+                    transform.rotation * Quaternion.Euler(0, 0, 90), stats.attacker.transform);
+
+            effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
+            ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+            var main = ps.main;
+            main.simulationSpeed = stats.base_duration / stats.duration;
+
+            foreach (Transform t in effect.transform) {
+                t.localScale *= 1 + ((stats.scale - 1) / 2);
+                ps = t.gameObject.GetComponent<ParticleSystem>();
+                if (ps == null) { continue; }
+                main = ps.main;
+                main.simulationSpeed = stats.base_duration / stats.duration;
+            }
+
             Destroy(gameObject, delay + effect_duration);
+            Destroy(effect, effect_duration + delay + 0.25f);
+
+            pos_start = transform.position + transform.forward * offs_start * 5 + halfway_up_vec;
+            pos_end = transform.position + transform.forward * offs_end + transform.forward * offs_start * 1 + halfway_up_vec;
         }
 
         void Update()
@@ -73,23 +104,12 @@ namespace Attacks
             float alive_t_frac = (alive_t - delay) / effect_duration;
 
             if (!created) {
-                Instantiate(audio_dummy, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2), transform.rotation, stats.attacker.transform);
-
-                GameObject effect = Instantiate(effect_prefab, transform.position, transform.rotation, transform);
-                Destroy(effect, effect_duration);
-                effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
-                ParticleSystem ps = effect.GetComponent<ParticleSystem>();
-                var main = ps.main;
-                main.simulationSpeed = stats.base_duration / stats.duration;
                 coll.enabled = true;
                 created = true;
             }
 
-            // Vector3 pos_current = Vector3.Lerp();
-
-            // float degrees_current = Mathf.Lerp(degrees_orig + degrees_start, degrees_orig + degrees_end, alive_t_frac) % 360f;
-            // float degrees_current_rad = degrees_current * ((2 * MathF.PI) / 360f);
-            // transform.position = new Vector3(radius * MathF.Cos(360 - degrees_current_rad) + origin.x, origin.y, radius * MathF.Sin(360 - degrees_current_rad) + origin.z);
+            Vector3 pos_current = Vector3.Lerp(pos_start, pos_end, alive_t_frac);
+            transform.position = pos_current;
         }
 
         void OnTriggerStay(Collider collider)
@@ -101,6 +121,8 @@ namespace Attacks
             if (stats.attacker == null || collider.gameObject.tag == stats.attacker.tag) {
                 return;
             }
+
+            Debug.Log("OnTriggerStay: " + collider.gameObject.tag + " --> " + stats.attacker.tag);
 
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
@@ -122,12 +144,12 @@ namespace Attacks
     {
         public GhostAttackNormal()
         {
-            prefab_index = 0;
+            prefab_index = 4;
             sprite_index = 0;
-            name = "Slash";
+            name = "Ghost Attack Normal";
             level = 1;
             damage_base = 1; damage_per_level = 1;
-            duration_base = 1; duration_per_level = 0;
+            duration_base = 0.75f; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
             scale_base = 1; scale_per_level = 0.025f;
             damage_type = DamageType.Normal;
@@ -141,13 +163,21 @@ namespace Attacks
             cooldown = duration;
         }
 
-        public override void ScaleWithEnemyStats(EnemyStats es) { }
+        public override void ScaleWithEnemyStats(EnemyStats es)
+        {
+            damage   = damage_base   + es.attack_damage;
+            scale    = scale_base    * es.attack_scale;
+            duration = duration_base / es.attack_speed;
+            cooldown = duration;
+        }
 
         public override void Use(Transform parent)
         {
             Transform t = parent;
 
-            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position + parent.forward, parent.rotation, t);
+            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
+
+            Debug.Log("Use Ghostattack at " + parent.position);
 
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;

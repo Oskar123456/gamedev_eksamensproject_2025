@@ -64,6 +64,7 @@ MonoBehaviour:
   - {fileID: 3549895203262144173, guid: 947b2dca3bd3df299b3e2a750d14873d, type: 3}
   - {fileID: 363127035908328369, guid: e5d89578d9c4b8b82a65050710a12148, type: 3}
   - {fileID: 2706022499547128120, guid: 38fc4da56aa06934a9346e249050dcc6, type: 3}
+  - {fileID: 7754377741481163506, guid: bb13cb90c4222595d9545be6e7e0f61d, type: 3}
   spell_list_prefabs:
   - {fileID: 6288382277645583362, guid: 57427e8cf56a4e48982fe1bed2ff86d8, type: 3}
   - {fileID: 6506590698679266267, guid: 3a74865aa4ed02e9e8f3c5b24f3e7911, type: 3}

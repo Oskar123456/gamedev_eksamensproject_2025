@@ -64,7 +64,7 @@ public class EnemyStats : MonoBehaviour
         attack_duration = base_attack_duration / attack_speed;
         attack_cooldown = attack_duration;
         collision_damage = GameState.level * collision_damage_per_level + base_collision_damage;
-        active_attack = new ShockWaveAttack();
+        active_attack = new GhostAttackNormal();
         active_attack.ScaleWithEnemyStats(this);
         attack_range = base_attack_range * attack_scale;
     }
