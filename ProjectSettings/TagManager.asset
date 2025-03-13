@@ -7,6 +7,9 @@ TagManager:
   - Attack
   - Enemy
   - Spell
+  - Text
+  - Background
+  - Event
   layers:
   - Default
   - TransparentFX
