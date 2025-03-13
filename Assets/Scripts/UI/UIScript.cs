@@ -167,7 +167,7 @@ namespace UI
                 ToggleStats();
             }
 
-            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
+            if (Input.GetKeyDown(KeyCode.I)) {
                 ToggleInventory();
             }
         }
