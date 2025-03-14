@@ -32,11 +32,14 @@ namespace Player
 
         /* UI */
         GameObject ui_active_attack;
+        CoolDownScript ui_active_attack_cooldown;
         TextMeshProUGUI ui_active_attack_text;
         GameObject ui_active_spell;
+        CoolDownScript ui_active_spell_cooldown;
         TextMeshProUGUI ui_active_spell_text;
         GameObject skill_tree_plus_button;
         UITest ui_test;
+        PotionSlotScript ui_potion_slot;
 
         UIScript ui_script;
         GameObject game_controller;
@@ -137,12 +140,26 @@ namespace Player
 
             audio_source = GetComponent<AudioSource>();
             /* UI */
+            GameObject ui_potion_slot_go = GameObject.Find("PotionSlot");
+            if (ui_potion_slot_go != null) {
+                ui_potion_slot = ui_potion_slot_go.GetComponent<PotionSlotScript>();
+            }
             ui_active_attack = GameObject.Find("ActiveAttack");
-            if (ui_active_attack != null)
+            GameObject ui_active_attack_cooldown_go = GameObject.Find("ActiveAttackCoolDown");
+            if (ui_active_attack_cooldown_go != null) {
+                ui_active_attack_cooldown = ui_active_attack_cooldown_go.GetComponent<CoolDownScript>();
+            }
+            if (ui_active_attack != null) {
                 ui_active_attack_text = GameObject.Find("ActiveAttackText").GetComponent<TextMeshProUGUI>();
+            }
             ui_active_spell = GameObject.Find("ActiveSpell");
-            if (ui_active_spell != null)
+            GameObject ui_active_spell_cooldown_go = GameObject.Find("ActiveSpellCoolDown");
+            if (ui_active_spell_cooldown_go != null) {
+                ui_active_spell_cooldown = ui_active_spell_cooldown_go.GetComponent<CoolDownScript>();
+            }
+            if (ui_active_spell != null) {
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+            }
 
             SyncStats();
         }
@@ -218,18 +235,15 @@ namespace Player
         {
             if (Input.GetKey(KeyCode.LeftShift)) {
                 if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                    ChangeActiveSpell(0);
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                    ChangeActiveSpell(1);
-                }
-            } else {
-                if (Input.GetKeyDown(KeyCode.Alpha1)) {
                     ChangeActiveAttack(0);
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha2)) {
                     ChangeActiveAttack(1);
                 }
+                if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                    ChangeActiveAttack(2);
+                }
+            } else {
             }
 
             if (Input.GetKeyDown(KeyCode.F)) {
@@ -262,6 +276,7 @@ namespace Player
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
                     attack_time_left = attack_anim_time / stats.attack_speed;
+                    ui_active_attack_cooldown.SetCoolDown(attack_time_left);
                     animator.SetFloat("attack_speed", attack_anim_time / attack_time_left);
                     stats.active_attack.Use(transform);
                     did_attack = true;
@@ -286,6 +301,7 @@ namespace Player
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
                     cast_time_left = cast_anim_speed / stats.spell_speed;
                     cast_cooldown_left = stats.active_spell.cooldown;
+                    ui_active_spell_cooldown.SetCoolDown(cast_cooldown_left);
                     animator.SetFloat("cast_speed", stats.spell_speed);
                     did_cast = true;
                     is_casting = true;
@@ -555,6 +571,13 @@ namespace Player
             SyncStats();
         }
 
+        void OnLevelUpAttack(int i)
+        {
+            stats.skill_points--;
+            stats.learned_attacks[i].level++;
+            SyncStats();
+        }
+
         void OnPickUp(Item item)
         {
             Instantiate(pickup_audio_dummy, transform.position + halfway_up_vec, Quaternion.identity, transform);
@@ -565,6 +588,15 @@ namespace Player
                 txt.GetComponent<TextMeshProUGUI>().text = item.EffectString();
                 item.Consume(stats);
                 SyncStats();
+            }
+
+            else if (item is HealthPotion) {
+                if (stats.potions == null) {
+                    stats.potions = (HealthPotion)item;
+                } else {
+                    stats.potions.amount += ((HealthPotion)item).amount;
+                }
+                ui_potion_slot.UpdateSprite();
             }
 
             else if (stats.inventory_space > 0 && stats.currently_held_item == null) {
@@ -600,13 +632,13 @@ namespace Player
             if (ui_active_attack != null) {
                 Image img_icon = ui_active_attack.GetComponent<Image>();
                 img_icon.sprite = GameData.attack_sprites[stats.active_attack.sprite_index];
-                ui_active_attack_text.text = stats.active_attack.GetDescriptionString(Environment.NewLine);
+                ui_active_attack_text.text = stats.active_attack.name;
             }
 
             if (ui_active_spell != null) {
                 Image img_icon = ui_active_spell.GetComponent<Image>();
                 img_icon.sprite = GameData.spell_sprites[stats.active_spell.sprite_index];
-                ui_active_spell_text.text = stats.active_spell.GetDescriptionString(Environment.NewLine);
+                ui_active_spell_text.text = stats.active_spell.name;
             }
         }
     }

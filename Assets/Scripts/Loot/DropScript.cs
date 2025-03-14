@@ -60,6 +60,8 @@ namespace Loot
             button_text = canvas.transform.GetChild(0).gameObject;
             button_text.GetComponent<TextMeshProUGUI>().text = item.name;
             button_text.GetComponent<TextMeshProUGUI>().color = (item.text_color != null) ? item.text_color : Color.white;
+            LootButtonOverlayScript lbos = canvas.GetComponent<LootButtonOverlayScript>();
+            lbos.item = item;
         }
 
         void Update()

@@ -39,9 +39,9 @@ public class GameData : MonoBehaviour
     public static List<Attack> attack_list;
     public static List<Spell> spell_list;
     public static List<Item> item_list;
-    
+
     public static List<Item> item_list_Boss;
-    
+
     public static List<Sprite> spell_sprites;
     public static List<Sprite> attack_sprites;
     public static List<Sprite> item_sprites;
@@ -81,6 +81,7 @@ public class GameData : MonoBehaviour
         spell_list = new List<Spell>();
         spell_list.Add(new BlizzardSpell());
         spell_list.Add(new ForceFieldSpell());
+        spell_list.Add(new CombustSpell());
 
         item_list = new List<Item>();
         item_list.Add(new Gold());
@@ -91,7 +92,8 @@ public class GameData : MonoBehaviour
         item_list.Add(new LeatherHelmet());
         item_list.Add(new LeatherBoots());
         item_list.Add(new Amulet());
-      
+        item_list.Add(new HealthPotion());
+
         item_list_Boss = new List<Item>();
         item_list_Boss.Add(new DivineDemonStaff());
 
@@ -133,7 +135,7 @@ public class GameData : MonoBehaviour
 
 public static Item GenerateBossLoot()
     {
-       
+
         Type t = item_list_Boss[ GameState.rng.Next(item_list_Boss.Count)].GetType();
         // Debug.Log("GenerateLoot: " + t.FullName);
         return (Item)Activator.CreateInstance(t);

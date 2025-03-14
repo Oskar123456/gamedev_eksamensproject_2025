@@ -15,6 +15,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UI;
+using System;
 
 public class ActiveSpellButtonScript : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class ActiveSpellButtonScript : MonoBehaviour
     Button button;
     GameObject player;
     PlayerStats player_stats;
+    UIScript ui_script;
 
     bool open;
 
@@ -29,6 +32,7 @@ public class ActiveSpellButtonScript : MonoBehaviour
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(Toggle);
+        ui_script = GameObject.Find("UI").GetComponent<UIScript>();
     }
 
     void Update()
@@ -37,7 +41,18 @@ public class ActiveSpellButtonScript : MonoBehaviour
             player = GameObject.Find("Player");
             player_stats = player.GetComponent<PlayerStats>();
         }
-        // TODO: Cooldown fade
+    }
+
+    void LateUpdate()
+    {
+        if (player_stats.active_spell == null) {
+            return;
+        }
+
+        if (ui_script.current_ui_object_hovered == gameObject) {
+            ui_script.item_tooltip_text.text = player_stats.active_spell.GetDescriptionString(Environment.NewLine);
+            ui_script.item_tooltip.SetActive(true);
+        }
     }
 
     void Hide()

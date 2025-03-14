@@ -58,7 +58,7 @@
   - More decorations, also in clusters, some wall decos [x].
   - A new player attack and a new player spell [x?].
   - Is currently possible to jump while attacking in same frame, maybe change.
-  - Cull pillar when in between camera and player [x].
+  - Cull pillar when in between camera and player.
   - ... rest of the game...
 
 

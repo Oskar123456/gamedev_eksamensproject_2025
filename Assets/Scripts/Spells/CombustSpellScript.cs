@@ -21,39 +21,83 @@ using UnityEngine;
 
 namespace Spells
 {
-    public class BlizzardSpellScript : MonoBehaviour
+    public class CombustSpellScript : MonoBehaviour
     {
-        AudioSource audio_source;
-        public GameObject audio_hit_dummy;
+        public GameObject effect_prefab;
         public GameObject hit_effect_prefab;
+        public GameObject audio_dummy;
+        public GameObject audio_hit_dummy;
 
+        AudioSource audio_source;
+        SphereCollider coll;
         SpellStats stats;
 
-        float created_t, alive_t;
-        float damage_begin_t, damage_end_t;
-        public float duration_t, begin_t, end_t;
+        Vector3 origin;
 
-        public float damage_cooldown = 0.5f;
+        float created_t, alive_t;
+        bool created = false;
+        public float delay = 1.00f;
+        public Vector3 scale_start = new Vector3(2, 2, 2);
+        public Vector3 scale_end = new Vector3(8, 4, 8);
+        public float effect_duration = 0.20f;
 
         List<GameObject> was_damaged;
-        List<float> was_damaged_t;
 
         void Awake()
         {
-            stats = GetComponent<SpellStats>();
             audio_source = GetComponent<AudioSource>();
-            was_damaged = new List<GameObject>();
-            was_damaged_t = new List<float>();
+            stats = GetComponent<SpellStats>();
+            coll = GetComponent<SphereCollider>();
+            coll.enabled = false;
         }
 
         void Start()
         {
-            Destroy(gameObject, stats.duration);
-            audio_source.Play();
+            was_damaged = new List<GameObject>();
+
+            created_t = Time.time;
+            delay = delay / (stats.base_duration / stats.duration);
+            effect_duration = effect_duration / (stats.base_duration / stats.duration);
+
+            scale_start *= 1 + ((stats.scale - 1) / 2);
+            scale_end *= 1 + ((stats.scale - 1) / 2);
+
+            GameObject effect = Instantiate(effect_prefab, stats.caster.transform.position + Vector3.up * (stats.caster.transform.lossyScale.y / 2),
+                    stats.caster.transform.rotation, stats.caster.transform);
+            effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
+
+            ParticleSystem ps = effect.GetComponent<ParticleSystem>();
+            var main = ps.main;
+            main.simulationSpeed = stats.base_duration / stats.duration;
+
+            foreach (Transform t in ps.transform) {
+                t.localScale *= 1 + ((stats.scale - 1) / 2);
+                ps = effect.GetComponent<ParticleSystem>();
+                main = ps.main;
+                main.simulationSpeed = stats.base_duration / stats.duration;
+            }
+
+            Destroy(effect, effect_duration + delay);
+            Destroy(gameObject, effect_duration + delay);
         }
 
         void Update()
         {
+            alive_t = Time.time - created_t;
+
+            if (alive_t < delay) {
+                return;
+            }
+
+            float alive_t_frac = (alive_t - delay) / effect_duration;
+
+            if (!created) {
+                Instantiate(audio_dummy, stats.caster.transform.position + Vector3.up * (stats.caster.transform.lossyScale.y / 2), transform.rotation, stats.caster.transform);
+                coll.enabled = true;
+                created = true;
+            }
+
+            transform.localScale = Vector3.Lerp(scale_start, scale_end, alive_t_frac);
         }
 
         void OnTriggerStay(Collider collider)
@@ -62,23 +106,11 @@ namespace Spells
                 return;
             }
 
-            bool damaged_before = false;
-            for (int i = 0; i < was_damaged.Count; i++) {
-                if (was_damaged[i] == collider.gameObject) {
-                    if (Time.time - was_damaged_t[i] > damage_cooldown) {
-                        was_damaged_t[i] = Time.time;
-                        damaged_before = true;
-                    } else {
-                        return;
-                    }
-                }
+            if (was_damaged.Contains(collider.gameObject)) {
+                return;
             }
 
-            if (!damaged_before) {
-                was_damaged.Add(collider.gameObject);
-                was_damaged_t.Add(Time.time);
-            }
-
+            was_damaged.Add(collider.gameObject);
 
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
@@ -87,22 +119,22 @@ namespace Spells
             Destroy(hit_effect, 0.4f);
             Destroy(hit_effect_sound, 1);
 
-            collider.SendMessage("OnHit", new HitInfo(Vector3.zero, stats.caster, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
+            collider.gameObject.SendMessage("OnHit", new HitInfo(Vector3.zero, stats.caster, stats.damage, stats.damage_type), SendMessageOptions.DontRequireReceiver);
         }
     }
 
-    public class BlizzardSpell : Spell
+    public class CombustSpell : Spell
     {
-        public BlizzardSpell()
+        public CombustSpell()
         {
-            prefab_index = 0;
-            sprite_index = 0;
-            name = "Blizzard";
+            prefab_index = 2;
+            sprite_index = 2;
+            name = "Combust";
             level = 1;
-            damage_base = 1; damage_per_level = 1;
-            duration_base = 2; duration_per_level = 0.1f;
+            damage_base = 4; damage_per_level = 1;
+            duration_base = 1.2f; duration_per_level = 0f;
             cooldown_base = 8; cooldown_per_level = 0;
-            scale_base = 0.25f; scale_per_level = 0.05f;
+            scale_base = 1f; scale_per_level = 0.1f;
             damage_type = DamageType.Ice;
         }
 
@@ -118,20 +150,14 @@ namespace Spells
 
         public override void Use(Transform parent)
         {
-            RaycastHit hit_info;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out hit_info, 500, 1 << 6)) {
-                return;
-            }
-
-            GameObject instance = GameState.InstantiateGlobal(GameData.spell_prefabs[prefab_index], hit_info.point + Vector3.up * 0.25f, Quaternion.identity);
-            instance.transform.localScale = new Vector3(instance.transform.localScale.x * scale, instance.transform.localScale.y, instance.transform.localScale.z * scale);
+            GameObject instance = GameState.InstantiateParented(GameData.spell_prefabs[prefab_index],
+                    parent.position + Vector3.up * (parent.lossyScale.y / 2), Quaternion.identity, parent);
 
             SpellStats spell_stats = instance.GetComponent<SpellStats>();
             spell_stats.damage = damage;
             spell_stats.scale = scale;
             spell_stats.duration = duration;
-            spell_stats.base_duration = 4;
+            spell_stats.base_duration = duration_base;
             spell_stats.damage_type = damage_type;
             spell_stats.caster = parent.gameObject;
         }

@@ -263,8 +263,6 @@ namespace PCG
                         Vector3 dir_vec = Utils.DirVec3DF(dir);
                         Vector3Int dir_vec_perp_i = Utils.DirVec3D((dir + 1) % 4);
                         if (Physics.Raycast(pos, dir_vec, out hit_info, ray_length * 1.1f * LevelBuilder.voxel_scale)) {
-                            Debug.DrawRay(pos, dir_vec, Color.red, 1000);
-
                             int r = Utils.rng.Next(medieval_deco_large_prefabs.Count);
                             GameObject new_deco = Instantiate(medieval_deco_large_prefabs[r], hit_info.point,
                                     Quaternion.Euler(0, (dir + 1) * 90, 0), level_container.transform);
@@ -280,11 +278,6 @@ namespace PCG
 
                             new_deco.transform.position = new Vector3(new_deco.transform.position.x,
                                     min_noise * LevelBuilder.voxel_scale + LevelBuilder.voxel_scale, new_deco.transform.position.z);
-
-                            Debug.DrawRay(new Vector3(point_voxel_coord.x * LevelBuilder.voxel_scale, 0,
-                                        point_voxel_coord.y * LevelBuilder.voxel_scale), Vector3.up * 10, Color.red, 1000);
-                            Debug.DrawRay(new Vector3(point_voxel_neighbor_coord.x * LevelBuilder.voxel_scale, 0,
-                                        point_voxel_neighbor_coord.y * LevelBuilder.voxel_scale), Vector3.up * 10, Color.red, 1000);
 
                             n++;
 
@@ -337,8 +330,6 @@ namespace PCG
                     if (light_count < max_lights && Utils.rng.Next() % 2 == 0 && z < level.height - 1 && level.maze.walls[z + 1, x]) {
                         Vector3 pos = level.MapCellVoxelToWorld(x, z, level.column_widths[x] / 2, level.row_heights[z] / 2);
                         pos.y = level.level_voxel_height * (LevelBuilder.voxel_scale / 2.0f) * 0.65f;
-                        // Debug.DrawRay(pos, Vector3.forward * 3f * level.row_heights[z] * LevelBuilder.voxel_scale, Color.red, 1000);
-                        // Debug.DrawRay(pos, Vector3.right * 3f * level.column_widths[x] * LevelBuilder.voxel_scale, Color.red, 1000);
                         if (Physics.Raycast(pos, Vector3.forward, out hit_info, 10f * level.row_heights[z] * LevelBuilder.voxel_scale)) {
                             deco_pos = hit_info.point;
 

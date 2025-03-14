@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 4873088852806208097}
   m_Layer: 0
   m_Name: Little_Ghost_ZOMbi (large, slow)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -443,8 +443,8 @@ MonoBehaviour:
   collision_damage: 1
   base_hp_max: 5
   base_attack_damage: 5
-  base_attack_speed: 0.4
-  base_attack_scale: 1.5
+  base_attack_speed: 0.3
+  base_attack_scale: 1.2
   base_attack_duration: 1
   base_attack_cooldown: 1
   base_collision_damage: 1

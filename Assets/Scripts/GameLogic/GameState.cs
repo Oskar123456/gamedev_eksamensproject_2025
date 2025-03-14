@@ -79,6 +79,7 @@ public class GameState : MonoBehaviour
 
             ps.learned_spells.Add(new BlizzardSpell());
             ps.learned_spells.Add(new ForceFieldSpell());
+            ps.learned_spells.Add(new CombustSpell());
             ps.learned_attacks.Add(new SlashNormal());
             ps.learned_attacks.Add(new SlashIce());
             ps.learned_attacks.Add(new MeleeChargeAttack());
@@ -111,8 +112,10 @@ public class GameState : MonoBehaviour
 
         ps.learned_spells.Add(new BlizzardSpell());
         ps.learned_spells.Add(new ForceFieldSpell());
+        ps.learned_spells.Add(new CombustSpell());
         ps.learned_attacks.Add(new SlashNormal());
         ps.learned_attacks.Add(new SlashIce());
+        ps.learned_attacks.Add(new MeleeChargeAttack());
         ps.active_attack = ps.learned_attacks[0];
         ps.active_spell = ps.learned_spells[0];
 

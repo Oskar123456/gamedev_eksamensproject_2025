@@ -153,11 +153,10 @@ namespace UI
             player_hp_bar.value = (float)player_stats.hp / player_stats.hp_max;
             player_xp_bar.value = (float)player_stats.xp / player_stats.xp_max;
 
-            if (is_inventory_active) {
-                Vector3 mouse_pos = Input.mousePosition;
-                player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
-                item_tooltip_rt.position = new Vector3(mouse_pos.x - 225, mouse_pos.y, 0);
-            }
+            Vector3 mouse_pos = Input.mousePosition;
+
+            item_tooltip_rt.position = new Vector3(mouse_pos.x - 150, mouse_pos.y, 0);
+            player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 HideUI();
@@ -285,7 +284,13 @@ namespace UI
 
         void BuildSkillTree()
         {
-            for (int i = 0; i < player_stats.learned_spells.Count; i++) {
+            int total_skills = player_stats.learned_spells.Count + player_stats.learned_attacks.Count;
+            float y_scale = MathF.Min(5.5f / total_skills, 1f);
+            float padding = 5 * y_scale;
+            float height = 130 * y_scale;
+
+            int i, j;
+            for (i = 0; i < player_stats.learned_spells.Count; i++) {
                 GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
                 GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
                 GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
@@ -314,13 +319,56 @@ namespace UI
                 }
 
 
+                Transform t_container = container.GetComponent<Transform>();
                 RectTransform rt_container = container.GetComponent<RectTransform>();
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
                 RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(0, 430 - (i + 1) * 120 - i * 20);
+                rt_container.anchoredPosition = new Vector2(0, 430 - (i + 1) * height - i * padding);
                 rt_icon.anchoredPosition = new Vector2(-200, 0);
                 rt_text.anchoredPosition = new Vector2(110, -15);
+
+                t_container.localScale = new Vector3(y_scale, y_scale, y_scale);
+            }
+
+            for (j = 0; j < player_stats.learned_attacks.Count; j++) {
+                GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
+                GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
+                GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
+
+                string descr = player_stats.learned_attacks[j].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
+                description.GetComponent<TextMeshProUGUI>().text = descr;
+
+                Sprite sprite = GameData.attack_sprites[player_stats.learned_attacks[j].sprite_index];
+                icon.GetComponent<Image>().sprite = sprite;
+
+                if (player_stats.skill_points > 0) {
+                    GameObject button = Instantiate(skill_tree_element_button, Vector3.zero, Quaternion.identity, container.transform);
+                    int ii = j;
+                    Button b = button.GetComponent<Button>();
+                    b.onClick.AddListener(() => {
+                            player.SendMessage("OnLevelUpAttack", ii);
+                            BuildSkillTree();
+                            audio_source.clip = audio_clips[0];
+                            audio_source.Play();
+                            if (player_stats.skill_points < 1) {
+                                skill_tree_plus_button.SetActive(false);
+                            }
+                            });
+                    RectTransform rt_button = button.GetComponent<RectTransform>();
+                    rt_button.anchoredPosition = new Vector2(-100, 0);
+                }
+
+                Transform t_container = container.GetComponent<Transform>();
+                RectTransform rt_container = container.GetComponent<RectTransform>();
+                RectTransform rt_icon = icon.GetComponent<RectTransform>();
+                RectTransform rt_text = description.GetComponent<RectTransform>();
+
+                rt_container.anchoredPosition = new Vector2(0, 430 - (i + j + 1) * height - (i + j) * padding);
+                rt_icon.anchoredPosition = new Vector2(-200, 0);
+                rt_text.anchoredPosition = new Vector2(110, -15);
+
+                t_container.localScale = new Vector3(y_scale, y_scale, y_scale);
             }
         }
 
@@ -376,6 +424,12 @@ namespace UI
         public void PlaySwapFailSound()
         {
             audio_source.clip = audio_clips[1];
+            audio_source.Play();
+        }
+
+        public void PlayBuffSound()
+        {
+            audio_source.clip = audio_clips[3];
             audio_source.Play();
         }
 

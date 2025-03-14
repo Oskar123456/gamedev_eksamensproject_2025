@@ -64,6 +64,7 @@ public class PlayerStats : MonoBehaviour
     public Armor armor;
     public Weapon weapon;
     public Boots boots;
+    public HealthPotion potions = new HealthPotion();
 
     public int inventory_size = 25;
     public int inventory_space = 25;
@@ -75,10 +76,11 @@ public class PlayerStats : MonoBehaviour
         string str = "";
         str += string.Format("Level: {0}{1}XP: {2}/{3}{4}HP: {5}/{6}{7}", level, Environment.NewLine, xp, xp_max, Environment.NewLine, hp, hp_max, Environment.NewLine);
         str += string.Format("Gold: {0}{1}", gold, Environment.NewLine);
+        str += string.Format("Movement Speed: {0}%{1}", (int)(move_speed_bonus * 100), Environment.NewLine);
         str += string.Format("Attack Damage: {0}/n:{1}/f:{2}/c:{3}{4}", attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire, Environment.NewLine);
-        str += string.Format("Attack Speed: {0}%{1}Attack AoE: {2}%{3}", attack_speed, Environment.NewLine, attack_scale, Environment.NewLine);
+        str += string.Format("Attack Speed: {0}%{1}Attack AoE: {2}%{3}", (int)(attack_speed * 100), Environment.NewLine, (int)(attack_scale * 100), Environment.NewLine);
         str += string.Format("Spell Damage: {0}/{1}/{2}/{3}{4}", spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire, Environment.NewLine);
-        str += string.Format("Cast Speed: {0}%{1}Spell AoE: {2}%", spell_speed, Environment.NewLine, spell_scale);
+        str += string.Format("Cast Speed: {0}%{1}Spell AoE: {2}%", (int)(spell_speed * 100), Environment.NewLine, (int)(spell_scale * 100));
         return str;
     }
 
@@ -151,6 +153,7 @@ public class PlayerStats : MonoBehaviour
         this.jewelry = ps.jewelry;
         this.weapon = ps.weapon;
         this.boots = ps.boots;
+        this.potions = ps.potions;
 
         this.currently_held_item = ps.currently_held_item;
         this.inventory_size = ps.inventory_size;

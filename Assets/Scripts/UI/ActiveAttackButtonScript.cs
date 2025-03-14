@@ -15,6 +15,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UI;
+using System;
 
 public class ActiveAttackButtonScript : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class ActiveAttackButtonScript : MonoBehaviour
     Button button;
     GameObject player;
     PlayerStats player_stats;
+    UIScript ui_script;
 
     bool open;
 
@@ -29,6 +32,7 @@ public class ActiveAttackButtonScript : MonoBehaviour
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(Toggle);
+        ui_script = GameObject.Find("UI").GetComponent<UIScript>();
     }
 
     void Update()
@@ -38,6 +42,18 @@ public class ActiveAttackButtonScript : MonoBehaviour
             player_stats = player.GetComponent<PlayerStats>();
         }
         // TODO: Cooldown fade
+    }
+
+    void LateUpdate()
+    {
+        if (player_stats.active_attack == null) {
+            return;
+        }
+
+        if (ui_script.current_ui_object_hovered == gameObject) {
+            ui_script.item_tooltip_text.text = player_stats.active_attack.GetDescriptionString(Environment.NewLine);
+            ui_script.item_tooltip.SetActive(true);
+        }
     }
 
     void Hide()
