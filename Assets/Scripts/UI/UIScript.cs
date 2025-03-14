@@ -133,6 +133,13 @@ namespace UI
                 player_stats = player.GetComponent<PlayerStats>();
             }
 
+            item_tooltip.SetActive(false);
+
+            hp_info.text = string.Format("{0}/{1} HP", player_stats.hp, player_stats.hp_max);
+            xp_info.text = string.Format("{0}/{1} XP [Level {2}]", player_stats.xp, player_stats.xp_max, player_stats.level);
+            player_hp_bar.value = (float)player_stats.hp / player_stats.hp_max;
+            player_xp_bar.value = (float)player_stats.xp / player_stats.xp_max;
+
             if (fade_in_left > 0) {
                 level_intro_text.text = GameState.level_name;
                 screen_color_img.color = new Color(0, 0, 0, 1 - ((1 - fade_in_left) / fade_in));
@@ -145,13 +152,6 @@ namespace UI
             }
 
             DrawDebugInfo();
-
-            item_tooltip.SetActive(false);
-
-            hp_info.text = string.Format("{0}/{1} HP", player_stats.hp, player_stats.hp_max);
-            xp_info.text = string.Format("{0}/{1} XP [Level {2}]", player_stats.xp, player_stats.xp_max, player_stats.level);
-            player_hp_bar.value = (float)player_stats.hp / player_stats.hp_max;
-            player_xp_bar.value = (float)player_stats.xp / player_stats.xp_max;
 
             Vector3 mouse_pos = Input.mousePosition;
 
@@ -172,7 +172,7 @@ namespace UI
                 ToggleStats();
             }
 
-            if (Input.GetKeyDown(KeyCode.I)) {
+            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
                 ToggleInventory();
             }
 
