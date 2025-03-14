@@ -12,6 +12,7 @@
   - Space : Jump
   - Left Mouse Button: Attack
   - Right Mouse Button: Cast Spell
+  - 1 : Drink Potion
   - Number Keys : Switch Active Attack
   - [Left-Shift+]Number Keys : Switch Active Spell
   - Tab : [Maximize] Minimap

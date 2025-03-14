@@ -155,7 +155,7 @@ namespace UI
 
             Vector3 mouse_pos = Input.mousePosition;
 
-            item_tooltip_rt.position = new Vector3(mouse_pos.x - 150, mouse_pos.y, 0);
+            item_tooltip_rt.position = new Vector3(mouse_pos.x - 175, mouse_pos.y, 0);
             player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
