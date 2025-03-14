@@ -51,15 +51,15 @@
 
 ## TODO:
 
-  - Visual cooldown effect on active skill/attack button.
+  - Visual cooldown effect on active skill/attack button [x].
   - Prettier UI.
   - Spawn enemies in clusters, more types of ghosts [x].
   - Enemy spawn weights, like with item drops [x].
-  - A new type of enemy, different from the rest.
+  - A new type of enemy, different from the rest [x?].
   - More decorations, also in clusters, some wall decos [x].
   - A new player attack and a new player spell [x?].
   - Is currently possible to jump while attacking in same frame, maybe change.
-  - Cull pillar when in between camera and player.
+  - Cull pillar when in between camera and player [x].
   - ... rest of the game...
 
 
