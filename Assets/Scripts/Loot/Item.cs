@@ -62,7 +62,7 @@ namespace Loot
             prefab_index = 0;
             sprite_index = 0;
 
-            weight = 1000;
+            weight = 10000;
             is_equippable = false;
             is_consumable = true;
             is_consumed_on_pickup = true;
@@ -87,7 +87,7 @@ namespace Loot
             prefab_index = 1;
             sprite_index = 25;
 
-            weight = 1000;
+            weight = 10000;
             should_show = true;
             is_equippable = false;
             is_consumable = true;
