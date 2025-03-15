@@ -51,7 +51,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7754377741481163506}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -130,8 +130,8 @@ MonoBehaviour:
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
   delay: 0.55
   degrees_orig: 0
-  offs_start: 0.5
-  offs_end: 5
+  offs_start: 0.2
+  offs_end: 6
   effect_duration: 0.2
 --- !u!114 &350640697902970753
 MonoBehaviour:

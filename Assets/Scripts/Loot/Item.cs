@@ -62,7 +62,7 @@ namespace Loot
             prefab_index = 0;
             sprite_index = 0;
 
-            weight = 10000;
+            weight = 5000;
             is_equippable = false;
             is_consumable = true;
             is_consumed_on_pickup = true;
@@ -87,20 +87,21 @@ namespace Loot
             prefab_index = 1;
             sprite_index = 25;
 
-            weight = 10000;
+            weight = 5000;
             should_show = true;
             is_equippable = false;
             is_consumable = true;
             is_consumed_on_pickup = false;
             duration = 0;
             amount = 1;
-            hp = 5;
+            hp = 10;
             name = "Health Potion";
+            description = "Restores 10 health";
             text_color = Color.red;
         }
 
         public override float Consume(PlayerStats ps) { ps.hp = Math.Min(ps.hp_max, ps.hp + hp); amount -= 1; return hp; }
-        public override string EffectString() { return string.Format("+{0} hp (x{1})", hp, amount); }
+        public override string EffectString() { return string.Format("Restores +{0} health (x{1})", hp, amount); }
         public override void Equip(PlayerStats ps) { return; }
         public override void UnEquip(PlayerStats ps) { return; }
     }
