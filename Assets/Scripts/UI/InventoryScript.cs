@@ -110,9 +110,7 @@ public class InventoryScript : MonoBehaviour
         float y_padding = 10;
         float padding = 2;
         float i_slot_width = (inventory_rect.rect.size.x - 2 * outer_padding - 7 * padding) / 8;
-        float i_slot_height = (inventory_rect.rect.size.y - 4 * padding) / 5;
-        float min_wh = MathF.Min(i_slot_width, i_slot_height);
-        i_slot_width = i_slot_width; i_slot_height = i_slot_width;
+        float i_slot_height = i_slot_width;
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 8; j++) {
