@@ -709,7 +709,7 @@ MonoBehaviour:
   xp_per_level: 1
   hp_max_per_level: 1
   attack_damage_per_level: 1
-  attack_speed_per_level: 0.1
+  attack_speed_per_level: 0.02
   attack_scale_per_level: 0
   attack_duration_per_level: 0
   attack_cooldown_per_level: 0
