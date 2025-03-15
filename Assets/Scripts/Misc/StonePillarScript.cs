@@ -38,7 +38,6 @@ namespace Misc
                 if (renderer == null) {
                     continue;
                 }
-                Debug.Log("Hide: " + t.gameObject);
                 renderer.material = mat_transparent;
             }
         }
@@ -50,7 +49,6 @@ namespace Misc
                 if (renderer == null) {
                     continue;
                 }
-                Debug.Log("UnHide: " + t.gameObject);
                 renderer.material = mat_opaque;
             }
         }

@@ -122,8 +122,6 @@ namespace Attacks
                 return;
             }
 
-            Debug.Log("OnTriggerStay: " + collider.gameObject.tag + " --> " + stats.attacker.tag);
-
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
@@ -176,8 +174,6 @@ namespace Attacks
             Transform t = parent;
 
             GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
-
-            Debug.Log("Use Ghostattack at " + parent.position);
 
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
