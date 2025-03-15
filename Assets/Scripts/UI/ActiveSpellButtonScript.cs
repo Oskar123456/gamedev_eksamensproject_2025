@@ -41,6 +41,10 @@ public class ActiveSpellButtonScript : MonoBehaviour
             player = GameObject.Find("Player");
             player_stats = player.GetComponent<PlayerStats>();
         }
+
+        if (Input.GetMouseButtonDown(0) && ui_script.current_ui_object_hovered == null) {
+            Hide();
+        }
     }
 
     void LateUpdate()

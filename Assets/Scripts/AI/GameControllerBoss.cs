@@ -73,8 +73,8 @@ public class GameControllerBoss : MonoBehaviour
     void Start()
     {
         GameState.InstantiatePlayer();
-        
-        
+
+
         Vector3 start_pos = new Vector3(0, 2, 0);
         player = GameObject.Find("Player");
         player.GetComponent<CharacterController>().enabled = false;
@@ -101,13 +101,13 @@ public class GameControllerBoss : MonoBehaviour
 
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), player_trf);
         player_marker_trf = player_marker.GetComponent<Transform>();
-        
+
 
         UI = GameObject.Find("UI");
         active_attack_button = GameObject.Find("ActiveAttackButton");
         active_spell_button = GameObject.Find("ActiveSpellButton");
 
-    
+
     }
 
     void Update()
@@ -135,23 +135,9 @@ public class GameControllerBoss : MonoBehaviour
         if (player_trf.hasChanged) {
             // player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            UI.SendMessage("HideUI");
-            active_attack_button.SendMessage("Hide");
-            active_spell_button.SendMessage("Hide");
-        }
-
-        if (Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.C)) {
-            UI.SendMessage("ToggleSkillTree");
-        }
-
-        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.E)) {
-            UI.SendMessage("ToggleInventory");
-        }
     }
 
-    
+
 
     void UpdateMiniMapCam()
     {

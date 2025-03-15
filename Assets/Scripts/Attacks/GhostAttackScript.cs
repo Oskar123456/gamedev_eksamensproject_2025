@@ -38,7 +38,7 @@ namespace Attacks
         bool created = false;
         public float delay = 0.55f;
         public float degrees_orig;
-        public float offs_start = 0.5f;
+        public float offs_start = 0.0f;
         public float offs_end = 5f;
         public float effect_duration = 0.20f;
 
@@ -60,6 +60,8 @@ namespace Attacks
             created_t = Time.time;
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
+
+            Debug.Log("delay: " + delay + " dur: " + effect_duration);
 
             offs_start *= stats.scale;
             offs_end *= stats.scale;
@@ -171,7 +173,7 @@ namespace Attacks
         {
             Transform t = parent;
 
-            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position + parent.forward * (parent.lossyScale.x / 2), parent.rotation, t);
+            GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position + parent.forward * (parent.lossyScale.x * 0.67f), parent.rotation, t);
 
             AttackStats attack_stats = instance.GetComponent<AttackStats>();
             attack_stats.damage = damage;
@@ -190,25 +192,9 @@ namespace Attacks
                     delimiter, scale);
         }
 
-        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        public override string GetLevelUpDescriptionString(string delimiter)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level++;
-            ScaleWithPlayerStats(ps);
-
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level--;
-            ScaleWithPlayerStats(ps);
-
-            return current + string_delimiter + next;
+            return "";
         }
     }
 }

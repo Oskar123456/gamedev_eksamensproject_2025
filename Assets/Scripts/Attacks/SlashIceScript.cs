@@ -140,7 +140,7 @@ namespace Attacks
             prefab_index = 1;
             sprite_index = 1;
             name = "Ice Slash";
-            level = 1;
+            level = 0;
             damage_base = 1; damage_per_level = 1;
             duration_base = 1; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
@@ -175,31 +175,12 @@ namespace Attacks
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
+            return string.Format("Dmg: {0}{1}AoE:{2}", damage, delimiter, scale);
         }
 
-        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        public override string GetLevelUpDescriptionString(string delimiter)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level++;
-            ScaleWithPlayerStats(ps);
-
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level--;
-            ScaleWithPlayerStats(ps);
-
-            return current + string_delimiter + next;
+            return string.Format("+{0} damage{1}+{2}% AoE", damage_per_level, delimiter, (int)(scale_per_level * 100));
         }
     }
 }

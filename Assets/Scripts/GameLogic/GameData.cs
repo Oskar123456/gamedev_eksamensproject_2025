@@ -75,7 +75,6 @@ public class GameData : MonoBehaviour
         attack_list = new List<Attack>();
         attack_list.Add(new SlashNormal());
         attack_list.Add(new SlashIce());
-        attack_list.Add(new ShockWaveAttack());
         attack_list.Add(new MeleeChargeAttack());
 
         spell_list = new List<Spell>();

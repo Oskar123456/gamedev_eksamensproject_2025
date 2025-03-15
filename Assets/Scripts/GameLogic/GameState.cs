@@ -49,6 +49,9 @@ public class GameState : MonoBehaviour
     public static bool has_died;
     public static bool first_load = true;
 
+    public static List<Attack> attacks = new List<Attack>();
+    public static List<Spell> spells = new List<Spell>();
+
     void Awake()
     {
         if (Instance != null) {
@@ -61,6 +64,13 @@ public class GameState : MonoBehaviour
 
         pf = player_prefab;
         player_stats_saved = GetComponent<PlayerStats>();
+
+        spells.Add(new BlizzardSpell());
+        spells.Add(new ForceFieldSpell());
+        spells.Add(new CombustSpell());
+        attacks.Add(new SlashNormal());
+        attacks.Add(new SlashIce());
+        attacks.Add(new MeleeChargeAttack());
     }
 
     void Start()
@@ -77,14 +87,12 @@ public class GameState : MonoBehaviour
             p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
             ps = p.GetComponent<PlayerStats>();
 
-            ps.learned_spells.Add(new BlizzardSpell());
-            ps.learned_spells.Add(new ForceFieldSpell());
-            ps.learned_spells.Add(new CombustSpell());
-            ps.learned_attacks.Add(new SlashNormal());
-            ps.learned_attacks.Add(new SlashIce());
-            ps.learned_attacks.Add(new MeleeChargeAttack());
+            ps.learned_attacks.Add(attacks[0]);
+            ps.learned_spells.Add(spells[0]);
             ps.active_attack = ps.learned_attacks[0];
             ps.active_spell = ps.learned_spells[0];
+            ps.active_attack.level = 1;
+            ps.active_spell.level = 1;
 
             player_stats_saved.CopyFrom(ps);
             Destroy(p);
@@ -110,14 +118,22 @@ public class GameState : MonoBehaviour
         GameObject p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
         PlayerStats ps = p.GetComponent<PlayerStats>();
 
-        ps.learned_spells.Add(new BlizzardSpell());
-        ps.learned_spells.Add(new ForceFieldSpell());
-        ps.learned_spells.Add(new CombustSpell());
-        ps.learned_attacks.Add(new SlashNormal());
-        ps.learned_attacks.Add(new SlashIce());
-        ps.learned_attacks.Add(new MeleeChargeAttack());
+        spells = new List<Spell>();
+        attacks = new List<Attack>();
+
+        spells.Add(new BlizzardSpell());
+        spells.Add(new ForceFieldSpell());
+        spells.Add(new CombustSpell());
+        attacks.Add(new SlashNormal());
+        attacks.Add(new SlashIce());
+        attacks.Add(new MeleeChargeAttack());
+
+        ps.learned_attacks.Add(attacks[0]);
+        ps.learned_spells.Add(spells[0]);
         ps.active_attack = ps.learned_attacks[0];
         ps.active_spell = ps.learned_spells[0];
+        ps.active_attack.level = 1;
+        ps.active_spell.level = 1;
 
         player_stats_saved.CopyFrom(ps);
         Destroy(p);

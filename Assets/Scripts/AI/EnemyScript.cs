@@ -105,11 +105,13 @@ namespace AI
                 is_attacking = false;
             }
 
-            if (!nma.enabled)
+            if (!nma.enabled) {
                 return;
+            }
 
+            Vector3 normal = Vector3.Normalize(player_trf.position - transform.position);
             RaycastHit hit_info = new RaycastHit();
-            if (Physics.Raycast(transform.position + halfway_up_vec, player_trf.position - transform.position, out hit_info, 200)) {
+            if (Physics.Raycast(transform.position + halfway_up_vec - normal * 0.5f, player_trf.position - transform.position, out hit_info, 200)) {
                 if (hit_info.collider.gameObject.CompareTag("Player") && dist_to_player <= stats.base_attack_range) {
                     nma.ResetPath();
                     Attack();

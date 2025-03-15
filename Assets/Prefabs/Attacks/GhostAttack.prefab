@@ -128,11 +128,11 @@ MonoBehaviour:
   hit_effect_prefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
   audio_dummy: {fileID: 5578298940507306935, guid: cdc3bdb3f3d254ba484299500db2d1e2, type: 3}
   audio_hit_dummy: {fileID: 5578298940507306935, guid: 945d576249eba04bda20d18df988bc51, type: 3}
-  delay: 0.55
+  delay: 0.48
   degrees_orig: 0
-  offs_start: 0.2
-  offs_end: 6
-  effect_duration: 0.2
+  offs_start: 0
+  offs_end: 5.2
+  effect_duration: 0.25
 --- !u!114 &350640697902970753
 MonoBehaviour:
   m_ObjectHideFlags: 0

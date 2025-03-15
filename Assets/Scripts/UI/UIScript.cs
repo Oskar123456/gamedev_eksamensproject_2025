@@ -65,9 +65,12 @@ namespace UI
         TextMeshProUGUI stats_defense_text;
         TextMeshProUGUI stats_util_text;
 
+        TextMeshProUGUI skill_tree_free_text;
+
         GameObject skill_tree;
         GameObject inventory;
         GameObject stats;
+        GameObject skill_tree_container;
         InventoryScript inventory_script;
 
         List<GameObject> occluding_gameobjects = new List<GameObject>();
@@ -103,6 +106,7 @@ namespace UI
             audio_source = GetComponent<AudioSource>();
 
             skill_tree = GameObject.Find("SkillTree");
+            skill_tree_container = GameObject.Find("SkillTreeElementContainer");
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
             inventory = GameObject.Find("Inventory");
             inventory_script = inventory.GetComponent<InventoryScript>();
@@ -114,6 +118,8 @@ namespace UI
             stats_spell_text = GameObject.Find("StatsSpellText").GetComponent<TextMeshProUGUI>();
             stats_defense_text = GameObject.Find("StatsDefenseText").GetComponent<TextMeshProUGUI>();
             stats_util_text = GameObject.Find("StatsUtilText").GetComponent<TextMeshProUGUI>();
+
+            skill_tree_free_text = GameObject.Find("SkillTreePointsText").GetComponent<TextMeshProUGUI>();
 
             active_attack_button = GameObject.Find("ActiveAttackButton");
             active_spell_button = GameObject.Find("ActiveSpellButton");
@@ -131,6 +137,8 @@ namespace UI
             xp_info = GameObject.Find("PlayerXPText").GetComponent<TextMeshProUGUI>();
             player_hp_bar = GameObject.Find("PlayerHPBar").GetComponent<Slider>();
             player_xp_bar = GameObject.Find("PlayerXPBar").GetComponent<Slider>();
+
+            BuildSkillTree();
 
             SetHeldItem();
             HideUI();
@@ -168,7 +176,8 @@ namespace UI
 
             Vector3 mouse_pos = Input.mousePosition;
 
-            item_tooltip_rt.position = new Vector3(mouse_pos.x - 175, mouse_pos.y, 0);
+            float tooltip_offs = (mouse_pos.x < Screen.width / 2) ? 175 : -175;
+            item_tooltip_rt.position = new Vector3(mouse_pos.x + tooltip_offs, mouse_pos.y, 0);
             player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -253,17 +262,11 @@ namespace UI
         {
             skill_tree_toggled = !skill_tree_toggled;
             skill_tree.SetActive(skill_tree_toggled);
+            Sync();
 
             if (skill_tree_toggled) {
                 if (stats_toggled) {
                     ToggleStats();
-                }
-                BuildSkillTree();
-            } else {
-                foreach (Transform t in skill_tree.transform) {
-                    if (t.gameObject.name != "SkillTreeButton") {
-                        Destroy(t.gameObject);
-                    }
                 }
             }
         }
@@ -303,91 +306,25 @@ namespace UI
 
         void BuildSkillTree()
         {
-            int total_skills = player_stats.learned_spells.Count + player_stats.learned_attacks.Count;
-            float y_scale = MathF.Min(5.5f / total_skills, 1f);
-            float padding = 5 * y_scale;
-            float height = 130 * y_scale;
-
-            int i, j;
-            for (i = 0; i < player_stats.learned_spells.Count; i++) {
-                GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
-                GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
-                GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
-
-                string descr = player_stats.learned_spells[i].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
-                description.GetComponent<TextMeshProUGUI>().text = descr;
-
-                Sprite sprite = GameData.spell_sprites[player_stats.learned_spells[i].sprite_index];
-                icon.GetComponent<Image>().sprite = sprite;
-
-                if (player_stats.skill_points > 0) {
-                    GameObject button = Instantiate(skill_tree_element_button, Vector3.zero, Quaternion.identity, container.transform);
-                    int ii = i;
-                    Button b = button.GetComponent<Button>();
-                    b.onClick.AddListener(() => {
-                            player.SendMessage("OnLevelUpSpell", ii);
-                            BuildSkillTree();
-                            audio_source.clip = audio_clips[0];
-                            audio_source.Play();
-                            if (player_stats.skill_points < 1) {
-                                skill_tree_plus_button.SetActive(false);
-                            }
-                            });
-                    RectTransform rt_button = button.GetComponent<RectTransform>();
-                    rt_button.anchoredPosition = new Vector2(-100, 0);
-                }
-
-
-                Transform t_container = container.GetComponent<Transform>();
-                RectTransform rt_container = container.GetComponent<RectTransform>();
-                RectTransform rt_icon = icon.GetComponent<RectTransform>();
-                RectTransform rt_text = description.GetComponent<RectTransform>();
-
-                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + 1) * height - i * padding);
-                rt_icon.anchoredPosition = new Vector2(-200, 0);
-                rt_text.anchoredPosition = new Vector2(110, -15);
-
-                t_container.localScale = new Vector3(y_scale, y_scale, y_scale);
+            List<GameObject> skill_tree_elements = new List<GameObject>();
+            foreach (Transform t in skill_tree_container.transform) {
+                skill_tree_elements.Add(t.gameObject);
             }
 
-            for (j = 0; j < player_stats.learned_attacks.Count; j++) {
-                GameObject container = Instantiate(skill_tree_element, Vector3.zero, Quaternion.identity, skill_tree.transform);
-                GameObject icon = Instantiate(skill_tree_element_icon, Vector3.zero, Quaternion.identity, container.transform);
-                GameObject description = Instantiate(skill_tree_element_description, Vector3.zero, Quaternion.identity, container.transform);
-
-                string descr = player_stats.learned_attacks[j].GetLevelUpDescriptionString(" ", Environment.NewLine, player_stats);
-                description.GetComponent<TextMeshProUGUI>().text = descr;
-
-                Sprite sprite = GameData.attack_sprites[player_stats.learned_attacks[j].sprite_index];
-                icon.GetComponent<Image>().sprite = sprite;
-
-                if (player_stats.skill_points > 0) {
-                    GameObject button = Instantiate(skill_tree_element_button, Vector3.zero, Quaternion.identity, container.transform);
-                    int ii = j;
-                    Button b = button.GetComponent<Button>();
-                    b.onClick.AddListener(() => {
-                            player.SendMessage("OnLevelUpAttack", ii);
-                            BuildSkillTree();
-                            audio_source.clip = audio_clips[0];
-                            audio_source.Play();
-                            if (player_stats.skill_points < 1) {
-                                skill_tree_plus_button.SetActive(false);
-                            }
-                            });
-                    RectTransform rt_button = button.GetComponent<RectTransform>();
-                    rt_button.anchoredPosition = new Vector2(-100, 0);
-                }
-
-                Transform t_container = container.GetComponent<Transform>();
-                RectTransform rt_container = container.GetComponent<RectTransform>();
-                RectTransform rt_icon = icon.GetComponent<RectTransform>();
-                RectTransform rt_text = description.GetComponent<RectTransform>();
-
-                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + j + 1) * height - (i + j) * padding);
-                rt_icon.anchoredPosition = new Vector2(-200, 0);
-                rt_text.anchoredPosition = new Vector2(110, -15);
-
-                t_container.localScale = new Vector3(y_scale, y_scale, y_scale);
+            int i = 0;
+            for (int j = 0; j < GameState.attacks.Count; j++) {
+                SkillTreeElementScript script = skill_tree_elements[i].GetComponent<SkillTreeElementScript>();
+                script.attack = GameState.attacks[j];
+                i++;
+            }
+            for (int j = 0; j < GameState.spells.Count; j++) {
+                SkillTreeElementScript script = skill_tree_elements[i].GetComponent<SkillTreeElementScript>();
+                script.spell = GameState.spells[j];
+                i++;
+            }
+            foreach (GameObject elm in skill_tree_elements) {
+                SkillTreeElementScript script = elm.GetComponent<SkillTreeElementScript>();
+                script.Init();
             }
         }
 
@@ -422,10 +359,18 @@ namespace UI
                     player_stats.hp, player_stats.hp_max, Environment.NewLine, player_stats.stun_lock);
             stats_util_text.text = string.Format("Movement Speed: {0}%", (100 + (int)(player_stats.move_speed_bonus * 100)));
 
+            skill_tree_free_text.text = player_stats.skill_points.ToString();
+
             SetHeldItem();
 
             if (is_inventory_active && player_stats.currently_held_item != null) {
                 player_cursor_img.SetActive(true);
+            }
+
+            if (player_stats.skill_points < 1) {
+                skill_tree_plus_button.SetActive(false);
+            } else {
+                skill_tree_plus_button.SetActive(true);
             }
         }
 

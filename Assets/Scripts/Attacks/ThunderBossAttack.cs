@@ -178,25 +178,9 @@ namespace Attacks
                     delimiter, scale);
         }
 
-        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        public override string GetLevelUpDescriptionString(string delimiter)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level++;
-            ScaleWithPlayerStats(ps);
-
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale);
-
-            level--;
-            ScaleWithPlayerStats(ps);
-
-            return current + string_delimiter + next;
+            return "";
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Spells
             prefab_index = 1;
             sprite_index = 1;
             name = "Force Field";
-            level = 1;
+            level = 0;
             damage_base = 0; damage_per_level = 0;
             duration_base = 1; duration_per_level = 0.1f;
             cooldown_base = 4; cooldown_per_level = 0;
@@ -99,28 +99,12 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
-                    delimiter, level, delimiter,
-                    delimiter, duration);
+            return string.Format("Invulnerable{0}Duration: {1}s", delimiter, duration);
         }
 
-        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        public override string GetLevelUpDescriptionString(string delimiter)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
-                    delimiter, level, delimiter,
-                    delimiter, duration);
-
-            level++;
-            ScaleWithPlayerStats(ps);
-
-            string next = string.Format("{0}{1}Next level: {2}{3}Buff: Invuln{4}Duration: {5}", name,
-                    delimiter, level, delimiter,
-                    delimiter, duration + duration_per_level);
-
-            level--;
-            ScaleWithPlayerStats(ps);
-
-            return current + string_delimiter + next;
+            return string.Format("+{0}s Duration", (duration_per_level));
         }
     }
 }

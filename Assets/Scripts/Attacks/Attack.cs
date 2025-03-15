@@ -33,13 +33,15 @@ namespace Attacks
         public float scale, scale_base, scale_per_level;
         public DamageType damage_type;
 
+        public string description = "no description";
+
         public abstract void ScaleWithPlayerStats(PlayerStats ps);
         public abstract void ScaleWithEnemyStats(EnemyStats es);
 
         public abstract void Use(Transform parent);
 
         public abstract string GetDescriptionString(string delimiter);
-        public abstract string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps);
+        public abstract string GetLevelUpDescriptionString(string delimiter);
     }
 }
 

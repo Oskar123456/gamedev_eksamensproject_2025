@@ -23,6 +23,9 @@ public class SkillTreePlusScript : MonoBehaviour
     {
         UI = GameObject.Find("UI");
         Button b = GetComponent<Button>();
-        b.onClick.AddListener(() => UI.SendMessage("ToggleSkillTree"));
+        b.onClick.AddListener(() => {
+                UI.SendMessage("PlaySwapSound");
+                UI.SendMessage("ToggleSkillTree");
+                });
     }
 }

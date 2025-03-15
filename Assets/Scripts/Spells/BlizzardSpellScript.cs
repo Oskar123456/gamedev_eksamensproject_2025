@@ -98,7 +98,7 @@ namespace Spells
             prefab_index = 0;
             sprite_index = 0;
             name = "Blizzard";
-            level = 1;
+            level = 0;
             damage_base = 1; damage_per_level = 1;
             duration_base = 2; duration_per_level = 0.1f;
             cooldown_base = 8; cooldown_per_level = 0;
@@ -138,34 +138,13 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("{0}{1}Level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale,
-                    delimiter, duration);
+            return string.Format("Dmg: {0}{1}AoE:{2}{3}Duration: {4}s", damage, delimiter, scale, delimiter, duration);
         }
 
-        public override string GetLevelUpDescriptionString(string delimiter, string string_delimiter, PlayerStats ps)
+        public override string GetLevelUpDescriptionString(string delimiter)
         {
-            string current = string.Format("{0}{1}Current level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale,
-                    delimiter, duration);
-
-            level++;
-            ScaleWithPlayerStats(ps);
-
-            string next = string.Format("{0}{1}Next level: {2}{3}{4}Dmg: {5}{6}Scale:{7: 0.00}{8}Duration: {9: 0.00}", name,
-                    delimiter, level, delimiter,
-                    delimiter, damage,
-                    delimiter, scale,
-                    delimiter, duration);
-
-            level--;
-            ScaleWithPlayerStats(ps);
-
-            return current + string_delimiter + next;
+            return string.Format("+{0} damage{1}+{2}% AoE{3}+{4}s Duration", damage_per_level, delimiter,
+                    (int)(scale_per_level * 100), delimiter, (duration_per_level));
         }
     }
 }
