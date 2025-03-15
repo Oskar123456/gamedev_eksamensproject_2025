@@ -127,20 +127,12 @@ namespace UI
 
         void ClickCallBack()
         {
-            Debug.Log("ClickCallBack");
             if (player_stats == null) {
                 GameObject player = GameObject.Find("Player");
                 if (player == null) {
                     return;
                 }
                 player_stats = player.GetComponent<PlayerStats>();
-            }
-
-            if (spell != null) {
-                Debug.Log("ClickCallBack with: " + spell.name + " level: " + spell.level);
-            }
-            if (attack != null) {
-                Debug.Log("ClickCallBack with: " + attack.name + " level: " + attack.level);
             }
 
             if (player_stats.skill_points > 0) {
