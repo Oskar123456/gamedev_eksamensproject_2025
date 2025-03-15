@@ -66,8 +66,8 @@ public class PlayerStats : MonoBehaviour
     public Boots boots;
     public HealthPotion potions = new HealthPotion();
 
-    public int inventory_size = 25;
-    public int inventory_space = 25;
+    public int inventory_size = 32;
+    public int inventory_space = 32;
     public Item[] inventory;
     public Item currently_held_item;
 

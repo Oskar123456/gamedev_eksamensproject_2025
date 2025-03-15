@@ -105,33 +105,35 @@ public class InventoryScript : MonoBehaviour
         boot_slot_script.UpdateSprite();
 
         RectTransform inventory_rect = inventory.GetComponent<RectTransform>();
-        float padding = 0;
-        float i_slot_width = (inventory_rect.rect.size.x - 6 * padding) / 5;
-        float i_slot_height = (inventory_rect.rect.size.y - 6 * padding) / 5;
-        float min_wh = MathF.Min(i_slot_width, i_slot_height);
-        i_slot_width = min_wh; i_slot_height = min_wh;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+
+        float outer_padding = 34;
+        float y_padding = 10;
+        float padding = 2;
+        float i_slot_width = (inventory_rect.rect.size.x - 2 * outer_padding - 7 * padding) / 8;
+        float i_slot_height = i_slot_width;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 8; j++) {
                 GameObject i_slot = Instantiate(inventory_slot_prefab, Vector3.zero, Quaternion.identity, inventory.transform);
                 RectTransform i_slot_rt = i_slot.GetComponent<RectTransform>();
                 i_slot_rt.sizeDelta = new Vector2(i_slot_width, i_slot_height);
-                i_slot_rt.anchoredPosition = new Vector2(j * i_slot_width + (j + 1) * padding - inventory_rect.rect.size.x / 2 + i_slot_width / 2,
-                        -i * i_slot_height + -(i + 1) * padding + inventory_rect.rect.size.y / 2 - i_slot_width / 2);
+                i_slot_rt.anchoredPosition = new Vector2(j * i_slot_width + j * padding - inventory_rect.rect.size.x / 2 + i_slot_width / 2 + outer_padding,
+                        -i * i_slot_height + -i * padding + inventory_rect.rect.size.y / 2 - i_slot_width / 2 - outer_padding - y_padding);
 
                 ItemSlotScript iss = i_slot.GetComponent<ItemSlotScript>();
-                iss.inventory_index = i * 5 + j;
+                iss.inventory_index = i * 8 + j;
                 iss.item = player_stats.inventory[iss.inventory_index];
 
                 // Debug.Log("inventory slot no." + iss.inventory_index + " : "
                 //         + (player_stats.inventory[iss.inventory_index] == null ? "null" : player_stats.inventory[iss.inventory_index].name));
 
-                if (player_stats.inventory[i * 5 + j] != null) {
+                if (player_stats.inventory[i * 8 + j] != null) {
                     GameObject iss_img = Instantiate(inventory_slot_image_prefab, Vector3.zero, Quaternion.identity, i_slot.transform);
                     RectTransform rt = iss_img.GetComponent<RectTransform>();
                     rt.sizeDelta = i_slot_rt.sizeDelta * 0.85f;
                     rt.anchoredPosition = Vector2.zero;
                     Image img = iss_img.GetComponent<Image>();
-                    img.sprite = GameData.item_sprites[player_stats.inventory[i * 5 + j].sprite_index];
+                    img.sprite = GameData.item_sprites[player_stats.inventory[i * 8 + j].sprite_index];
                 }
             }
         }

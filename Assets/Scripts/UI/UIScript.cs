@@ -57,7 +57,13 @@ namespace UI
         TextMeshProUGUI hp_info;
         TextMeshProUGUI xp_info;
         TextMeshProUGUI level_intro_text;
-        TextMeshProUGUI stats_text;
+
+        TextMeshProUGUI stats_name_text;
+        TextMeshProUGUI stats_misc_text;
+        TextMeshProUGUI stats_attack_text;
+        TextMeshProUGUI stats_spell_text;
+        TextMeshProUGUI stats_defense_text;
+        TextMeshProUGUI stats_util_text;
 
         GameObject skill_tree;
         GameObject inventory;
@@ -101,7 +107,14 @@ namespace UI
             inventory = GameObject.Find("Inventory");
             inventory_script = inventory.GetComponent<InventoryScript>();
             stats = GameObject.Find("Stats");
-            stats_text = GameObject.Find("StatsText").GetComponent<TextMeshProUGUI>();
+
+            stats_name_text = GameObject.Find("StatsNameText").GetComponent<TextMeshProUGUI>();
+            stats_misc_text = GameObject.Find("StatsMiscText").GetComponent<TextMeshProUGUI>();
+            stats_attack_text = GameObject.Find("StatsAttackText").GetComponent<TextMeshProUGUI>();
+            stats_spell_text = GameObject.Find("StatsSpellText").GetComponent<TextMeshProUGUI>();
+            stats_defense_text = GameObject.Find("StatsDefenseText").GetComponent<TextMeshProUGUI>();
+            stats_util_text = GameObject.Find("StatsUtilText").GetComponent<TextMeshProUGUI>();
+
             active_attack_button = GameObject.Find("ActiveAttackButton");
             active_spell_button = GameObject.Find("ActiveSpellButton");
 
@@ -223,7 +236,7 @@ namespace UI
             HideInventory();
         }
 
-        void ToggleStats()
+        public void ToggleStats()
         {
             stats_toggled = !stats_toggled;
             stats.SetActive(stats_toggled);
@@ -234,7 +247,7 @@ namespace UI
             }
         }
 
-        void ToggleSkillTree()
+        public void ToggleSkillTree()
         {
             skill_tree_toggled = !skill_tree_toggled;
             skill_tree.SetActive(skill_tree_toggled);
@@ -244,12 +257,14 @@ namespace UI
                 BuildSkillTree();
             } else {
                 foreach (Transform t in skill_tree.transform) {
-                    Destroy(t.gameObject);
+                    if (t.gameObject.name != "SkillTreeButton") {
+                        Destroy(t.gameObject);
+                    }
                 }
             }
         }
 
-        void ToggleInventory()
+        public void ToggleInventory()
         {
             is_inventory_active = !is_inventory_active;
 
@@ -324,7 +339,7 @@ namespace UI
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
                 RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(0, 430 - (i + 1) * height - i * padding);
+                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + 1) * height - i * padding);
                 rt_icon.anchoredPosition = new Vector2(-200, 0);
                 rt_text.anchoredPosition = new Vector2(110, -15);
 
@@ -364,7 +379,7 @@ namespace UI
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
                 RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(0, 430 - (i + j + 1) * height - (i + j) * padding);
+                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + j + 1) * height - (i + j) * padding);
                 rt_icon.anchoredPosition = new Vector2(-200, 0);
                 rt_text.anchoredPosition = new Vector2(110, -15);
 
@@ -390,7 +405,19 @@ namespace UI
 
         public void Sync()
         {
-            stats_text.text = player_stats.ToString();
+            stats_name_text.text = string.Format("Wizard");
+            stats_misc_text.text = string.Format("Level: {0}   XP: {1}/{2}{3}Gold: {4}",
+                    player_stats.level, player_stats.xp, player_stats.xp_max, Environment.NewLine, player_stats.gold);
+            stats_attack_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
+                    player_stats.attack_damage, player_stats.attack_damage_fire, player_stats.attack_damage_ice,
+                    Environment.NewLine, ((int)(player_stats.attack_scale * 100)), ((int)(player_stats.attack_speed * 100)));
+            stats_spell_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
+                    player_stats.spell_damage, player_stats.spell_damage_fire, player_stats.spell_damage_ice,
+                    Environment.NewLine, ((int)(player_stats.spell_scale * 100)), ((int)(player_stats.spell_speed * 100)));
+            stats_defense_text.text = string.Format("HP: {0}/{1}{2}Hit Recovery: {3}",
+                    player_stats.hp, player_stats.hp_max, Environment.NewLine, player_stats.stun_lock);
+            stats_util_text.text = string.Format("Movement Speed: {0}%", (100 + (int)(player_stats.move_speed_bonus * 100)));
+
             SetHeldItem();
 
             if (is_inventory_active && player_stats.currently_held_item != null) {

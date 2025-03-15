@@ -49,6 +49,7 @@
   - [UndeadBoss (Boss1)](https://assetstore.unity.com/packages/3d/characters/creatures/monster-mutant-7-188552)
   - [Shopkeeper](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/stylized-npc-peasant-nolant-demo-252440)
   - [Skeleton](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/mini-simple-characters-skeleton-free-demo-262897)
+  - [Footsteps](https://assetstore.unity.com/packages/audio/sound-fx/foley/footsteps-essentials-189879)
 
 ## TODO:
 

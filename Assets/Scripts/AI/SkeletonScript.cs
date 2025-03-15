@@ -31,6 +31,7 @@ namespace AI
         public GameObject healthbar_prefab;
         public GameObject hit_effect_prefab;
         public GameObject audio_hit_dummy;
+        public GameObject audio_bone_hit_dummy;
 
         public float drop_chance = 0.5f;
         public float move_speed = 3.5f;
@@ -47,6 +48,11 @@ namespace AI
         Animator animator;
 
         /* effects */
+        AudioSource audio_source;
+        FootStepsScript footsteps;
+        float footstep_cooldown = 0.1f;
+        float footstep_cooldown_left;
+
         GameObject death_effect;
         public float death_effect_delete_t = 1f;
         public float death_effect_scale = 1f;
@@ -78,6 +84,17 @@ namespace AI
 
             stats = GetComponent<EnemyStats>();
             stats.active_attack.ScaleWithEnemyStats(stats);
+
+            foreach (Transform t in transform) {
+                if (t.gameObject.name == "AudioDummyPlayerFootSteps") {
+                    footsteps = t.GetComponent<FootStepsScript>();
+                }
+            }
+            if (footsteps == null) {
+                Debug.LogError("Skeleton: no footsteps audio source");
+            }
+
+            audio_source = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -227,6 +244,8 @@ namespace AI
             is_attacking = false;
 
             other.SendMessage("OnHit", new HitInfo(normal, gameObject, stats.collision_damage, DamageType.Normal), SendMessageOptions.DontRequireReceiver);
+
+            audio_source.Play();
         }
 
         void OnPush(Vector3 normal)
@@ -262,6 +281,7 @@ namespace AI
                 hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
                 death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
                 death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
+                Instantiate(audio_bone_hit_dummy, transform.position, Quaternion.identity);
                 Destroy(death_effect, death_effect_delete_t);
                 Destroy(gameObject);
                 return;
@@ -270,6 +290,8 @@ namespace AI
             nma.enabled = false;
             transform.position = transform.position + (hit_info.normal * MathF.Min(0.1f * MathF.Sqrt(hit_info.damage), 1.0f));
             nma.enabled = true;
+
+            audio_source.Play();
         }
 
         void Attack()
@@ -285,6 +307,9 @@ namespace AI
 
         void ChooseAnimation()
         {
+            AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
+            footstep_cooldown_left -= Time.deltaTime;
+
             if (fall_time_left > 0) {
                 animator.Play("Mini Simple Characters Armature|Loose");
             } else if (hit_time_left > 0) {
@@ -292,9 +317,31 @@ namespace AI
             } else if (is_attacking) {
                 animator.Play("Mini Simple Characters Armature|Run");
                 animator.SetFloat("sprint_speed", nma.velocity.magnitude / 5f);
+                if (footstep_cooldown_left <= 0) {
+                    float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                    if (anim_time_normed > 0.21f && anim_time_normed < 0.27f) {
+                        footsteps.PlayRandom();
+                        footstep_cooldown_left = footstep_cooldown;
+                    }
+                    if (anim_time_normed > 0.71f || anim_time_normed < 0.77f) {
+                        footsteps.PlayRandom();
+                        footstep_cooldown_left = footstep_cooldown;
+                    }
+                }
             } else if (nma.velocity.magnitude > 0) {
                 animator.Play("Mini Simple Characters Armature|Walk");
                 animator.SetFloat("walk_speed", nma.velocity.magnitude / 2f);
+                if (footstep_cooldown_left <= 0) {
+                    float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                    if (anim_time_normed > 0.47f && anim_time_normed < 0.53f) {
+                        footsteps.PlayRandom();
+                        footstep_cooldown_left = footstep_cooldown;
+                    }
+                    if (anim_time_normed > 0.97f || anim_time_normed < 0.03f) {
+                        footsteps.PlayRandom();
+                        footstep_cooldown_left = footstep_cooldown;
+                    }
+                }
             } else {
                 animator.Play("Mini Simple Characters Armature|Idle");
             }

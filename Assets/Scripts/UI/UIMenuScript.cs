@@ -21,14 +21,17 @@ namespace UI
 {
     public class UIMenuScript : MonoBehaviour
     {
+        public AudioClip[] audio_clips;
+
         GameObject screen_color;
         Image screen_color_img;
+        AudioSource audio_source;
 
         Button play_button;
         // TextMeshProUGUI title;
         TextMeshProUGUI status;
 
-        public float fade_in = 1;
+        public float fade_in = 2;
         float fade_in_left;
 
         void Awake()
@@ -44,21 +47,26 @@ namespace UI
 
             play_button = GameObject.Find("PlayButton").GetComponent<Button>();
             play_button.onClick.AddListener(PlayGame);
+
+            audio_source = GetComponent<AudioSource>();
             // title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
             status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
             /* game UI */
             if (GameState.has_died) {
                 status.text = "YOU DIED...";
+                audio_source.clip = audio_clips[1];
+                audio_source.Play();
+                fade_in_left = fade_in * 3;
             } else {
                 status.text = "Welcome...";
+                fade_in_left = fade_in;
             }
 
             GameState.has_died = false;
 
-            fade_in_left = fade_in;
-
-            if (GameObject.Find("Player") != null)
+            if (GameObject.Find("Player") != null) {
                 Destroy(GameObject.Find("Player"));
+            }
         }
 
         void Update()

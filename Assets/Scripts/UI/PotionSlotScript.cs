@@ -124,6 +124,7 @@ public class PotionSlotScript : MonoBehaviour
                 if (player_stats.potions.amount < 1) {
                     player_stats.potions = null;
                 }
+                ui_script.ShowInventory();
             }
         } else if (player_stats.currently_held_item is HealthPotion) {
             HealthPotion hp_pot = (HealthPotion)player_stats.currently_held_item;
