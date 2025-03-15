@@ -242,7 +242,9 @@ namespace UI
             stats.SetActive(stats_toggled);
             Sync();
 
-            if (stats_toggled) {
+            if (stats_toggled && skill_tree_toggled) {
+                Sync();
+                ToggleSkillTree();
             } else {
             }
         }
@@ -253,7 +255,9 @@ namespace UI
             skill_tree.SetActive(skill_tree_toggled);
 
             if (skill_tree_toggled) {
-                stats.SetActive(false);
+                if (stats_toggled) {
+                    ToggleStats();
+                }
                 BuildSkillTree();
             } else {
                 foreach (Transform t in skill_tree.transform) {
