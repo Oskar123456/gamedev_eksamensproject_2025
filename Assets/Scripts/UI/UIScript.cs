@@ -223,7 +223,7 @@ namespace UI
             HideInventory();
         }
 
-        void ToggleStats()
+        public void ToggleStats()
         {
             stats_toggled = !stats_toggled;
             stats.SetActive(stats_toggled);
@@ -234,7 +234,7 @@ namespace UI
             }
         }
 
-        void ToggleSkillTree()
+        public void ToggleSkillTree()
         {
             skill_tree_toggled = !skill_tree_toggled;
             skill_tree.SetActive(skill_tree_toggled);
@@ -244,12 +244,14 @@ namespace UI
                 BuildSkillTree();
             } else {
                 foreach (Transform t in skill_tree.transform) {
-                    Destroy(t.gameObject);
+                    if (t.gameObject.name != "SkillTreeButton") {
+                        Destroy(t.gameObject);
+                    }
                 }
             }
         }
 
-        void ToggleInventory()
+        public void ToggleInventory()
         {
             is_inventory_active = !is_inventory_active;
 
@@ -324,7 +326,7 @@ namespace UI
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
                 RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(0, 430 - (i + 1) * height - i * padding);
+                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + 1) * height - i * padding);
                 rt_icon.anchoredPosition = new Vector2(-200, 0);
                 rt_text.anchoredPosition = new Vector2(110, -15);
 
@@ -364,7 +366,7 @@ namespace UI
                 RectTransform rt_icon = icon.GetComponent<RectTransform>();
                 RectTransform rt_text = description.GetComponent<RectTransform>();
 
-                rt_container.anchoredPosition = new Vector2(0, 430 - (i + j + 1) * height - (i + j) * padding);
+                rt_container.anchoredPosition = new Vector2(-25, 430 - (i + j + 1) * height - (i + j) * padding);
                 rt_icon.anchoredPosition = new Vector2(-200, 0);
                 rt_text.anchoredPosition = new Vector2(110, -15);
 

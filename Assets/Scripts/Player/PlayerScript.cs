@@ -86,6 +86,8 @@ namespace Player
         public float anim_mul_move_speed = 13;
         public float attack_anim_time = 1.333f;
         public float cast_anim_speed = 2.333f;
+        float footstep_cooldown = 0.1f;
+        float footstep_cooldown_left;
         /* effects */
         public GameObject pickup_audio_dummy;
         public List<AudioClip> sounds;
@@ -96,6 +98,7 @@ namespace Player
         public GameObject level_up_prefab;
         GameObject level_up_effect;
         Renderer wizard_renderer;
+        FootStepsScript footsteps;
 
         Vector3 halfway_up_vec;
         public float level_up_anim_t;
@@ -159,6 +162,15 @@ namespace Player
             }
             if (ui_active_spell != null) {
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
+            }
+            /* effects */
+            foreach (Transform t in transform) {
+                if (t.gameObject.name == "AudioDummyPlayerFootSteps") {
+                    footsteps = t.GetComponent<FootStepsScript>();
+                }
+            }
+            if (footsteps == null) {
+                Debug.LogError("Player: no footsteps audio source");
             }
 
             SyncStats();
@@ -382,15 +394,16 @@ namespace Player
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            // Vector3 normal = hit.normal;
-            // if (normal.y >= 0.9 && is_falling) {
-                // did_land = true;
-                // is_falling = false;
-            // }
+            if (hit.normal.y >= 0.9 && fall_time > 0.1f) {
+                footsteps.PlayRandom();
+            }
         }
 
         void ChooseAnimation()
         {
+            AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
+            footstep_cooldown_left -= Time.deltaTime;
+
             if (hit_time_left > 0) {
                 animator.Play("GetHit");
             }
@@ -413,9 +426,31 @@ namespace Player
                 if (did_sprint) {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 2);
                     animator.Play("BattleRunForward");
+                    if (footstep_cooldown_left <= 0) {
+                        float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                        if (anim_time_normed > 0.57f && anim_time_normed < 0.63f) {
+                            footsteps.PlayRandom();
+                            footstep_cooldown_left = footstep_cooldown;
+                        }
+                        if (anim_time_normed > 0.07f || anim_time_normed < 0.13f) {
+                            footsteps.PlayRandom();
+                            footstep_cooldown_left = footstep_cooldown;
+                        }
+                    }
                 } else {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz);
                     animator.Play("WalkForward");
+                    if (footstep_cooldown_left <= 0) {
+                        float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                        if (anim_time_normed > 0.47f && anim_time_normed < 0.53f) {
+                            footsteps.PlayRandom();
+                            footstep_cooldown_left = footstep_cooldown;
+                        }
+                        if (anim_time_normed > 0.97f || anim_time_normed < 0.03f) {
+                            footsteps.PlayRandom();
+                            footstep_cooldown_left = footstep_cooldown;
+                        }
+                    }
                 }
             }
 

@@ -127,6 +127,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6654831002460326101, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: audio_clips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654831002460326101, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: 'audio_clips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
+    - target: {fileID: 6654831002460326101, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: 'audio_clips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 468e833a16ac45d10aa26d371f097f5c, type: 3}
+    - target: {fileID: 7158738073303018196, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: m_Volume
+      value: 0.524
+      objectReference: {fileID: 0}
     - target: {fileID: 8336603331124274194, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
       propertyPath: m_Name
       value: UI Menu
