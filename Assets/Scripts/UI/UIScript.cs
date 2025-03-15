@@ -157,7 +157,7 @@ namespace UI
             item_tooltip.SetActive(false);
 
             hp_info.text = string.Format("{0}/{1} HP", player_stats.hp, player_stats.hp_max);
-            xp_info.text = string.Format("{0}/{1} XP [Level {2}]", player_stats.xp, player_stats.xp_max, player_stats.level);
+            xp_info.text = string.Format("{0}/{1} XP", player_stats.xp, player_stats.xp_max, player_stats.level);
             player_hp_bar.value = (float)player_stats.hp / player_stats.hp_max;
             player_xp_bar.value = (float)player_stats.xp / player_stats.xp_max;
 
