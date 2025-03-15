@@ -1271,7 +1271,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -330, y: -370}
-  m_SizeDelta: {x: 130, y: 260}
+  m_SizeDelta: {x: 134, y: 268}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1045015207658136370
 MonoBehaviour:
@@ -2301,7 +2301,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -320, y: -370}
-  m_SizeDelta: {x: 130, y: 260}
+  m_SizeDelta: {x: 134, y: 268}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4911380456442945223
 MonoBehaviour:
@@ -3832,12 +3832,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8690539129468334860}
-  - {fileID: 1468556424952056246}
   - {fileID: 8602001811142995667}
   - {fileID: 8027843545973476729}
   - {fileID: 5769958333259582247}
   - {fileID: 2509530440958141966}
+  - {fileID: 8690539129468334860}
+  - {fileID: 1468556424952056246}
   - {fileID: 6825656819054890403}
   - {fileID: 2644698724015908911}
   - {fileID: 1297544854840958406}
