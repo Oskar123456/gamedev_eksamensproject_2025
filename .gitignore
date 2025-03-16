@@ -74,3 +74,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 [Tt]hird[Pp]arty
+
+.vscode
+.idea
