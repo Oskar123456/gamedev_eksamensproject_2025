@@ -51,7 +51,7 @@
   - [Shopkeeper](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/stylized-npc-peasant-nolant-demo-252440)
   - [Skeleton](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/mini-simple-characters-skeleton-free-demo-262897)
   - [Footsteps](https://assetstore.unity.com/packages/audio/sound-fx/foley/footsteps-essentials-189879)
-  - [Cursors](https://assetstore.unity.com/packages/2d/gui/icons/pixel-cursors-109256)
+  - [Cursors](https://assetstore.unity.com/packages/2d/gui/icons/pixel-cursors-109256) (NOTE: Change cursor icons' texture type to "Cursor")
 
 ## TODO:
 
