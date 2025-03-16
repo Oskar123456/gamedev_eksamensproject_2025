@@ -323,8 +323,9 @@ MonoBehaviour:
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
   attack_anim_time: 1.333
-  attack_thrust_anim_time: 0.95
+  attack_thrust_anim_time: 0.99
   cast_anim_speed: 1.4
+  pickup_anim_time: 1.667
   pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
   - {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
@@ -526,6 +527,9 @@ MonoBehaviour:
   invulnerable: 0
   stun_lock: 0.15
   move_speed_bonus: 0
+  pickup_range: 5
+  pickup_time: 0.25
+  pickup_speed: 1
   skill_points: 0
   attack_damage: 0
   attack_damage_normal: 0
@@ -3101,8 +3105,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4180b6d0a6a4e71f1b3c56dff776edfe, type: 3}
---- !u!4 &6743233589253308808 stripped
-Transform:
+--- !u!224 &6743233589253308808 stripped
+RectTransform:
   m_CorrespondingSourceObject: {fileID: 4785510040089249244, guid: 4180b6d0a6a4e71f1b3c56dff776edfe, type: 3}
   m_PrefabInstance: {fileID: 2305081314958165076}
   m_PrefabAsset: {fileID: 0}

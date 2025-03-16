@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loot_button_prefab: {fileID: 220773235339088963, guid: 02592564c2705a408a0bebe764557e04, type: 3}
+  pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
 --- !u!33 &136223216852762423
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -136,7 +137,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: abdbbfd33a46f4549987385f85c536b5, type: 3}
   m_Resource: {fileID: 8300000, guid: abdbbfd33a46f4549987385f85c536b5, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.406
+  m_Volume: 0.212
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -28,6 +28,7 @@ namespace Loot
     public class DropScript : MonoBehaviour
     {
         public GameObject loot_button_prefab;
+        public GameObject pickup_audio_dummy;
 
         public Item item;
 
@@ -75,7 +76,7 @@ namespace Loot
 
         public void OnPickUp()
         {
-            GetComponent<AudioSource>().Play();
+            Instantiate(pickup_audio_dummy, transform.position, Quaternion.identity);
             player.SendMessage("OnPickUp", item, SendMessageOptions.DontRequireReceiver);
             Destroy(canvas);
             Destroy(gameObject);

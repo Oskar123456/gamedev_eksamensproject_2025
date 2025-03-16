@@ -33,7 +33,9 @@ public class PlayerStats : MonoBehaviour
     public bool invulnerable;
     public float stun_lock = 0.15f;
     public float move_speed_bonus = 0;
-    public float pickup_range = 5;
+    public float pickup_range = 3;
+    public float pickup_time = 0.25f;
+    public float pickup_speed = 1;
 
     public List<Item> items = new List<Item>();
 

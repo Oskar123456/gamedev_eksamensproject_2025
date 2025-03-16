@@ -99,8 +99,8 @@ namespace Player
         public float anim_mul_move_speed = 13;
         public float attack_anim_time = 1.333f;
         public float attack_thrust_anim_time = 1f;
-        public float cast_anim_speed = 2.333f;
-        public float pickup_anim_speed = 1f;
+        public float cast_anim_speed = 1.4f;
+        public float pickup_anim_time = 1.667f;
         float footstep_cooldown = 0.1f;
         float footstep_cooldown_left;
         /* effects */
@@ -289,6 +289,8 @@ namespace Player
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
 
             ChooseAnimation();
+
+            // Debug.Log("is_picking_up: " + is_picking_up + " pickup_time_left: " + pickup_time_left);
         }
 
         void LateUpdate()
@@ -352,7 +354,7 @@ namespace Player
 
             is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_floor;
 
-            if (is_falling || is_attacking || is_casting) {
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -366,7 +368,7 @@ namespace Player
                 is_following_object = true;
                 is_moving_to_point = false;
                 follow_object = enemy;
-                Debug.Log("follow_object: " + follow_object);
+                // Debug.Log("follow_object: " + follow_object);
             }
 
             else if (is_mouse_hover_loot) {
@@ -374,7 +376,7 @@ namespace Player
                 is_moving_to_point = false;
                 LootButtonOverlayScript lbos = loot.GetComponent<LootButtonOverlayScript>();
                 follow_object = lbos.loot_object;
-                Debug.Log("follow_object: " + follow_object);
+                // Debug.Log("follow_object: " + follow_object);
             }
 
             else if (is_mouse_hover_floor) {
@@ -399,7 +401,7 @@ namespace Player
 
         void PollAttack()
         {
-            if (!is_attacking && !is_casting) {
+            if (!is_attacking && !is_casting && !is_picking_up) {
                 if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl)) {
                     PointAtMouse();
                     Attack();
@@ -431,7 +433,7 @@ namespace Player
 
         void PollSpell()
         {
-            if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
+            if (!is_casting && !is_attacking && !is_picking_up && cast_cooldown_left <= 0) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
                     PointAtMouse();
                     cast_time_left = cast_anim_speed / stats.spell_speed;
@@ -483,19 +485,32 @@ namespace Player
 
         void PollMisc()
         {
-            if (is_falling || is_attacking || is_casting) {
+            pickup_time_left -= Time.deltaTime;
+            if (pickup_time_left > 0) {
+                is_picking_up = true;
+            } else {
+                is_picking_up = false;
+            }
+
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
             if (is_following_object && follow_object.tag == "Loot") {
-                float dist = Vector3.Distance(transform.position, follow_object.transform.position);
-                if (dist <= stats.pickup_range) {
+                Vector3 diff_vec = (follow_object.transform.position) - transform.position;
+                diff_vec.y = 0;
+
+                if (diff_vec.magnitude <= stats.pickup_range) {
+                    transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
                     DropScript script = follow_object.GetComponent<DropScript>();
                     script.OnPickUp();
                     is_following_object = false;
                     is_moving_to_point = false;
                     did_pickup = true;
                     is_picking_up = true;
+                    pickup_time_left = stats.pickup_time / stats.pickup_speed;
+                    animator.SetFloat("pickup_speed", pickup_anim_time / pickup_time_left);
+                    // Debug.Log("pickup_time_left: " + pickup_time_left);
                 }
             }
         }
@@ -591,6 +606,10 @@ namespace Player
                 animator.Play("VictoryStart");
             }
 
+            else if (is_picking_up) {
+                animator.Play("PickUp");
+            }
+
             else if (is_falling) {
                 if (d_y < 0 && fall_time > 0.1f) { animator.Play("JumpAir"); }
                 else if (d_y > 0 && fall_time < 0.2f) { animator.Play("JumpStart"); }
@@ -639,7 +658,6 @@ namespace Player
             is_mouse_hover_ui = false;
             is_mouse_hover_enemy = false;
             is_mouse_hover_floor = false;
-            is_picking_up = false;
             did_cast = false;
             did_jump = false;
             did_move = false;
@@ -680,6 +698,8 @@ namespace Player
                 audio_source.Play();
                 effect_blink_left_t = effect_blink_t;
                 hit_time_left = stats.stun_lock;
+                pickup_time_left = 0;
+                is_picking_up = false;
             }
 
             GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
@@ -805,8 +825,6 @@ namespace Player
 
         void OnPickUp(Item item)
         {
-            Instantiate(pickup_audio_dummy, transform.position + halfway_up_vec, Quaternion.identity, transform);
-
             if (item.is_consumed_on_pickup) {
                 GameObject txt = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
                 txt.transform.localScale = txt.transform.localScale;
@@ -838,7 +856,8 @@ namespace Player
             else {
                 item.Drop(transform.position + (GameState.rng.Next(10) / 10.0f) * transform.forward
                         + (GameState.rng.Next(10) / 10.0f) * transform.right);
-                Debug.Log("No room, dropping " + item.name);
+                GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+                txt.GetComponent<TextMeshProUGUI>().text = string.Format("no inventory space");
                 ui_script.Sync();
                 ui_script.ShowInventory();
             }
