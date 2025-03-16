@@ -85,6 +85,7 @@ namespace Player
         /* animator parameters */
         public float anim_mul_move_speed = 13;
         public float attack_anim_time = 1.333f;
+        public float attack_thrust_anim_time = 1f;
         public float cast_anim_speed = 2.333f;
         float footstep_cooldown = 0.1f;
         float footstep_cooldown_left;
@@ -287,9 +288,10 @@ namespace Player
         {
             if (!is_attacking && !is_casting) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
-                    attack_time_left = attack_anim_time / stats.attack_speed;
+                    float anim_time = (stats.active_attack.stance == Stance.Slash) ? attack_anim_time : attack_thrust_anim_time;
+                    attack_time_left = anim_time / stats.attack_speed;
                     ui_active_attack_cooldown.SetCoolDown(attack_time_left);
-                    animator.SetFloat("attack_speed", attack_anim_time / attack_time_left);
+                    animator.SetFloat("attack_speed", anim_time / attack_time_left);
                     stats.active_attack.Use(transform);
                     did_attack = true;
                     is_attacking = true;
@@ -409,7 +411,11 @@ namespace Player
             }
 
             else if (is_attacking) {
-                animator.Play("Attack04");
+                if (stats.active_attack.stance == Stance.Slash) {
+                    animator.Play("Attack04");
+                } else {
+                    animator.Play("Attack01");
+                }
             }
 
             else if (is_casting) {

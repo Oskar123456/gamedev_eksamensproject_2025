@@ -322,6 +322,7 @@ MonoBehaviour:
   a_minus_horizontal_fall_factor: 0.01
   anim_mul_move_speed: 25
   attack_anim_time: 1.333
+  attack_thrust_anim_time: 0.95
   cast_anim_speed: 1.4
   pickup_audio_dummy: {fileID: 7201156227621268438, guid: f0038b2cbac609bc88910b1d4543912e, type: 3}
   sounds:
@@ -520,6 +521,7 @@ MonoBehaviour:
   gold: 0
   hp: 100
   hp_max: 100
+  defense: 0
   invulnerable: 0
   stun_lock: 0.15
   move_speed_bonus: 0

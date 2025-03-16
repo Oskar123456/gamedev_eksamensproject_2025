@@ -76,6 +76,7 @@ public class GameData : MonoBehaviour
         attack_list.Add(new SlashNormal());
         attack_list.Add(new SlashIce());
         attack_list.Add(new MeleeChargeAttack());
+        attack_list.Add(new MagicThrust());
 
         spell_list = new List<Spell>();
         spell_list.Add(new BlizzardSpell());

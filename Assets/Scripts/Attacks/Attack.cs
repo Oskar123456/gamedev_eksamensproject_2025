@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using Spells;
+using Player;
 using UnityEngine;
 
 namespace Attacks
@@ -24,6 +25,7 @@ namespace Attacks
         public int prefab_index;
         public int sprite_index;
         public string name;
+        public Stance stance = Stance.Slash;
 
         public int level;
 

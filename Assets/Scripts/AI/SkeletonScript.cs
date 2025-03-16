@@ -187,7 +187,6 @@ namespace AI
             normal.y = 0;
 
             if (nma.velocity.magnitude < move_speed_damage_threshold) {
-                Debug.Log("not doing damage at " + nma.velocity.magnitude.ToString() + " speed");
                 float angle = GameState.rng.Next(360);
                 float dist = stats.attack_range;
                 int c = 0;
@@ -209,8 +208,6 @@ namespace AI
                         dist += (float)((int)angle / 360);
                         continue;
                     }
-
-                    Debug.Log("new destination: " + hit_info.point);
 
                     is_fleeing = true;
 

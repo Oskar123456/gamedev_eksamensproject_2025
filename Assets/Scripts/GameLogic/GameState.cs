@@ -71,6 +71,7 @@ public class GameState : MonoBehaviour
         attacks.Add(new SlashNormal());
         attacks.Add(new SlashIce());
         attacks.Add(new MeleeChargeAttack());
+        attacks.Add(new MagicThrust());
     }
 
     void Start()
@@ -127,6 +128,7 @@ public class GameState : MonoBehaviour
         attacks.Add(new SlashNormal());
         attacks.Add(new SlashIce());
         attacks.Add(new MeleeChargeAttack());
+        attacks.Add(new MagicThrust());
 
         ps.learned_attacks.Add(attacks[0]);
         ps.learned_spells.Add(spells[0]);

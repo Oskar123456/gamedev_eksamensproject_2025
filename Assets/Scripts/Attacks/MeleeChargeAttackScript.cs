@@ -58,8 +58,6 @@ namespace Attacks
             transform.localScale *= 1 + ((stats.scale - 1) / 2);
 
             Destroy(gameObject, stats.duration);
-
-            Debug.Log("duration : " + stats.duration + " scale: " + stats.scale + " pos: " + transform.position);
         }
 
         void Update()
