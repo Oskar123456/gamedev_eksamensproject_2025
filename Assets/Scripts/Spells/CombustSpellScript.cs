@@ -110,6 +110,10 @@ namespace Spells
                 return;
             }
 
+            if (collider.gameObject.tag == "Ignore") {
+                return;
+            }
+
             was_damaged.Add(collider.gameObject);
 
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;

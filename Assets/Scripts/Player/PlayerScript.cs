@@ -26,6 +26,7 @@ using UnityEngine.UI;
 
 namespace Player
 {
+
     public class PlayerScript : MonoBehaviour
     {
         PlayerStats stats;
@@ -60,14 +61,20 @@ namespace Player
         bool did_sprint = false;
         bool did_attack = false;
         bool did_cast = false;
+        bool did_pickup = false;
         bool is_attacking = false;
         bool is_casting = false;
+        bool is_picking_up = false;
         bool is_falling = false;
         bool is_mouse_hover_ui = false;
+        bool is_mouse_hover_enemy = false;
+        bool is_mouse_hover_floor = false;
+        bool is_mouse_hover_loot = false;
         /* state parameters */
         float attack_time_left = 0;
         float cast_time_left = 0;
         float cast_cooldown_left = 0;
+        float pickup_time_left = 0;
         float hit_time_left = 0;
         /* movement */
         float move_speed = 0.2f;
@@ -82,11 +89,18 @@ namespace Player
         public float a_minus_horizontal_fall_factor = 0.01f;
         float fall_time;
         float pitch_0, pitch;
+
+        GameObject hover_object;
+        GameObject follow_object;
+        Vector3 destination_point;
+        bool is_following_object = false;
+        bool is_moving_to_point = false;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
         public float attack_anim_time = 1.333f;
         public float attack_thrust_anim_time = 1f;
-        public float cast_anim_speed = 2.333f;
+        public float cast_anim_speed = 1.4f;
+        public float pickup_anim_time = 1.667f;
         float footstep_cooldown = 0.1f;
         float footstep_cooldown_left;
         /* effects */
@@ -200,6 +214,10 @@ namespace Player
                 }
             }
 
+            if (follow_object == null) {
+                is_following_object = false;
+            }
+
             if (hit_time_left <= 0) {
                 is_mouse_hover_ui = ui_test.IsPointerOverUIElement();
                 PollKeys();
@@ -213,6 +231,7 @@ namespace Player
                 attack_time_left -= Time.deltaTime;
                 cast_time_left -= Time.deltaTime;
                 cast_cooldown_left -= Time.deltaTime;
+                pickup_time_left -= Time.deltaTime;
                 if (cast_time_left > 0) {
                     is_casting = true;
                 } else {
@@ -223,6 +242,36 @@ namespace Player
                 } else {
                     is_attacking = false;
                 }
+                if (pickup_time_left > 0) {
+                    is_picking_up = true;
+                } else {
+                    is_picking_up = false;
+                }
+            }
+
+            if (is_following_object) {
+                Vector3 dest = destination_point;
+                Vector3 src = transform.position;
+                dest.y = 0;
+                src.y = 0;
+                Vector3 diff_vec = dest - src;
+                transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                pitch = transform.rotation.eulerAngles.y;
+                did_move = true;
+            } else if (is_moving_to_point) {
+                Vector3 dest = destination_point;
+                Vector3 src = transform.position;
+                dest.y = 0;
+                src.y = 0;
+                Vector3 diff_vec = dest - src;
+                if (diff_vec.magnitude < 0.5f) {
+                    is_moving_to_point = false;
+                } else {
+                    diff_vec.y = 0;
+                    transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                    pitch = transform.rotation.eulerAngles.y;
+                    did_move = true;
+                }
             }
 
             UpdateVelocity();
@@ -231,9 +280,17 @@ namespace Player
                 char_ctrl.Move(trf.up * 0.001f * Time.deltaTime);
             }
 
+            if (is_mouse_hover_enemy) {
+                Cursor.SetCursor(GameState.cursor_attack, Vector2.zero, CursorMode.Auto);
+            } else {
+                Cursor.SetCursor(GameState.cursor_default, Vector2.zero, CursorMode.Auto);
+            }
+
             char_ctrl.Move(transform.forward * d_xz + Vector3.up * d_y);
 
             ChooseAnimation();
+
+            // Debug.Log("is_picking_up: " + is_picking_up + " pickup_time_left: " + pickup_time_left);
         }
 
         void LateUpdate()
@@ -282,23 +339,88 @@ namespace Player
                 camera_dist -= scroll_speed * mwheel;
                 UpdateCam();
             }
+
+            RaycastHit hit_info_enemy;
+            RaycastHit hit_info_floor;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            bool hit_enemy = Physics.Raycast(ray, out hit_info_enemy, 500, 1 << 10);
+            bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 6);
+
+            is_mouse_hover_loot  = ui_script.is_ui_object_hovered && ui_script.current_ui_object_hovered.tag == "Loot";
+            GameObject loot = (is_mouse_hover_loot) ? ui_script.current_ui_object_hovered : null;
+
+            is_mouse_hover_enemy = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && hit_enemy;
+            GameObject enemy = (hit_enemy) ? hit_info_enemy.collider.transform.parent.gameObject : null;
+
+            is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_floor;
+
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
+                return;
+            }
+
+            if (!Input.GetMouseButton(0)) {
+                return;
+            }
+
+            destination_point = (hit_floor) ? hit_info_floor.point : Vector3.zero;
+
+            if (is_mouse_hover_enemy) {
+                is_following_object = true;
+                is_moving_to_point = false;
+                follow_object = enemy;
+                // Debug.Log("follow_object: " + follow_object);
+            }
+
+            else if (is_mouse_hover_loot) {
+                is_following_object = true;
+                is_moving_to_point = false;
+                LootButtonOverlayScript lbos = loot.GetComponent<LootButtonOverlayScript>();
+                follow_object = lbos.loot_object;
+                // Debug.Log("follow_object: " + follow_object);
+            }
+
+            else if (is_mouse_hover_floor) {
+                is_following_object = false;
+                is_moving_to_point = true;
+                // Debug.Log("destination_point: " + destination_point.ToString());
+            }
+        }
+
+        void Attack()
+        {
+            float anim_time = (stats.active_attack.stance == Stance.Slash) ? attack_anim_time : attack_thrust_anim_time;
+            attack_time_left = anim_time / stats.attack_speed;
+            ui_active_attack_cooldown.SetCoolDown(attack_time_left);
+            animator.SetFloat("attack_speed", anim_time / attack_time_left);
+            stats.active_attack.Use(transform);
+            did_attack = true;
+            is_attacking = true;
+            is_following_object = false;
+            is_moving_to_point = false;
         }
 
         void PollAttack()
         {
-            if (!is_attacking && !is_casting) {
-                if (!is_mouse_hover_ui && Input.GetMouseButton(0)) {
-                    float anim_time = (stats.active_attack.stance == Stance.Slash) ? attack_anim_time : attack_thrust_anim_time;
-                    attack_time_left = anim_time / stats.attack_speed;
-                    ui_active_attack_cooldown.SetCoolDown(attack_time_left);
-                    animator.SetFloat("attack_speed", anim_time / attack_time_left);
-                    stats.active_attack.Use(transform);
-                    did_attack = true;
-                    is_attacking = true;
-                    return;
-                } else {
-                    return;
+            if (!is_attacking && !is_casting && !is_picking_up) {
+                if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl)) {
+                    PointAtMouse();
+                    Attack();
+                } else if (is_following_object && follow_object.tag == "Enemy") {
+                    CapsuleCollider cap_coll = follow_object.GetComponent<CapsuleCollider>();
+                    if (cap_coll == null) {
+                        return;
+                    }
+                    Vector3 dest = cap_coll.ClosestPoint(transform.position);
+                    Vector3 src = transform.position;
+                    dest.y = 0;
+                    src.y = 0;
+                    Vector3 diff_vec = dest - src;
+                    if (diff_vec.magnitude <= stats.active_attack.range) {
+                        transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                        Attack();
+                    }
                 }
+                return;
             }
 
             attack_time_left -= Time.deltaTime;
@@ -311,8 +433,9 @@ namespace Player
 
         void PollSpell()
         {
-            if (!is_casting && !is_attacking && cast_cooldown_left <= 0) {
+            if (!is_casting && !is_attacking && !is_picking_up && cast_cooldown_left <= 0) {
                 if (!is_mouse_hover_ui && Input.GetMouseButton(1)) {
+                    PointAtMouse();
                     cast_time_left = cast_anim_speed / stats.spell_speed;
                     cast_cooldown_left = stats.active_spell.cooldown;
                     ui_active_spell_cooldown.SetCoolDown(cast_cooldown_left);
@@ -320,6 +443,8 @@ namespace Player
                     did_cast = true;
                     is_casting = true;
                     stats.active_spell.Use(transform);
+                    is_following_object = false;
+                    is_moving_to_point = false;
                     return;
                 } else {
                     return;
@@ -335,11 +460,64 @@ namespace Player
             }
         }
 
-        void PollMisc() {}
+        void PointAtMouse()
+        {
+            if (is_falling) {
+                return;
+            }
+
+            RaycastHit hit_info;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out hit_info, 200, 1 << 8)) {
+                return;
+            }
+
+            Vector3 t_pos = transform.position;
+            Vector3 h_pos = hit_info.point;
+            t_pos.y = 0;
+            h_pos.y = 0;
+            Vector3 normal = h_pos - t_pos;
+            transform.rotation = Quaternion.FromToRotation(Vector3.forward, normal);
+
+//             point_hover_on_plane = hit_info.point;
+//             dist_to_hover_on_plane = Vector3.Distance(t_pos, h_pos);
+        }
+
+        void PollMisc()
+        {
+            pickup_time_left -= Time.deltaTime;
+            if (pickup_time_left > 0) {
+                is_picking_up = true;
+            } else {
+                is_picking_up = false;
+            }
+
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
+                return;
+            }
+
+            if (is_following_object && follow_object.tag == "Loot") {
+                Vector3 diff_vec = (follow_object.transform.position) - transform.position;
+                diff_vec.y = 0;
+
+                if (diff_vec.magnitude <= stats.pickup_range) {
+                    transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                    DropScript script = follow_object.GetComponent<DropScript>();
+                    script.OnPickUp();
+                    is_following_object = false;
+                    is_moving_to_point = false;
+                    did_pickup = true;
+                    is_picking_up = true;
+                    pickup_time_left = stats.pickup_time / stats.pickup_speed;
+                    animator.SetFloat("pickup_speed", pickup_anim_time / pickup_time_left);
+                    // Debug.Log("pickup_time_left: " + pickup_time_left);
+                }
+            }
+        }
 
         void PollMovement()
         {
-            if (is_falling || is_attacking || is_casting) {
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -391,13 +569,19 @@ namespace Player
             if (did_move) {
                 pitch += 45f;
                 trf.eulerAngles = new Vector3(0, pitch, 0);
+                is_following_object = false;
+                is_moving_to_point = false;
             }
+
+            did_move = did_move;
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (hit.normal.y >= 0.9 && fall_time > 0.1f) {
+            if (hit.normal.y >= 0.9f && fall_time > 0.1f) {
                 footsteps.PlayRandom();
+            }
+            if (hit.normal.y < 0.1f) {
             }
         }
 
@@ -420,6 +604,10 @@ namespace Player
 
             else if (is_casting) {
                 animator.Play("VictoryStart");
+            }
+
+            else if (is_picking_up) {
+                animator.Play("PickUp");
             }
 
             else if (is_falling) {
@@ -468,11 +656,14 @@ namespace Player
         void ResetState()
         {
             is_mouse_hover_ui = false;
+            is_mouse_hover_enemy = false;
+            is_mouse_hover_floor = false;
             did_cast = false;
             did_jump = false;
             did_move = false;
             did_attack = false;
             did_sprint = false;
+            did_pickup = false;
         }
 
         void UpdateCam()
@@ -507,6 +698,8 @@ namespace Player
                 audio_source.Play();
                 effect_blink_left_t = effect_blink_t;
                 hit_time_left = stats.stun_lock;
+                pickup_time_left = 0;
+                is_picking_up = false;
             }
 
             GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
@@ -582,7 +775,7 @@ namespace Player
             if (!is_falling) {
                 v_vertical_0 = 0;
                 fall_time = 0;
-                if (did_attack || did_cast) {
+                if (did_attack || did_cast || did_pickup) {
                     v_horizontal_0 = 0;
                 }
             } else {
@@ -632,8 +825,6 @@ namespace Player
 
         void OnPickUp(Item item)
         {
-            Instantiate(pickup_audio_dummy, transform.position + halfway_up_vec, Quaternion.identity, transform);
-
             if (item.is_consumed_on_pickup) {
                 GameObject txt = Instantiate(level_up_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
                 txt.transform.localScale = txt.transform.localScale;
@@ -665,7 +856,8 @@ namespace Player
             else {
                 item.Drop(transform.position + (GameState.rng.Next(10) / 10.0f) * transform.forward
                         + (GameState.rng.Next(10) / 10.0f) * transform.right);
-                Debug.Log("No room, dropping " + item.name);
+                GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
+                txt.GetComponent<TextMeshProUGUI>().text = string.Format("no inventory space");
                 ui_script.Sync();
                 ui_script.ShowInventory();
             }
@@ -694,4 +886,7 @@ namespace Player
             }
         }
     }
+
 }
+
+

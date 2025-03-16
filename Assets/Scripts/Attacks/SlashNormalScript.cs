@@ -117,6 +117,10 @@ namespace Attacks
                 return;
             }
 
+            if (stats.attacker == null || collider.gameObject.tag == "Ignore") {
+                return;
+            }
+
             Vector3 halfway_up_vec = Vector3.up * collider.gameObject.transform.lossyScale.y / 2.0f;
 
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position + halfway_up_vec, Quaternion.identity);
@@ -145,6 +149,7 @@ namespace Attacks
             duration_base = 1; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
             scale_base = 1; scale_per_level = 0.025f;
+            range_base = 1;
             damage_type = DamageType.Normal;
         }
 
@@ -152,6 +157,7 @@ namespace Attacks
         {
             damage   = (damage_per_level * level + damage_base) + ps.attack_damage + ps.attack_damage_normal;
             scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
+            range    = range_base        * (1 + ((ps.attack_scale - 1) / 2));
             duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }

@@ -34,6 +34,7 @@ namespace Attacks
         public float cooldown, cooldown_base, cooldown_per_level;
         public float scale, scale_base, scale_per_level;
         public DamageType damage_type;
+        public float range, range_base;
 
         public string description = "no description";
 
