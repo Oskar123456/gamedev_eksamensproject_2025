@@ -7,11 +7,12 @@
 ### Controls
 
   - R : [R]estart
+  - Left Mouse Button : Move to location / Attack enemy / Pick up loot
+  - Right Mouse Button: Cast Spell
+  - Left Ctrl : Attack in Place
   - WASD : Movement
   - Shift : Sprint
   - Space : Jump
-  - Left Mouse Button: Attack
-  - Right Mouse Button: Cast Spell
   - 1 : Drink Potion
   - Number Keys : Switch Active Attack
   - [Left-Shift+]Number Keys : Switch Active Spell
