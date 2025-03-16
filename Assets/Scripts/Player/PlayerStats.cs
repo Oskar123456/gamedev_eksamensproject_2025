@@ -29,6 +29,7 @@ public class PlayerStats : MonoBehaviour
 
     public int hp = 100;
     public int hp_max = 100;
+    public int defense = 0;
     public bool invulnerable;
     public float stun_lock = 0.15f;
     public float move_speed_bonus = 0;
@@ -111,6 +112,7 @@ public class PlayerStats : MonoBehaviour
 
         this.hp = ps.hp;
         this.hp_max = ps.hp_max;
+        this.defense = ps.defense;
         this.invulnerable = ps.invulnerable;
         this.stun_lock = ps.stun_lock;
         this.move_speed_bonus = ps.move_speed_bonus;

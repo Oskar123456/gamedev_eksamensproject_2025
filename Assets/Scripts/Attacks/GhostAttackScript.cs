@@ -61,8 +61,6 @@ namespace Attacks
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
-            Debug.Log("delay: " + delay + " dur: " + effect_duration);
-
             offs_start *= stats.scale;
             offs_end *= stats.scale;
 

@@ -355,8 +355,8 @@ namespace UI
             stats_spell_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
                     player_stats.spell_damage, player_stats.spell_damage_fire, player_stats.spell_damage_ice,
                     Environment.NewLine, ((int)(player_stats.spell_scale * 100)), ((int)(player_stats.spell_speed * 100)));
-            stats_defense_text.text = string.Format("HP: {0}/{1}{2}Hit Recovery: {3}",
-                    player_stats.hp, player_stats.hp_max, Environment.NewLine, player_stats.stun_lock);
+            stats_defense_text.text = string.Format("HP: {0}/{1}   Defense: {2}{3}Hit Recovery: {4}",
+                    player_stats.hp, player_stats.hp_max, player_stats.defense, Environment.NewLine, player_stats.stun_lock);
             stats_util_text.text = string.Format("Movement Speed: {0}%", (100 + (int)(player_stats.move_speed_bonus * 100)));
 
             skill_tree_free_text.text = player_stats.skill_points.ToString();
@@ -383,12 +383,6 @@ namespace UI
                 debug_info.text = string.Format("player_pos: {0} | fps: {1: .00}",
                     player_trf.position.ToString(), fps_avg / 60.0f);
             }
-
-            if (player_trf.hasChanged) {
-                player_info.text = string.Format("stats: damage: {0} | attack-speed/-scale: {1: .00}/{2: .00}",
-                    player_stats.attack_damage, player_stats.attack_speed, player_stats.attack_scale);
-            }
-
         }
 
         public void PlaySwapSound()

@@ -488,17 +488,28 @@ namespace Player
 
         void TakeDamage(int damage)
         {
-            if (stats.invulnerable)
+            if (stats.invulnerable) {
                 return;
-            audio_source.clip = sounds[3];
-            audio_source.Play();
-            stats.hp -= damage;
-            effect_blink_left_t = effect_blink_t;
-            hit_time_left = stats.stun_lock;
+            }
+
+            int d = Math.Max(damage - stats.defense, 0);
+
+            stats.hp -= d;
+
+            if (d > 0) {
+                audio_source.clip = sounds[3];
+                audio_source.Play();
+                effect_blink_left_t = effect_blink_t;
+                hit_time_left = stats.stun_lock;
+            }
 
             GameObject txt = Instantiate(bad_text_prefab, Vector3.zero, Quaternion.identity, GameObject.Find("Overlay").GetComponent<Transform>());
-            txt.transform.localScale = txt.transform.localScale;
-            txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", damage);
+
+            if (d <= 0) {
+                txt.GetComponent<TextMeshProUGUI>().text = string.Format("blocked");
+            } else {
+                txt.GetComponent<TextMeshProUGUI>().text = string.Format("-{0} hp", d);
+            }
         }
 
         void OnTriggerEnter(Collider collider)

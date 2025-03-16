@@ -83,14 +83,50 @@ public class GameData : MonoBehaviour
         spell_list.Add(new CombustSpell());
 
         item_list = new List<Item>();
+
         item_list.Add(new Gold());
         item_list.Add(new Staff());
         item_list.Add(new Axe());
         item_list.Add(new SteelAxe());
+        item_list.Add(new AssassinDagger());
+        item_list.Add(new BronzeDagger());
+        item_list.Add(new MageStaff());
+        item_list.Add(new WizardStaff());
+        item_list.Add(new Mace());
+        item_list.Add(new VikingAxe());
+        item_list.Add(new InfantrySword());
+
         item_list.Add(new LeatherArmor());
+        item_list.Add(new ScoutArmor());
+        item_list.Add(new BanditArmor());
+        item_list.Add(new GreyKnightArmor());
+        item_list.Add(new ManticoreArmor());
+        item_list.Add(new DarkMountainArmor());
+        item_list.Add(new BattleGuardArmor());
+        item_list.Add(new RoyalTunicArmor());
+
         item_list.Add(new LeatherHelmet());
+        item_list.Add(new ScoutHelmet());
+        item_list.Add(new HawkHelmet());
+        item_list.Add(new KnightHelmet());
+        item_list.Add(new HighKnightHelmet());
+        item_list.Add(new ManticoreHelmet());
+        item_list.Add(new BattleGuardHelmet());
+        item_list.Add(new DarkMountainHelmet());
+
         item_list.Add(new LeatherBoots());
+        item_list.Add(new BanditBoots());
+        item_list.Add(new GreyKnightBoots());
+        item_list.Add(new ManticoreBoots());
+        item_list.Add(new BattleGuardBoots());
+        item_list.Add(new DarkMountainBoots());
+        item_list.Add(new ScoutBoots());
+
         item_list.Add(new Amulet());
+        item_list.Add(new BronzeRing());
+        item_list.Add(new SilverRing());
+        item_list.Add(new GoldRing());
+
         item_list.Add(new HealthPotion());
 
         item_list_Boss = new List<Item>();

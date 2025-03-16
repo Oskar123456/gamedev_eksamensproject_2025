@@ -109,25 +109,36 @@ namespace Loot
     public class Helmet : Item
     {
         public int hp;
+        public int defense;
+        public float hit_recovery;
 
         public override float Consume(PlayerStats ps) { return 0; }
 
         public override string EffectString()
         {
-            return name + Environment.NewLine + description + Environment.NewLine
-                + string.Format("+{0} hp", hp);
+            string str = name + Environment.NewLine + description + Environment.NewLine + Environment.NewLine;
+
+            str += (hp != 0) ?  string.Format("+{0} to max health", hp) + Environment.NewLine  : "";
+            str += (defense != 0) ?  string.Format("+{0} to defense", defense) + Environment.NewLine  : "";
+            str += (hit_recovery != 0) ?  string.Format("{0: 0.00}s to hit recovery", hit_recovery) + Environment.NewLine  : "";
+
+            return str;
         }
 
         public override void Equip(PlayerStats ps)
         {
             ps.hp_max += hp;
             ps.hp += hp;
+            ps.defense += defense;
+            ps.stun_lock -= hit_recovery;
         }
 
         public override void UnEquip(PlayerStats ps)
         {
             ps.hp_max -= hp;
             ps.hp -= hp;
+            ps.defense -= defense;
+            ps.stun_lock += hit_recovery;
         }
     }
 
@@ -152,13 +163,24 @@ namespace Loot
 
         public override string EffectString()
         {
-            return name + Environment.NewLine + description + Environment.NewLine
-                + string.Format("+{0}/normal:{1}/fire:{2}/cold:{3} attack damage{4}+{5}% attack speed{6}+{7}%AoE{8}+{9}/normal:{10}/fire:{11}/cold:{12} spell damage{13}+{14}% cast speed{15}+{16}%AoE{17}+{18} hp{19}+{20}% movement speed",
-                        attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire,
-                        Environment.NewLine, (int)(100 * attack_speed), Environment.NewLine, (int)(100 * attack_scale), Environment.NewLine,
-                        spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire,
-                        Environment.NewLine, (int)(100 * spell_speed), Environment.NewLine, (int)(100 * spell_scale),
-                        Environment.NewLine, hp, Environment.NewLine, (int)(100 * move_speed_bonus));
+            string str = name + Environment.NewLine + description + Environment.NewLine + Environment.NewLine;
+
+            str += (hp != 0) ? string.Format("+{0} to health", hp) + Environment.NewLine : "";
+            str += (move_speed_bonus != 0) ?  string.Format("+{0}% to movement speed", (int)(100 * move_speed_bonus)) + Environment.NewLine  : "";
+
+            str += (attack_damage != 0) ?  string.Format("+{0} to attack damage", attack_damage) + Environment.NewLine  : "";
+            str += (attack_damage_ice != 0) ?  string.Format("+{0} to attack ice damage", attack_damage_ice) + Environment.NewLine  : "";
+            str += (attack_damage_fire != 0) ?  string.Format("+{0} to attack fire damage", attack_damage_fire) + Environment.NewLine  : "";
+            str += (attack_speed != 0) ?  string.Format("+{0}% to attack speed", (int)(100 * attack_speed)) + Environment.NewLine  : "";
+            str += (attack_scale != 0) ?  string.Format("+{0}% to attack AoE", (int)(100 * attack_scale)) + Environment.NewLine  : "";
+
+            str += (spell_damage != 0) ?  string.Format("+{0} to spell damage", spell_damage) + Environment.NewLine  : "";
+            str += (spell_damage_ice != 0) ?  string.Format("+{0} to spell ice damage", spell_damage_ice) + Environment.NewLine  : "";
+            str += (spell_damage_fire != 0) ?  string.Format("+{0} to spell fire damage", spell_damage_fire) + Environment.NewLine  : "";
+            str += (spell_speed != 0) ?  string.Format("+{0}% to cast speed", (int)(100 * spell_speed)) + Environment.NewLine  : "";
+            str += (spell_scale != 0) ?  string.Format("+{0}% to spell AoE", (int)(100 * spell_scale)) : "";
+
+            return str;
         }
 
         public override void Equip(PlayerStats ps)
@@ -209,25 +231,36 @@ namespace Loot
     public class Armor : Item
     {
         public int hp;
+        public int defense;
+        public float hit_recovery;
 
         public override float Consume(PlayerStats ps) { return 0; }
 
         public override string EffectString()
         {
-            return name + Environment.NewLine + description + Environment.NewLine
-                + string.Format("+{0} hp", hp);
+            string str = name + Environment.NewLine + description + Environment.NewLine + Environment.NewLine;
+
+            str += (hp != 0) ?  string.Format("+{0} to max health", hp) + Environment.NewLine  : "";
+            str += (defense != 0) ?  string.Format("+{0} to defense", defense) + Environment.NewLine  : "";
+            str += (hit_recovery != 0) ?  string.Format("{0: 0.00}s to hit recovery", hit_recovery) + Environment.NewLine  : "";
+
+            return str;
         }
 
         public override void Equip(PlayerStats ps)
         {
             ps.hp_max += hp;
             ps.hp += hp;
+            ps.defense += defense;
+            ps.stun_lock -= hit_recovery;
         }
 
         public override void UnEquip(PlayerStats ps)
         {
             ps.hp_max -= hp;
             ps.hp -= hp;
+            ps.defense -= defense;
+            ps.stun_lock += hit_recovery;
         }
     }
 
@@ -249,12 +282,21 @@ namespace Loot
 
         public override string EffectString()
         {
-            return name + Environment.NewLine + description + Environment.NewLine
-                + string.Format("+{0}/normal:{1}/fire:{2}/cold:{3} attack damage{4}+{5}% attack speed{6}+{7}%AoE{8}+{9}/normal:{10}/fire:{11}/cold:{12} spell damage{13}+{14}% cast speed{15}+{16}%AoE",
-                        attack_damage, attack_damage_normal, attack_damage_ice, attack_damage_fire,
-                        Environment.NewLine, (int)(attack_speed * 100), Environment.NewLine, (int)(attack_scale * 100), Environment.NewLine,
-                        spell_damage, spell_damage_normal, spell_damage_ice, spell_damage_fire,
-                        Environment.NewLine, (int)(spell_speed * 100), Environment.NewLine, (int)(spell_scale * 100));
+            string str = name + Environment.NewLine + description + Environment.NewLine + Environment.NewLine;
+
+            str += (attack_damage > 0) ?  string.Format("+{0} to attack damage", attack_damage) + Environment.NewLine  : "";
+            str += (attack_damage_ice > 0) ?  string.Format("+{0} to attack ice damage", attack_damage_ice) + Environment.NewLine  : "";
+            str += (attack_damage_fire > 0) ?  string.Format("+{0} to attack fire damage", attack_damage_fire) + Environment.NewLine  : "";
+            str += (attack_speed != 0) ?  string.Format("+{0}% to attack speed", (int)(100 * attack_speed)) + Environment.NewLine  : "";
+            str += (attack_scale != 0) ?  string.Format("+{0}% to attack AoE", (int)(100 * attack_scale)) + Environment.NewLine  : "";
+
+            str += (spell_damage > 0) ?  string.Format("+{0} to spell damage", spell_damage) + Environment.NewLine  : "";
+            str += (spell_damage_ice > 0) ?  string.Format("+{0} to spell ice damage", spell_damage_ice) + Environment.NewLine  : "";
+            str += (spell_damage_fire > 0) ?  string.Format("+{0} to spell fire damage", spell_damage_fire) + Environment.NewLine  : "";
+            str += (spell_speed != 0) ?  string.Format("+{0}% to cast speed", (int)(100 * spell_speed)) + Environment.NewLine  : "";
+            str += (spell_scale != 0) ?  string.Format("+{0}% to spell AoE", (int)(100 * spell_scale)) : "";
+
+            return str;
         }
 
         public override void Equip(PlayerStats ps)
@@ -305,8 +347,12 @@ namespace Loot
 
         public override string EffectString()
         {
-            return name + Environment.NewLine + description + Environment.NewLine
-                + string.Format("+{0}% movement speed{1}+{2} hp", (int)(move_speed_bonus * 100), Environment.NewLine, hp);
+            string str = name + Environment.NewLine + description + Environment.NewLine + Environment.NewLine;
+
+            str += (hp != 0) ?  string.Format("+{0} to max health", hp) + Environment.NewLine  : "";
+            str += (move_speed_bonus != 0) ?  string.Format("+{0}% to movement speed", (int)(move_speed_bonus * 100)) + Environment.NewLine  : "";
+
+            return str;
         }
 
         public override void Equip(PlayerStats ps)
