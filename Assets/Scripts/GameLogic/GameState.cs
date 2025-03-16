@@ -32,9 +32,13 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
     public GameObject player_prefab;
+    public Texture2D cursor_default_pre;
+    public Texture2D cursor_attack_pre;
     private static GameObject pf;
 
     public static GameState Instance;
+    public static Texture2D cursor_default;
+    public static Texture2D cursor_attack;
 
     public static Transform player_trf;
 
@@ -62,12 +66,18 @@ public class GameState : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        cursor_attack = cursor_attack_pre;
+        cursor_default = cursor_default_pre;
+
+        Cursor.SetCursor(cursor_default, Vector2.zero, CursorMode.Auto);
+
         pf = player_prefab;
         player_stats_saved = GetComponent<PlayerStats>();
 
         spells.Add(new BlizzardSpell());
         spells.Add(new ForceFieldSpell());
         spells.Add(new CombustSpell());
+        spells.Add(new MeteorSpell());
         attacks.Add(new SlashNormal());
         attacks.Add(new SlashIce());
         attacks.Add(new MeleeChargeAttack());
@@ -125,6 +135,7 @@ public class GameState : MonoBehaviour
         spells.Add(new BlizzardSpell());
         spells.Add(new ForceFieldSpell());
         spells.Add(new CombustSpell());
+        spells.Add(new MeteorSpell());
         attacks.Add(new SlashNormal());
         attacks.Add(new SlashIce());
         attacks.Add(new MeleeChargeAttack());

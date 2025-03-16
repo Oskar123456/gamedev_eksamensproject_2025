@@ -127,6 +127,10 @@ namespace Attacks
                 return;
             }
 
+            if (stats.attacker == null || collider.gameObject.tag == "Ignore") {
+                return;
+            }
+
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.gameObject.transform.position, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.gameObject.transform.position, Quaternion.identity);
             Destroy(hit_effect, 0.4f);
@@ -154,6 +158,7 @@ namespace Attacks
             duration_base = 0.76f; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
             scale_base = 0.1f; scale_per_level = 0.025f;
+            range_base = 3.5f;
             damage_type = DamageType.Normal;
         }
 
@@ -161,6 +166,7 @@ namespace Attacks
         {
             damage   = (damage_per_level * level + damage_base) + ps.attack_damage + ps.attack_damage_ice + ps.attack_damage_fire;
             scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
+            range    = range_base        * (1 + ((ps.attack_scale - 1) / 2));
             duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }
@@ -170,19 +176,6 @@ namespace Attacks
         public override void Use(Transform parent)
         {
             Transform t = parent;
-
-            RaycastHit hit_info;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out hit_info, 200)) {
-                return;
-            }
-
-            Vector3 t_pos = t.position;
-            Vector3 h_pos = hit_info.point;
-            t_pos.y = 0;
-            h_pos.y = 0;
-            Vector3 normal = h_pos - t_pos;
-            parent.rotation = Quaternion.FromToRotation(Vector3.forward, normal);
 
             GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
 

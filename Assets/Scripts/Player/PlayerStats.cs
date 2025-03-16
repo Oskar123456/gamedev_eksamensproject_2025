@@ -33,6 +33,7 @@ public class PlayerStats : MonoBehaviour
     public bool invulnerable;
     public float stun_lock = 0.15f;
     public float move_speed_bonus = 0;
+    public float pickup_range = 5;
 
     public List<Item> items = new List<Item>();
 
@@ -116,6 +117,7 @@ public class PlayerStats : MonoBehaviour
         this.invulnerable = ps.invulnerable;
         this.stun_lock = ps.stun_lock;
         this.move_speed_bonus = ps.move_speed_bonus;
+        this.pickup_range = ps.pickup_range;
 
         this.skill_points = ps.skill_points;
         this.active_attack = ps.active_attack;

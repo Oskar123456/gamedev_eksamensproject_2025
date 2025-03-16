@@ -56,12 +56,13 @@ namespace Loot
             canvas = Instantiate(loot_button_prefab, screen_space_pos, Quaternion.identity, ui_loot_layer.transform);
             canvas_rt = canvas.GetComponent<RectTransform>();
             button = canvas.GetComponent<Button>();
-            button.onClick.AddListener(OnPickUp);
+            // button.onClick.AddListener(OnPickUp);
             button_text = canvas.transform.GetChild(0).gameObject;
             button_text.GetComponent<TextMeshProUGUI>().text = item.name;
             button_text.GetComponent<TextMeshProUGUI>().color = (item.text_color != null) ? item.text_color : Color.white;
             LootButtonOverlayScript lbos = canvas.GetComponent<LootButtonOverlayScript>();
             lbos.item = item;
+            lbos.loot_object = gameObject;
         }
 
         void Update()
@@ -72,7 +73,7 @@ namespace Loot
             canvas_rt.anchoredPosition = screen_space_pos;
         }
 
-        void OnPickUp()
+        public void OnPickUp()
         {
             GetComponent<AudioSource>().Play();
             player.SendMessage("OnPickUp", item, SendMessageOptions.DontRequireReceiver);

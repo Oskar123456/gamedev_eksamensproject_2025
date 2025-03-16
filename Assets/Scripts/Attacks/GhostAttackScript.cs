@@ -122,6 +122,10 @@ namespace Attacks
                 return;
             }
 
+            if (stats.attacker == null || collider.gameObject.tag == "Ignore") {
+                return;
+            }
+
             GameObject hit_effect_sound = Instantiate(audio_hit_dummy, collider.transform.position, Quaternion.identity);
             GameObject hit_effect = Instantiate(hit_effect_prefab, collider.transform.position, Quaternion.identity);
             Destroy(hit_effect, 0.4f);

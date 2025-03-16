@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1084885990874811038}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Haxo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2420120986348977093}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Joint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1526177504660401942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Joint5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 6429271559676662471}
   - component: {fileID: 6579480271621212817}
   - component: {fileID: 2298389879658952442}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Blade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 7443058591406886074}
   - component: {fileID: 5462245419650819149}
   - component: {fileID: 7335335200443127647}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Angel_Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7148150876333017257}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Joint4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7427387873646745681}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Joint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +344,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8248428136304934499}
   - component: {fileID: 3432133570259235944}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Little_Ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 4913831701788634375}
   - component: {fileID: 4415998864865374485}
   - component: {fileID: 6581230397125391957}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Axe_Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7770492396328266935}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: JNTs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 5150683180240612847}
   - component: {fileID: 8442153042912613428}
   - component: {fileID: 6780213813572066291}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Little_Ghost_ZOMbi (2)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -580,6 +580,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7164320330801901500}
+  - {fileID: 7832610203630107468}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7066095812589005233
@@ -724,7 +725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7164320330801901500}
   - component: {fileID: 4691927242116274574}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Little_ghost_ANIMATOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -779,7 +780,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5350811998897375810}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Joint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -802,3 +803,69 @@ Transform:
   - {fileID: 7427387873646745681}
   m_Father: {fileID: 7770492396328266935}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2678015938794268621
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2092316183584630952}
+    m_Modifications:
+    - target: {fileID: 1044321227404126519, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6245918305040585086, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+      propertyPath: m_Name
+      value: EnemyRayTraceTarget
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+--- !u!4 &7832610203630107468 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5303336236915776641, guid: cd1326fc3d31a512698356dd67642d91, type: 3}
+  m_PrefabInstance: {fileID: 2678015938794268621}
+  m_PrefabAsset: {fileID: 0}

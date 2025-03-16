@@ -29,6 +29,7 @@ namespace Loot
     public class LootButtonOverlayScript : MonoBehaviour
     {
         public Item item;
+        public GameObject loot_object;
         UIScript ui_script;
 
         void Start()

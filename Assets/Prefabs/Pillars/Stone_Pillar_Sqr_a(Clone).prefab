@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 3025025341021619862}
   - component: {fileID: 1938608640455203911}
   - component: {fileID: -7413267390088050588}
-  m_Layer: 3
+  m_Layer: 11
   m_Name: Stone_Pillar_Sqr_a(Clone)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,6 +10,8 @@ TagManager:
   - Text
   - Background
   - Event
+  - Ignore
+  - Loot
   layers:
   - Default
   - TransparentFX
@@ -19,11 +21,11 @@ TagManager:
   - UI
   - Floor
   - Player
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerTargetPlane
+  - Enemy
+  - EnemyRayTrace
+  - Pillars
+  - Loot
   - 
   - 
   - 

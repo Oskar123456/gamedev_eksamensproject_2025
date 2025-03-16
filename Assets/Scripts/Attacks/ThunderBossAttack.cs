@@ -70,6 +70,10 @@ namespace Attacks
                 return;
             }
 
+            if (stats.attacker == null || GetComponent<Collider>().gameObject.tag == "Ignore") {
+                return;
+            }
+
             float alive_t_frac = (alive_t - delay) / effect_duration;
 
             if (!created) {
@@ -130,6 +134,7 @@ namespace Attacks
             damage_base = 1; damage_per_level = 1;
             duration_base = 0.8f; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
+            range_base = 1;
             scale_base = 1; scale_per_level = 0.1f;
             damage_type = DamageType.Normal;
 

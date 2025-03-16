@@ -355,7 +355,7 @@ namespace UI
             stats_spell_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
                     player_stats.spell_damage, player_stats.spell_damage_fire, player_stats.spell_damage_ice,
                     Environment.NewLine, ((int)(player_stats.spell_scale * 100)), ((int)(player_stats.spell_speed * 100)));
-            stats_defense_text.text = string.Format("HP: {0}/{1}   Defense: {2}{3}Hit Recovery: {4}",
+            stats_defense_text.text = string.Format("HP: {0}/{1}   Defense: {2}{3}Hit Recovery: {4: 0.00}",
                     player_stats.hp, player_stats.hp_max, player_stats.defense, Environment.NewLine, player_stats.stun_lock);
             stats_util_text.text = string.Format("Movement Speed: {0}%", (100 + (int)(player_stats.move_speed_bonus * 100)));
 
@@ -407,7 +407,7 @@ namespace UI
         {
             RaycastHit hit_info;
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            Physics.Raycast(ray, out hit_info, 500, 1 << 3);
+            Physics.Raycast(ray, out hit_info, 500, 1 << 11);
 
             List<GameObject> occluding_gameobjects_new = new List<GameObject>();
 

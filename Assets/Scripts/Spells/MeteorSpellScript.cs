@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace Spells
 {
-    public class BlizzardSpellScript : MonoBehaviour
+    public class MeteorSpellScript : MonoBehaviour
     {
         AudioSource audio_source;
         public GameObject audio_hit_dummy;
@@ -95,13 +95,13 @@ namespace Spells
         }
     }
 
-    public class BlizzardSpell : Spell
+    public class MeteorSpell : Spell
     {
-        public BlizzardSpell()
+        public MeteorSpell()
         {
-            prefab_index = 0;
-            sprite_index = 0;
-            name = "Blizzard";
+            prefab_index = 3;
+            sprite_index = 3;
+            name = "Meteor Storm";
             level = 0;
             damage_base = 1; damage_per_level = 1;
             duration_base = 2; duration_per_level = 0.1f;
