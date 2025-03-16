@@ -175,7 +175,7 @@ namespace PCG
 
         void AddEnemies(Level level, LevelType level_type)
         {
-            int enemy_target_num = (int)(MathF.Sqrt(GameState.level) * 100.0f);
+            int enemy_target_num = (int)(MathF.Sqrt(GameState.level) * 50.0f);
 
             Debug.Log("enemy_target_num : " + enemy_target_num);
 
@@ -187,7 +187,7 @@ namespace PCG
                     if (level.IsWall(x, z)) {
                         noise_array[x, z] = 0;
                     } else {
-                        noise_array[x, z] = Utils.MultiLayerNoise((x + noise_seeds.x) * 1.87f, (z + noise_seeds.y) * 1.87f);
+                        noise_array[x, z] = Utils.MultiLayerNoise((x + noise_seeds.x) * 3.577f, (z + noise_seeds.y) * 3.577f);
                     }
                     noise_levels[x * level.voxel_height + z] = noise_array[x, z];
                 }
