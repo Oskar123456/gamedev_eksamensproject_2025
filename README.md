@@ -6,7 +6,6 @@
 
 ### Controls
 
-  - R : [R]estart
   - Left Mouse Button : Move to location / Attack enemy / Pick up loot
   - Right Mouse Button: Cast Spell
   - Left Ctrl : Attack in Place
@@ -22,6 +21,7 @@
   - I/E : Open Inventory
   - F : Drop item on cursor
   - Escape : Close UI
+  - R : [R]estart
 
 ## Third Party Assets List
 
