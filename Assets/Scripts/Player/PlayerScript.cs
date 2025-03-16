@@ -572,8 +572,6 @@ namespace Player
                 is_following_object = false;
                 is_moving_to_point = false;
             }
-
-            did_move = did_move;
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
