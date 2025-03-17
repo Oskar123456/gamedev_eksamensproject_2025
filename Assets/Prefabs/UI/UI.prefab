@@ -2405,7 +2405,7 @@ GameObject:
   - component: {fileID: 5248145296388019681}
   - component: {fileID: 5907080551733529391}
   - component: {fileID: 1784573198732966522}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ActiveAttackText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2845,7 +2845,7 @@ GameObject:
   - component: {fileID: 3384442881735191581}
   - component: {fileID: 7614049776534461048}
   - component: {fileID: 6429669867288380819}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ActiveSpellText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3627,7 +3627,7 @@ GameObject:
   - component: {fileID: 4336926064165624435}
   - component: {fileID: 7668823664014055625}
   - component: {fileID: 44435874246866515}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: SkillTreeTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5480,7 +5480,7 @@ GameObject:
   - component: {fileID: 1136815665250967096}
   - component: {fileID: 4682304778487171157}
   - component: {fileID: 7103905748951463191}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9963,7 +9963,7 @@ GameObject:
   - component: {fileID: 2120331061366510411}
   - component: {fileID: 3293633231468860816}
   - component: {fileID: 4929072742756775495}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: SkillTreePointsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -313,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera_dist: 0.60000014
   scroll_speed: 0.5
-  move_speed_normal: 0.1
+  move_speed_normal: 8
   move_speed_sprint_multi: 2
   v_jump: 50
   a_horizontal: 100
@@ -321,7 +321,7 @@ MonoBehaviour:
   a_minus_horizontal: 350
   a_vertical: -200
   a_minus_horizontal_fall_factor: 0.01
-  anim_mul_move_speed: 25
+  anim_mul_move_speed: 28
   attack_anim_time: 1.333
   attack_thrust_anim_time: 0.99
   cast_anim_speed: 1.4

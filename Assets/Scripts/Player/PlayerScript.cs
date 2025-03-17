@@ -71,11 +71,12 @@ namespace Player
         bool is_mouse_hover_floor = false;
         bool is_mouse_hover_loot = false;
         /* state parameters */
-        float attack_time_left = 0;
-        float cast_time_left = 0;
-        float cast_cooldown_left = 0;
-        float pickup_time_left = 0;
-        float hit_time_left = 0;
+        float attack_time_left;
+        float cast_time_left;
+        float cast_cooldown_left;
+        float pickup_time_left;
+        float hit_time_left;
+        float follow_time_left;
         /* movement */
         float move_speed = 0.2f;
         public float move_speed_normal = 0.2f;
@@ -101,8 +102,8 @@ namespace Player
         public float attack_thrust_anim_time = 1f;
         public float cast_anim_speed = 1.4f;
         public float pickup_anim_time = 1.667f;
-        float footstep_cooldown = 0.1f;
         float footstep_cooldown_left;
+        int footstep_next;
         /* effects */
         public GameObject pickup_audio_dummy;
         public List<AudioClip> sounds;
@@ -218,6 +219,14 @@ namespace Player
                 is_following_object = false;
             }
 
+            if (is_moving_to_point) {
+                if (follow_time_left <= 0) {
+                    is_moving_to_point = false;
+                } else {
+                    follow_time_left -= Time.deltaTime;
+                }
+            }
+
             if (hit_time_left <= 0) {
                 is_mouse_hover_ui = ui_test.IsPointerOverUIElement();
                 PollKeys();
@@ -250,25 +259,18 @@ namespace Player
             }
 
             if (is_following_object) {
-                Vector3 dest = destination_point;
-                Vector3 src = transform.position;
-                dest.y = 0;
-                src.y = 0;
-                Vector3 diff_vec = dest - src;
-                transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                Vector3 diff_vec = follow_object.transform.position - transform.position;
+                diff_vec.y = 0;
+                transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
                 pitch = transform.rotation.eulerAngles.y;
                 did_move = true;
             } else if (is_moving_to_point) {
-                Vector3 dest = destination_point;
-                Vector3 src = transform.position;
-                dest.y = 0;
-                src.y = 0;
-                Vector3 diff_vec = dest - src;
+                Vector3 diff_vec = destination_point - transform.position;
+                diff_vec.y = 0;
                 if (diff_vec.magnitude < 0.5f) {
                     is_moving_to_point = false;
                 } else {
-                    diff_vec.y = 0;
-                    transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                    transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
                     pitch = transform.rotation.eulerAngles.y;
                     did_move = true;
                 }
@@ -384,6 +386,10 @@ namespace Player
                 is_moving_to_point = true;
                 // Debug.Log("destination_point: " + destination_point.ToString());
             }
+
+            if (is_moving_to_point) { // TODO: not entirely accurate
+                follow_time_left = Vector3.Distance(destination_point, transform.position) / move_speed_normal;
+            }
         }
 
         void Attack()
@@ -410,13 +416,10 @@ namespace Player
                     if (cap_coll == null) {
                         return;
                     }
-                    Vector3 dest = cap_coll.ClosestPoint(transform.position);
-                    Vector3 src = transform.position;
-                    dest.y = 0;
-                    src.y = 0;
-                    Vector3 diff_vec = dest - src;
+                    Vector3 diff_vec = follow_object.transform.position - transform.position;
+                    diff_vec.y = 0;
                     if (diff_vec.magnitude <= stats.active_attack.range) {
-                        transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                        transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
                         Attack();
                     }
                 }
@@ -472,15 +475,9 @@ namespace Player
                 return;
             }
 
-            Vector3 t_pos = transform.position;
-            Vector3 h_pos = hit_info.point;
-            t_pos.y = 0;
-            h_pos.y = 0;
-            Vector3 normal = h_pos - t_pos;
-            transform.rotation = Quaternion.FromToRotation(Vector3.forward, normal);
-
-//             point_hover_on_plane = hit_info.point;
-//             dist_to_hover_on_plane = Vector3.Distance(t_pos, h_pos);
+            Vector3 diff_vec = hit_info.point - transform.position;
+            diff_vec.y = 0;
+            transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
         }
 
         void PollMisc()
@@ -501,7 +498,7 @@ namespace Player
                 diff_vec.y = 0;
 
                 if (diff_vec.magnitude <= stats.pickup_range) {
-                    transform.rotation = Quaternion.FromToRotation(Vector3.forward, diff_vec);
+                    transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
                     DropScript script = follow_object.GetComponent<DropScript>();
                     script.OnPickUp();
                     is_following_object = false;
@@ -586,7 +583,6 @@ namespace Player
         void ChooseAnimation()
         {
             AnimatorStateInfo anim_state_info = animator.GetCurrentAnimatorStateInfo(0);
-            footstep_cooldown_left -= Time.deltaTime;
 
             if (hit_time_left > 0) {
                 animator.Play("GetHit");
@@ -618,30 +614,26 @@ namespace Player
                 if (did_sprint) {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 2);
                     animator.Play("BattleRunForward");
-                    if (footstep_cooldown_left <= 0) {
-                        float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
-                        if (anim_time_normed > 0.57f && anim_time_normed < 0.63f) {
-                            footsteps.PlayRandom();
-                            footstep_cooldown_left = footstep_cooldown;
-                        }
-                        if (anim_time_normed > 0.07f || anim_time_normed < 0.13f) {
-                            footsteps.PlayRandom();
-                            footstep_cooldown_left = footstep_cooldown;
-                        }
+                    float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                    if (footstep_next == 0 && (anim_time_normed > 0.07f && anim_time_normed < 0.13f)) {
+                        footsteps.PlayRandom();
+                        footstep_next = 1;
+                    }
+                    if (footstep_next == 1 && (anim_time_normed > 0.57f && anim_time_normed < 0.63f)) {
+                        footsteps.PlayRandom();
+                        footstep_next = 0;
                     }
                 } else {
                     animator.SetFloat("move_speed", anim_mul_move_speed * d_xz);
                     animator.Play("WalkForward");
-                    if (footstep_cooldown_left <= 0) {
-                        float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
-                        if (anim_time_normed > 0.47f && anim_time_normed < 0.53f) {
-                            footsteps.PlayRandom();
-                            footstep_cooldown_left = footstep_cooldown;
-                        }
-                        if (anim_time_normed > 0.97f || anim_time_normed < 0.03f) {
-                            footsteps.PlayRandom();
-                            footstep_cooldown_left = footstep_cooldown;
-                        }
+                    float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
+                    if (footstep_next == 0 && (anim_time_normed > 0.97f || anim_time_normed < 0.03f)) {
+                        footsteps.PlayRandom();
+                        footstep_next = 1;
+                    }
+                    if (footstep_next == 1 && (anim_time_normed > 0.47f && anim_time_normed < 0.53f)) {
+                        footsteps.PlayRandom();
+                        footstep_next = 0;
                     }
                 }
             }
@@ -797,7 +789,7 @@ namespace Player
             d_xz = (dt * v_horizontal_0) + 0.5f * v_horizontal * dt * dt;
             d_y = (dt * v_vertical_0) + 0.5f * (a_vertical) * dt * dt;
             d_xz = MathF.Max(0, d_xz);
-            d_xz = MathF.Min(move_speed, d_xz);
+            d_xz = MathF.Min(move_speed * dt, d_xz);
 
             // Debug.Log("is_falling: " + is_falling + " ms: " + move_speed + " d_xz: " + d_xz + " d_y : " + d_y);
 
