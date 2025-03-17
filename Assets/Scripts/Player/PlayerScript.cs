@@ -348,12 +348,14 @@ namespace Player
 
             RaycastHit hit_info_enemy;
             RaycastHit hit_info_floor;
+            RaycastHit hit_info_plane;
             if (Camera.main == null) {
                 return;
             }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             bool hit_enemy = Physics.Raycast(ray, out hit_info_enemy, 500, 1 << 10);
-            bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 8);
+            bool hit_plane = Physics.Raycast(ray, out hit_info_plane, 500, 1 << 8);
+            bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 6);
 
             is_mouse_hover_loot  = ui_script.is_ui_object_hovered && ui_script.current_ui_object_hovered.tag == "Loot";
             GameObject loot = (is_mouse_hover_loot) ? ui_script.current_ui_object_hovered : null;
@@ -361,7 +363,7 @@ namespace Player
             is_mouse_hover_enemy = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && hit_enemy;
             GameObject enemy = (hit_enemy) ? hit_info_enemy.collider.transform.parent.gameObject : null;
 
-            is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_floor;
+            is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_plane;
 
             if (fall_time > 0.1f || is_attacking || is_casting || is_picking_up) {
                 return;
@@ -383,7 +385,7 @@ namespace Player
                 return;
             }
 
-            destination_point = (hit_floor) ? hit_info_floor.point : Vector3.zero;
+            destination_point = (hit_plane) ? hit_info_plane.point : Vector3.zero;
 
             if (is_mouse_hover_enemy) {
                 is_following_object = true;
