@@ -80,7 +80,7 @@ namespace Player
         /* movement */
         float move_speed = 0.2f;
         public float move_speed_normal = 0.2f;
-        public float move_speed_sprint_multi = 2.2f;
+        public float move_speed_sprint_multi = 2f;
 
         float v_horizontal_0, v_horizontal;
         float v_vertical_0, v_vertical;
@@ -612,7 +612,7 @@ namespace Player
 
             else if (d_xz > 0) {
                 if (did_sprint) {
-                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz / 2);
+                    animator.SetFloat("move_speed", anim_mul_move_speed * MathF.Min(v_horizontal_0, move_speed) * 0.4f);
                     animator.Play("BattleRunForward");
                     float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
                     if (footstep_next == 0 && (anim_time_normed > 0.07f && anim_time_normed < 0.13f)) {
@@ -624,7 +624,7 @@ namespace Player
                         footstep_next = 0;
                     }
                 } else {
-                    animator.SetFloat("move_speed", anim_mul_move_speed * d_xz);
+                    animator.SetFloat("move_speed", anim_mul_move_speed * MathF.Min(v_horizontal_0, move_speed));
                     animator.Play("WalkForward");
                     float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
                     if (footstep_next == 0 && (anim_time_normed > 0.97f || anim_time_normed < 0.03f)) {

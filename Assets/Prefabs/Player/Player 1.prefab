@@ -321,7 +321,7 @@ MonoBehaviour:
   a_minus_horizontal: 350
   a_vertical: -200
   a_minus_horizontal_fall_factor: 0.01
-  anim_mul_move_speed: 28
+  anim_mul_move_speed: 0.3
   attack_anim_time: 1.333
   attack_thrust_anim_time: 0.99
   cast_anim_speed: 1.4
