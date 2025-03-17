@@ -75,13 +75,13 @@ namespace Attacks
                 Destroy(sound_effect, effect_duration);
                 GameObject effect = Instantiate(effect_prefab, transform.position, transform.rotation, transform);
                 Destroy(effect, effect_duration);
-                effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
+                // effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
 
                 ParticleSystem ps = effect.GetComponent<ParticleSystem>();
                 var main = ps.main;
                 main.simulationSpeed = stats.base_duration / stats.duration;
                 foreach (Transform t in transform) {
-                    t.localScale *= 1 + (stats.scale - 1) / 2;
+                    // t.localScale *= 1 + (stats.scale - 1) / 2;
                     ps = t.GetComponent<ParticleSystem>();
                     main = ps.main;
                     main.simulationSpeed = stats.base_duration / stats.duration;
@@ -133,7 +133,7 @@ namespace Attacks
             duration_base = 0.8f; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
             scale_base = 1; scale_per_level = 0.1f;
-            range_base = 2;
+            range_base = 1.65f;
             damage_type = DamageType.Normal;
 
         }

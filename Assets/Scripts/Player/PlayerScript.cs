@@ -267,7 +267,7 @@ namespace Player
             } else if (is_moving_to_point) {
                 Vector3 diff_vec = destination_point - transform.position;
                 diff_vec.y = 0;
-                if (diff_vec.magnitude < 0.5f) {
+                if (diff_vec.magnitude < 0.1f) {
                     is_moving_to_point = false;
                 } else {
                     transform.rotation = Quaternion.LookRotation(diff_vec, Vector3.up);
@@ -280,6 +280,7 @@ namespace Player
 
             if (did_jump) { // fix for stuck on floor when using charactor controller
                 char_ctrl.Move(trf.up * 0.001f * Time.deltaTime);
+                fall_time += 0.1f;
             }
 
             if (is_mouse_hover_enemy) {
@@ -356,7 +357,7 @@ namespace Player
 
             is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_floor;
 
-            if (is_falling || is_attacking || is_casting || is_picking_up) {
+            if (fall_time > 0.1f || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -465,7 +466,7 @@ namespace Player
 
         void PointAtMouse()
         {
-            if (is_falling) {
+            if (fall_time > 0.1f) {
                 return;
             }
 
@@ -489,7 +490,7 @@ namespace Player
                 is_picking_up = false;
             }
 
-            if (is_falling || is_attacking || is_casting || is_picking_up) {
+            if (fall_time > 0.1f || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -514,7 +515,7 @@ namespace Player
 
         void PollMovement()
         {
-            if (is_falling || is_attacking || is_casting || is_picking_up) {
+            if (fall_time > 0.1f || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -604,9 +605,9 @@ namespace Player
                 animator.Play("PickUp");
             }
 
-            else if (is_falling) {
-                if (d_y < 0 && fall_time > 0.1f) { animator.Play("JumpAir"); }
-                else if (d_y > 0 && fall_time < 0.2f) { animator.Play("JumpStart"); }
+            else if (is_falling && fall_time > 0.1f) {
+                if (d_y < 0 && fall_time > 0.2f) { animator.Play("JumpAir"); }
+                else if (d_y > 0 && fall_time < 0.3f) { animator.Play("JumpStart"); }
                 else if (d_y > 0) { animator.Play("JumpUp"); }
             }
 
