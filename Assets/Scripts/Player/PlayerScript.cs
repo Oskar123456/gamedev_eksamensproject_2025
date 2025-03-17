@@ -365,7 +365,7 @@ namespace Player
 
             is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_plane;
 
-            if (fall_time > 0.1f || is_attacking || is_casting || is_picking_up) {
+            if (is_falling || is_attacking || is_casting || is_picking_up) {
                 return;
             }
 
@@ -580,6 +580,8 @@ namespace Player
 
             if (Input.GetKey(KeyCode.Space)) {
                 did_jump = true;
+                is_following_object = false;
+                is_moving_to_point = false;
                 audio_source.clip = sounds[1];
                 audio_source.Play();
             }
