@@ -353,7 +353,7 @@ namespace Player
             }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             bool hit_enemy = Physics.Raycast(ray, out hit_info_enemy, 500, 1 << 10);
-            bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 6);
+            bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 8);
 
             is_mouse_hover_loot  = ui_script.is_ui_object_hovered && ui_script.current_ui_object_hovered.tag == "Loot";
             GameObject loot = (is_mouse_hover_loot) ? ui_script.current_ui_object_hovered : null;

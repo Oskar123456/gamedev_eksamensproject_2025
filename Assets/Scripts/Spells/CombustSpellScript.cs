@@ -168,7 +168,7 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("Dmg: {0}{1}AoE:{2}{3}{4: 0.00}s cooldown", damage, delimiter, scale, delimiter, cooldown);
+            return string.Format("Dmg: {0}{1}AoE:{2}{3}{4:0.00}s cooldown", damage, delimiter, scale, delimiter, cooldown);
         }
 
         public override string GetLevelUpDescriptionString(string delimiter)

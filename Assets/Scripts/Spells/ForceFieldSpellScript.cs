@@ -99,7 +99,7 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("Invulnerable{0}Duration: {1}s", delimiter, duration);
+            return string.Format("Dmg: {0}{1}{2:0.00}s cooldown", damage, delimiter, scale, delimiter, cooldown);
         }
 
         public override string GetLevelUpDescriptionString(string delimiter)

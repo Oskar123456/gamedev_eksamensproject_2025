@@ -149,7 +149,7 @@ namespace Attacks
             duration_base = 1; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
             scale_base = 1; scale_per_level = 0.025f;
-            range_base = 2;
+            range_base = 1.8f;
             damage_type = DamageType.Normal;
         }
 
