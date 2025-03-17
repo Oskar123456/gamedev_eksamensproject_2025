@@ -34,11 +34,20 @@ namespace UI
         GameObject child_frame;
         TextMeshProUGUI level_info_text;
         TextMeshProUGUI name_text;
+        Image img;
+
+        Color color_active = Color.white;
+        Color color_inactive = new Color(1, 1, 1, 0.10f);
 
         public Spell spell;
         public Attack attack;
 
         bool first = true;
+
+        void Awake()
+        {
+            img = GetComponent<Image>();
+        }
 
         void Start()
         {
@@ -46,8 +55,6 @@ namespace UI
 
         public void Init()
         {
-            Image img = GetComponent<Image>();
-
             child_frame = transform.GetChild(0).gameObject;
             child = transform.GetChild(1).gameObject;
             level_info_text = transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -99,8 +106,10 @@ namespace UI
             }
 
             if (player_stats.skill_points > 0) {
+                img.color = color_active;
                 child.SetActive(true);
             } else {
+                img.color = color_inactive;
                 child.SetActive(false);
             }
 

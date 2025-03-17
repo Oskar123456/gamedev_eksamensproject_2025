@@ -186,6 +186,12 @@ namespace UI
                  player_cursor_img.SetActive(false);
             }
 
+            if (player_stats.skill_points > 0) {
+                skill_tree_plus_button.SetActive(true);
+            } else {
+                skill_tree_plus_button.SetActive(false);
+            }
+
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 HideUI();
                 active_attack_button.SendMessage("Hide");
