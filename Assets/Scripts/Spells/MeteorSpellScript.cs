@@ -115,7 +115,7 @@ namespace Spells
             damage   = (damage_per_level   * level + damage_base)   + ps.spell_damage + ps.spell_damage_ice;
             scale    = (scale_per_level    * level + scale_base)    * ps.spell_scale;
             duration = (duration_per_level * level + duration_base) * ps.spell_duration;
-            cooldown = (cooldown_per_level * level + cooldown_base) * ps.spell_cooldown;
+            cooldown = (cooldown_per_level * level + cooldown_base) - (cooldown_base * ps.spell_cooldown);
         }
 
         public override void ScaleWithEnemyStats(EnemyStats es) { }
@@ -142,7 +142,7 @@ namespace Spells
 
         public override string GetDescriptionString(string delimiter)
         {
-            return string.Format("Dmg: {0}{1}AoE:{2}{3}Duration: {4}s", damage, delimiter, scale, delimiter, duration);
+            return string.Format("Dmg: {0}{1}AoE:{2}{3}Duration: {4}s{5}{6:0.00}s cooldown", damage, delimiter, scale, delimiter, duration, delimiter, cooldown);
         }
 
         public override string GetLevelUpDescriptionString(string delimiter)

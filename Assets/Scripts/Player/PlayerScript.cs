@@ -77,6 +77,7 @@ namespace Player
         float pickup_time_left;
         float hit_time_left;
         float follow_time_left;
+        float point_and_move_cooldown_left;
         /* movement */
         float move_speed = 0.2f;
         public float move_speed_normal = 0.2f;
@@ -337,6 +338,8 @@ namespace Player
 
         void PollMouse()
         {
+            point_and_move_cooldown_left -= Time.deltaTime;
+
             float mwheel = Input.GetAxis("Mouse ScrollWheel");
             if (mwheel != 0) {
                 camera_dist -= scroll_speed * mwheel;
@@ -345,6 +348,9 @@ namespace Player
 
             RaycastHit hit_info_enemy;
             RaycastHit hit_info_floor;
+            if (Camera.main == null) {
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             bool hit_enemy = Physics.Raycast(ray, out hit_info_enemy, 500, 1 << 10);
             bool hit_floor = Physics.Raycast(ray, out hit_info_floor, 500, 1 << 6);
@@ -362,6 +368,18 @@ namespace Player
             }
 
             if (!Input.GetMouseButton(0)) {
+                return;
+            }
+
+            if (stats.currently_held_item != null && is_mouse_hover_floor) {
+                stats.currently_held_item.Drop(hit_info_floor.point);
+                stats.currently_held_item = null;
+                ui_script.Sync();
+                point_and_move_cooldown_left = 0.1f;
+                return;
+            }
+
+            if (point_and_move_cooldown_left >= 0) {
                 return;
             }
 

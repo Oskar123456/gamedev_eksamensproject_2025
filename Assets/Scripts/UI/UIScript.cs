@@ -180,6 +180,12 @@ namespace UI
             item_tooltip_rt.position = new Vector3(mouse_pos.x + tooltip_offs, mouse_pos.y, 0);
             player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
 
+            if (player_stats.currently_held_item != null) {
+                 player_cursor_img.SetActive(true);
+            } else {
+                 player_cursor_img.SetActive(false);
+            }
+
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 HideUI();
                 active_attack_button.SendMessage("Hide");
@@ -352,10 +358,11 @@ namespace UI
             stats_attack_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
                     player_stats.attack_damage, player_stats.attack_damage_fire, player_stats.attack_damage_ice,
                     Environment.NewLine, ((int)(player_stats.attack_scale * 100)), ((int)(player_stats.attack_speed * 100)));
-            stats_spell_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%",
+            stats_spell_text.text = string.Format("Normal: {0} Fire: {1} Ice: {2}{3}AoE: {4}%   Speed: {5}%{6}Cooldown Reduction: {7}%",
                     player_stats.spell_damage, player_stats.spell_damage_fire, player_stats.spell_damage_ice,
-                    Environment.NewLine, ((int)(player_stats.spell_scale * 100)), ((int)(player_stats.spell_speed * 100)));
-            stats_defense_text.text = string.Format("HP: {0}/{1}   Defense: {2}{3}Hit Recovery: {4: 0.00}",
+                    Environment.NewLine, ((int)(player_stats.spell_scale * 100)), ((int)(player_stats.spell_speed * 100)),
+                    Environment.NewLine, ((int)(player_stats.spell_cooldown * 100)));
+            stats_defense_text.text = string.Format("HP: {0}/{1}   Defense: {2}{3}Hit Recovery: {4:0.00}",
                     player_stats.hp, player_stats.hp_max, player_stats.defense, Environment.NewLine, player_stats.stun_lock);
             stats_util_text.text = string.Format("Movement Speed: {0}%", (100 + (int)(player_stats.move_speed_bonus * 100)));
 

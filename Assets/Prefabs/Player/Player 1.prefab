@@ -546,7 +546,7 @@ MonoBehaviour:
   spell_speed: 1
   spell_scale: 1
   spell_duration: 1
-  spell_cooldown: 1
+  spell_cooldown: 0
   inventory_size: 48
   inventory_space: 48
 --- !u!114 &4497461525977231331

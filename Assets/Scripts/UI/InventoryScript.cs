@@ -108,7 +108,7 @@ public class InventoryScript : MonoBehaviour
 
         float outer_padding = 34;
         float y_padding = 10;
-        float padding = 2;
+        float padding = 0;
         float i_slot_width = (inventory_rect.rect.size.x - 2 * outer_padding - 7 * padding) / 8;
         float i_slot_height = i_slot_width;
 

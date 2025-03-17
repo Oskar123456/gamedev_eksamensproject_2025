@@ -74,7 +74,7 @@ namespace Spells
             damage   = 0;
             scale    = 1;
             duration = (duration_per_level * level + duration_base) * ps.spell_duration;
-            cooldown = (cooldown_per_level * level + cooldown_base) * ps.spell_cooldown;
+            cooldown = (cooldown_per_level * level + cooldown_base) - (cooldown_base * ps.spell_cooldown);
         }
 
         public override void ScaleWithEnemyStats(EnemyStats es) { }

@@ -62,7 +62,7 @@ namespace Loot
             prefab_index = 0;
             sprite_index = 0;
 
-            weight = 5000;
+            weight = 9000;
             is_equippable = false;
             is_consumable = true;
             is_consumed_on_pickup = true;
@@ -87,7 +87,7 @@ namespace Loot
             prefab_index = 1;
             sprite_index = 25;
 
-            weight = 5000;
+            weight = 1000;
             should_show = true;
             is_equippable = false;
             is_consumable = true;
@@ -279,6 +279,7 @@ namespace Loot
         public int spell_damage_fire;
         public float spell_speed;
         public float spell_scale;
+        public float spell_cooldown;
 
         public override string EffectString()
         {
@@ -293,8 +294,9 @@ namespace Loot
             str += (spell_damage > 0) ?  string.Format("+{0} to spell damage", spell_damage) + Environment.NewLine  : "";
             str += (spell_damage_ice > 0) ?  string.Format("+{0} to spell ice damage", spell_damage_ice) + Environment.NewLine  : "";
             str += (spell_damage_fire > 0) ?  string.Format("+{0} to spell fire damage", spell_damage_fire) + Environment.NewLine  : "";
-            str += (spell_speed != 0) ?  string.Format("+{0}% to cast speed", (int)(100 * spell_speed)) + Environment.NewLine  : "";
-            str += (spell_scale != 0) ?  string.Format("+{0}% to spell AoE", (int)(100 * spell_scale)) : "";
+            str += (spell_speed != 0) ?  string.Format("+{0}% to cast speed", (int)(100 * spell_speed)) + Environment.NewLine : "";
+            str += (spell_scale != 0) ?  string.Format("+{0}% to spell AoE", (int)(100 * spell_scale)) + Environment.NewLine : "";
+            str += (spell_cooldown != 0) ?  string.Format("-{0}% to spell cooldown", (int)(100 * spell_cooldown)) : "";
 
             return str;
         }
@@ -313,6 +315,7 @@ namespace Loot
             ps.spell_damage_fire += spell_damage_fire;
             ps.spell_speed += spell_speed;
             ps.spell_scale += spell_scale;
+            ps.spell_cooldown += spell_cooldown;
             ps.active_attack.ScaleWithPlayerStats(ps);
             ps.active_spell.ScaleWithPlayerStats(ps);
         }
@@ -331,6 +334,7 @@ namespace Loot
             ps.spell_damage_fire -= spell_damage_fire;
             ps.spell_speed -= spell_speed;
             ps.spell_scale -= spell_scale;
+            ps.spell_cooldown -= spell_cooldown;
             ps.active_attack.ScaleWithPlayerStats(ps);
             ps.active_spell.ScaleWithPlayerStats(ps);
         }

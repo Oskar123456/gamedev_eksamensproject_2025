@@ -39,6 +39,7 @@ namespace Loot
             spell_damage = GameState.rng.Next() % 2;
             spell_speed = (GameState.rng.Next() % 2) * 0.1f;
             spell_scale = (GameState.rng.Next() % 2) * 0.1f;
+            spell_cooldown = (GameState.rng.Next() % 2) * 0.1f;
         }
     }
 
@@ -87,6 +88,7 @@ namespace Loot
             spell_damage = GameState.rng.Next() % 10 + 5;
             spell_speed = (GameState.rng.Next() % 10 + 5) * 0.1f;
             spell_scale = (GameState.rng.Next() % 10 + 5) * 0.1f;
+            spell_cooldown = (GameState.rng.Next() % 8) * 0.1f;
         }
     }
 
@@ -137,6 +139,7 @@ namespace Loot
             spell_damage_fire = GameState.rng.Next() % 3;
             spell_speed = (GameState.rng.Next() % 3) * 0.1f;
             spell_scale = (GameState.rng.Next() % 3) * 0.1f;
+            spell_cooldown = (GameState.rng.Next() % 4) * 0.1f;
         }
     }
 
@@ -155,6 +158,7 @@ namespace Loot
             spell_damage_fire = GameState.rng.Next() % 5;
             spell_speed = (GameState.rng.Next() % 5) * 0.1f;
             spell_scale = (GameState.rng.Next() % 5) * 0.1f;
+            spell_cooldown = (GameState.rng.Next() % 6) * 0.1f;
         }
     }
 
