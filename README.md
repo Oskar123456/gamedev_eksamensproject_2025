@@ -55,6 +55,7 @@
 
 ## TODO:
 
+  - Fix player rotation (x, z).
   - Visual cooldown effect on active skill/attack button [x].
   - Prettier UI.
   - Spawn enemies in clusters, more types of ghosts [x].
