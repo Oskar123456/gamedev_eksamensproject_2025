@@ -112,7 +112,6 @@ namespace Player
             skill_tree_plus_button = GameObject.Find("SkillTreePlusButton");
             if (skill_tree_plus_button != null)
                 skill_tree_plus_button.SetActive(false);
-
             ui_test = GameObject.Find("UI").GetComponent<UITest>();
             wizard_renderer = GameObject.Find("WizardBody").GetComponent<Renderer>();
             color_original = wizard_renderer.material.color;

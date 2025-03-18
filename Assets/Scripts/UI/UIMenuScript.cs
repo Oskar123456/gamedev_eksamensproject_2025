@@ -75,7 +75,7 @@ namespace UI
 
         void PlayGame()
         {
-            SceneManager.LoadScene("Town");
+            SceneManager.LoadScene("Char_select_screen");
         }
     }
 }
