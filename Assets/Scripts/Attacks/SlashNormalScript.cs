@@ -54,8 +54,23 @@ namespace Attacks
         {
             Transform t = transform.parent;
             bool is_player = (transform.parent.gameObject.tag == "Player");
-            if (is_player) {
-                t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
+            if (is_player)
+            {
+                Transform probe = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
+                
+                if (probe != null)
+                {
+                    t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
+                }
+
+                if (t == null)
+                {
+                    t = transform.parent
+                        .Find(
+                            "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r")
+                        .GetComponent<Transform>();
+                }
+
                 transform.parent = t;
                 transform.localPosition = (Vector3.up * -0.6f) * stats.scale;
                 transform.localScale *= stats.scale;

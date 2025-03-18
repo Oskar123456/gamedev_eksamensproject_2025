@@ -87,6 +87,12 @@ public class GameState : MonoBehaviour
     void Start()
     {
     }
+    
+    public static void ChangePf(GameObject new_pf)
+    {
+        pf = new_pf;
+    }
+    
 
     public static void InstantiatePlayer()
     {
@@ -119,7 +125,7 @@ public class GameState : MonoBehaviour
         ps = p.GetComponent<PlayerStats>();
         ps.CopyFrom(player_stats_saved);
     }
-
+    
     public static void Reset()
     {
         level_name = "";

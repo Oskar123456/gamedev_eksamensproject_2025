@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa345ff63aaaaac8a651da222ef4806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera_dist: 0.60000014
+  camera_dist: 0.6000001
   scroll_speed: 0.5
   move_speed_normal: 8
   move_speed_sprint_multi: 2
