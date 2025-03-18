@@ -90,10 +90,21 @@ public class ItemSlotScript : MonoBehaviour
             ui_script.PlaySwapSound();
         }
 
-        Item temp_item = item;
-        item = player_stats.currently_held_item;
-        player_stats.inventory[inventory_index] = item;
-        player_stats.currently_held_item = temp_item;
+        if (Input.GetKey(KeyCode.LeftShift) && item is HealthPotion) {
+            HealthPotion hp_pot = (HealthPotion)item;
+            if (player_stats.potions == null) {
+                player_stats.potions = hp_pot;
+            } else {
+                player_stats.potions.amount += hp_pot.amount;
+            }
+            item = null;
+            player_stats.inventory[inventory_index] = null;
+        } else {
+            Item temp_item = item;
+            item = player_stats.currently_held_item;
+            player_stats.inventory[inventory_index] = item;
+            player_stats.currently_held_item = temp_item;
+        }
 
         ui_script.Sync();
         ui_script.ShowInventory();

@@ -23,6 +23,11 @@
   - Escape : Close UI
   - R : [R]estart
 
+#### Inventory Management
+
+  - Diablo 2 Style
+  - LeftShift + Left Mouse Button : Move potion from inventory to belt
+
 ## Third Party Assets List
 
   - [skyboxes](https://assetstore.unity.com/packages/2d/textures-materials/sky/3-skyboxes-25142)

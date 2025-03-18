@@ -21,10 +21,10 @@ public class ShopManager : MonoBehaviour
         ShopItems[1, 3] = 3;
         ShopItems[1, 4] = 4;
 
-        ShopItems[2, 1] = Random.Range(15, 55); // Price for item 1
-        ShopItems[2, 2] = Random.Range(35, 70); // Price for item 2
-        ShopItems[2, 3] = Random.Range(25, 90); // Price for item 3
-        ShopItems[2, 4] = Random.Range(45, 100); // Price for item 4
+        ShopItems[2, 1] = Random.Range(5, 15); // Price for item 1
+        ShopItems[2, 2] = Random.Range(5, 15); // Price for item 2
+        ShopItems[2, 3] = Random.Range(5, 15); // Price for item 3
+        ShopItems[2, 4] = Random.Range(5, 15); // Price for item 4
 
         ShopItems[3, 1] = 0; // Quantity for item 1
         ShopItems[3, 2] = 0; // Quantity for item 2

@@ -2774,8 +2774,8 @@ MonoBehaviour:
   spell_damage_normal: 0
   spell_damage_ice: 0
   spell_damage_fire: 0
-  spell_speed: 1
-  spell_scale: 1
+  spell_speed: 0.75
+  spell_scale: 0.75
   spell_duration: 1
   spell_cooldown: 0
   inventory_size: 48

@@ -99,6 +99,8 @@ public class PotionSlotScript : MonoBehaviour
             ui_script.item_tooltip_text.text = player_stats.potions.EffectString();
             ui_script.item_tooltip.SetActive(true);
         }
+
+        UpdateSprite();
     }
 
     void SwapItem()

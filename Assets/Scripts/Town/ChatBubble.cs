@@ -9,6 +9,7 @@ public class ChatBubble : MonoBehaviour
         Transform chatbubbleTransform =Instantiate(chatBubblePrefab, parent);
         // Enable the chat bubble GameObject (it might be disabled in the prefab)
         chatbubbleTransform.gameObject.SetActive(true);
+        chatbubbleTransform.localScale *= 0.25f;
 
         // Set the local position of the chat bubble (on top of the NPC)
         chatbubbleTransform.localPosition = localPosition;
