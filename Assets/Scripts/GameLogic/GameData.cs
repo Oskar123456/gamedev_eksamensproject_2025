@@ -40,7 +40,7 @@ public class GameData : MonoBehaviour
     public static List<Spell> spell_list;
     public static List<Item> item_list;
 
-    public static List<Item> item_list_Boss;
+    public static List<Item> item_list_boss;
 
     public static List<Sprite> spell_sprites;
     public static List<Sprite> attack_sprites;
@@ -53,6 +53,7 @@ public class GameData : MonoBehaviour
     public static Boots placeholder_boots;
 
     static int item_total_weights = 0;
+    static int item_boss_total_weights = 0;
 
     void Awake()
     {
@@ -130,12 +131,15 @@ public class GameData : MonoBehaviour
 
         item_list.Add(new HealthPotion());
 
-        item_list_Boss = new List<Item>();
-        item_list_Boss.Add(new DivineDemonStaff());
-
+        item_list_boss = new List<Item>();
+        item_list_boss.Add(new DivineDemonStaff());
 
         foreach (Item i in item_list) {
             item_total_weights += i.weight;
+        }
+
+        foreach (Item i in item_list_boss) {
+            item_boss_total_weights += i.weight;
         }
 
         placeholder_helmet = new Helmet();
@@ -160,20 +164,26 @@ public class GameData : MonoBehaviour
         int r = GameState.rng.Next(item_total_weights);
         int w = 0;
         int i;
+
         for (i = -1; r >= w; ++i) {
             w += item_list[i + 1].weight;
         }
 
         Type t = item_list[i].GetType();
-        // Debug.Log("GenerateLoot: " + t.FullName);
         return (Item)Activator.CreateInstance(t);
     }
 
 public static Item GenerateBossLoot()
     {
+        int r = GameState.rng.Next(item_boss_total_weights);
+        int w = 0;
+        int i;
 
-        Type t = item_list_Boss[ GameState.rng.Next(item_list_Boss.Count)].GetType();
-        // Debug.Log("GenerateLoot: " + t.FullName);
+        for (i = -1; r >= w; ++i) {
+            w += item_list_boss[i + 1].weight;
+        }
+
+        Type t = item_list_boss[i].GetType();
         return (Item)Activator.CreateInstance(t);
     }
 

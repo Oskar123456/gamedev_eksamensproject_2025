@@ -181,9 +181,10 @@ namespace UI
             player_cursor_img_rt.position = new Vector3(mouse_pos.x, mouse_pos.y, 0);
 
             if (player_stats.currently_held_item != null) {
-                 player_cursor_img.SetActive(true);
+                SetHeldItem();
+                player_cursor_img.SetActive(true);
             } else {
-                 player_cursor_img.SetActive(false);
+                player_cursor_img.SetActive(false);
             }
 
             if (player_stats.skill_points > 0) {
