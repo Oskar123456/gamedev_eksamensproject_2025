@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.28235295}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 0.28235295}
     m_PressedColor: {r: 0, g: 0, b: 0, a: 0.6666667}
     m_SelectedColor: {r: 0, g: 0, b: 0, a: 0.7254902}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -341,6 +341,18 @@ PrefabInstance:
       propertyPath: MinDistance
       value: 8.433891
       objectReference: {fileID: 0}
+    - target: {fileID: 7507607294849617703, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7507607294849617703, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7507607294849617703, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8336603331124274194, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
       propertyPath: m_Name
       value: UI Menu
@@ -455,6 +467,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8336603331124274194, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
       insertIndex: -1
       addedObject: {fileID: 940887168}
+    - targetCorrespondingSourceObject: {fileID: 8336603331124274194, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 940887175}
   m_SourcePrefab: {fileID: 100100000, guid: d77f860fd05922ab5990bf1a7665e104, type: 3}
 --- !u!114 &381412497 stripped
 MonoBehaviour:
@@ -528,7 +543,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.28235295}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 0.28235295}
     m_PressedColor: {r: 0, g: 0, b: 0, a: 0.6666667}
     m_SelectedColor: {r: 0, g: 0, b: 0, a: 0.7254902}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -690,6 +705,15 @@ MonoBehaviour:
   character1Button: {fileID: 575838277}
   character2Button: {fileID: 381412497}
   confirmButton: {fileID: 235798387}
+--- !u!45 &940887175
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940887161}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 0}
 --- !u!1001 &1047134528
 PrefabInstance:
   m_ObjectHideFlags: 0

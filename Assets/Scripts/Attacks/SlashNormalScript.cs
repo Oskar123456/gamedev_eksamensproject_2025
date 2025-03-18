@@ -54,6 +54,8 @@ namespace Attacks
         {
             Transform t = transform.parent;
             bool is_player = (transform.parent.gameObject.tag == "Player");
+            delay = delay / (stats.base_duration / stats.duration);
+
             if (is_player)
             {
                 Transform probe = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
@@ -61,26 +63,32 @@ namespace Attacks
                 if (probe != null)
                 {
                     t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
+                    transform.parent = t;
+                    transform.localPosition = (Vector3.up * -0.6f) * stats.scale;
+                    transform.localScale *= stats.scale;
+                    transform.localRotation = Quaternion.identity;
                 }
 
-                if (t == null)
+                if (probe == null)
                 {
                     t = transform.parent
                         .Find(
-                            "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r")
+                            "root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/weapon_r")
                         .GetComponent<Transform>();
+                    transform.parent = t;
+                    delay = 0;
+                    effect_duration = 0.533f;
+                    transform.localPosition = (Vector3.down * -1f) * stats.scale;
+                    transform.localScale *= stats.scale * 0.6f;
+                    transform.localRotation = Quaternion.identity;
                 }
 
-                transform.parent = t;
-                transform.localPosition = (Vector3.up * -0.6f) * stats.scale;
-                transform.localScale *= stats.scale;
-                transform.localRotation = Quaternion.identity;
+
             }
 
             was_damaged = new List<GameObject>();
 
             created_t = Time.time;
-            delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
             origin = stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2);
