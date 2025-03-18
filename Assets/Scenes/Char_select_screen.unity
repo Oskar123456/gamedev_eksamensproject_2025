@@ -701,7 +701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fade_in: 1
   characterPrefab1: {fileID: 1091759200899072319, guid: e60167972a30787aaa0ee22d802be731, type: 3}
-  characterPrefab2: {fileID: 8189980434977739222, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
+  characterPrefab2: {fileID: 8189980434977739222, guid: b534ddc2ec9ff51949794b2ad018e799, type: 3}
   character1Button: {fileID: 575838277}
   character2Button: {fileID: 381412497}
   confirmButton: {fileID: 235798387}

@@ -69,12 +69,9 @@ public class GameControllerScript : MonoBehaviour
 
     void Start()
     {
-        GameState.InstantiatePlayer();
-        player = GameObject.Find("Player");
-
-        player_trf = player.GetComponent<Transform>();
-        player_char_ctrl = player.GetComponent<CharacterController>();
-        GameState.player_trf = player_trf;
+        if (GameObject.Find("Player")) {
+            Destroy(GameObject.Find("Player"));
+        }
 
         current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
         // current_level_type = LevelType.Medieval;
@@ -89,6 +86,14 @@ public class GameControllerScript : MonoBehaviour
 
         level_builder = arena.GetComponent<LevelBuilder>();
         level_builder.Init();
+
+        GameState.InstantiatePlayer();
+        player = GameObject.Find("Player");
+
+        player_trf = player.GetComponent<Transform>();
+        player_char_ctrl = player.GetComponent<CharacterController>();
+        GameState.player_trf = player_trf;
+
 
         minimap_img = GameObject.Find("MiniMapImg");
         minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();

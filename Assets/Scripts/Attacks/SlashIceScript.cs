@@ -54,18 +54,38 @@ namespace Attacks
         {
             Transform t = transform.parent;
             bool is_player = (transform.parent.gameObject.tag == "Player");
-            if (is_player) {
-                t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
-                transform.parent = t;
-                transform.localPosition = (Vector3.up * -0.6f) * stats.scale;
-                transform.localScale *= stats.scale;
-                transform.localRotation = Quaternion.identity;
+            delay = delay / (stats.base_duration / stats.duration);
+
+            if (is_player)
+            {
+                Transform probe = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
+
+                if (probe != null)
+                {
+                    t = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
+                    transform.parent = t;
+                    transform.localPosition = (Vector3.up * -0.6f);
+                    transform.localScale *= stats.scale;
+                    transform.localRotation = Quaternion.identity;
+                }
+
+                if (probe == null)
+                {
+                    t = transform.parent.Find("root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/weapon_r").GetComponent<Transform>();
+                    transform.parent = t;
+                    delay = 0.096f;
+                    effect_duration = 0.437f;
+                    transform.localPosition = (Vector3.down * -1f);
+                    transform.localScale *= stats.scale * 0.6f;
+                    transform.localRotation = Quaternion.identity;
+                }
+
+
             }
 
             was_damaged = new List<GameObject>();
 
             created_t = Time.time;
-            delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
             origin = stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2);
@@ -85,6 +105,7 @@ namespace Attacks
             float alive_t_frac = (alive_t - delay) / effect_duration;
 
             if (!created) {
+                // Debug.Log("Create effect at : " + alive_t);
                 Instantiate(audio_dummy, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2), transform.rotation, stats.attacker.transform);
 
                 Quaternion rot = Quaternion.Euler(stats.attacker.transform.rotation.eulerAngles.x,
@@ -94,17 +115,13 @@ namespace Attacks
                 GameObject effect = Instantiate(effect_prefab, stats.attacker.transform.position + Vector3.up * (stats.attacker.transform.lossyScale.y / 2),
                         rot, stats.attacker.transform);
                 Destroy(effect, effect_duration);
-                effect.transform.localScale *= 1 + ((stats.scale - 1) / 2);
+                effect.transform.localScale *= stats.scale;
                 ParticleSystem ps = effect.GetComponent<ParticleSystem>();
                 var main = ps.main;
                 main.simulationSpeed = stats.base_duration / stats.duration;
                 coll.enabled = true;
                 created = true;
             }
-
-            // float degrees_current = Mathf.Lerp(degrees_orig + degrees_start, degrees_orig + degrees_end, alive_t_frac) % 360f;
-            // float degrees_current_rad = degrees_current * ((2 * MathF.PI) / 360f);
-            // transform.position = new Vector3(radius * MathF.Cos(360 - degrees_current_rad) + origin.x, origin.y, radius * MathF.Sin(360 - degrees_current_rad) + origin.z);
         }
 
         void OnTriggerStay(Collider collider)
@@ -157,7 +174,7 @@ namespace Attacks
         {
             damage   = (damage_per_level * level + damage_base) + ps.attack_damage + ps.attack_damage_ice;
             scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
-            range    = range_base        * (1 + ((ps.attack_scale - 1) / 2));
+            range    = range_base        * ps.attack_scale;
             duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }

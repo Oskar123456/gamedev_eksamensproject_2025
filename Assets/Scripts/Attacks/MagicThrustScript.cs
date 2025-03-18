@@ -36,12 +36,14 @@ namespace Attacks
 
         Vector3 origin;
         public float offs_start = 0.88f;
-        public float offs_finish = 4.62f;
+        public float offs_finish = 4f;
 
         float created_t, alive_t;
         bool created = false;
         public float delay = 0.5f;
         public float effect_duration = 0.16f;
+
+        bool is_warrior = false;
 
         List<GameObject> was_damaged;
 
@@ -56,13 +58,34 @@ namespace Attacks
         void Start()
         {
             parent = transform.parent;
+            Vector3 effect_off = Vector3.zero;
+
             bool is_player = (transform.parent.gameObject.tag == "Player");
+
             if (is_player) {
-                parent = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
-                transform.parent = parent;
-                transform.localPosition = (Vector3.up * -0.75f);
-                transform.localScale *= 1 + ((stats.scale - 1) / 2);
-                transform.localRotation = Quaternion.identity;
+                Transform trf = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
+
+                if (trf != null) {
+                    parent = trf;
+                    transform.position = trf.position;
+                    transform.parent = trf;
+                    transform.localPosition = (Vector3.up * -0.75f);
+                    transform.localScale *= stats.scale * 8;
+                    transform.localRotation = Quaternion.identity;
+                    effect_off = (Vector3.up * -0.75f);
+                } else {
+                    Transform t = transform.parent.Find("root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/weapon_r").GetComponent<Transform>();
+                    delay = 0.138f;
+                    effect_duration = 0.395f;
+                    transform.position = t.position;
+                    transform.parent = t;
+                    transform.localPosition = (Vector3.down * -1.15f);
+                    transform.localScale *= stats.scale * 8;
+                    transform.localRotation = Quaternion.identity;
+                    parent = t;
+                    effect_off = (Vector3.down * -1.15f);
+                    is_warrior = true;
+                }
             }
 
             was_damaged = new List<GameObject>();
@@ -74,16 +97,16 @@ namespace Attacks
             origin = transform.position;
 
             // Instantiate(audio_dummy_charge, transform.position, transform.rotation, parent);
-            GameObject effect = Instantiate(effect_prefab, transform.position + parent.up * -0.75f, transform.rotation, parent);
+            GameObject effect = Instantiate(effect_prefab, transform.position, transform.rotation, parent);
             effect_trf = effect.GetComponent<Transform>();
 
-            effect_trf.localScale *= 1 + ((stats.scale - 1) / 2);
+            effect_trf.localScale *= stats.scale * 8;
             ParticleSystem ps = effect.GetComponent<ParticleSystem>();
             var main = ps.main;
             main.simulationSpeed = stats.base_duration / stats.duration;
 
             foreach (Transform t in effect_trf) {
-                t.localScale *= 1 + ((stats.scale - 1) / 2);
+                t.localScale *= stats.scale * 8;
                 ps = t.GetComponent<ParticleSystem>();
                 main = ps.main;
                 main.simulationSpeed = stats.base_duration / stats.duration;
@@ -107,14 +130,13 @@ namespace Attacks
             float alive_t_frac = (alive_t - delay) / effect_duration;
 
             if (!created) {
-                origin = parent.position + parent.forward * -0.75f;
+                origin = transform.position + (is_warrior ? Vector3.down * 0.65f : Vector3.zero);
                 Instantiate(audio_dummy_thrust, transform.position, transform.rotation, parent);
                 coll.enabled = true;
                 created = true;
             }
 
-            transform.position = Vector3.Lerp(origin + stats.attacker.transform.forward * offs_start,
-                    origin + stats.attacker.transform.forward * offs_finish, alive_t_frac);
+            transform.position = Vector3.Lerp(origin, origin + stats.attacker.transform.forward * offs_finish, alive_t_frac);
         }
 
         void OnTriggerStay(Collider collider)
@@ -157,7 +179,7 @@ namespace Attacks
             damage_base = 1; damage_per_level = 1;
             duration_base = 0.76f; duration_per_level = 0;
             cooldown_base = 1; cooldown_per_level = 0;
-            scale_base = 0.1f; scale_per_level = 0.025f;
+            scale_base = 0.1f; scale_per_level = 0.0025f;
             range_base = 3.5f;
             damage_type = DamageType.Normal;
         }
@@ -166,7 +188,7 @@ namespace Attacks
         {
             damage   = (damage_per_level * level + damage_base) + ps.attack_damage + ps.attack_damage_ice + ps.attack_damage_fire;
             scale    = (scale_per_level  * level + scale_base)  * ps.attack_scale;
-            range    = range_base        * (1 + ((ps.attack_scale - 1) / 2));
+            range    = range_base        * ps.attack_scale;
             duration = duration_base     / ps.attack_speed;
             cooldown = duration;
         }

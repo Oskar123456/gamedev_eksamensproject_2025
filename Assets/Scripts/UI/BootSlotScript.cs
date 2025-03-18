@@ -99,7 +99,7 @@ public class BootSlotScript : MonoBehaviour
             player_stats.boots.Equip(player_stats);
         }
 
-        player_script.SyncStats();
+        player.SendMessage("SyncStats");
         ui_script.SetHeldItem();
         ui_script.Sync();
 

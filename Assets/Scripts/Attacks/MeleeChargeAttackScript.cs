@@ -48,14 +48,31 @@ namespace Attacks
         {
             was_damaged = new List<GameObject>();
 
+            origin = stats.attacker.transform.position;
+
+            bool is_player = (transform.parent.gameObject.tag == "Player");
+
+            if (is_player) {
+                Transform trf = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
+                if (trf != null) {
+                    transform.parent = trf;
+                    transform.position = trf.position;
+                    transform.localPosition = Vector3.down * 1.15f;
+                } else {
+                    Transform t = transform.parent.Find("root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/weapon_r").GetComponent<Transform>();
+                    delay = 0.096f;
+                    effect_duration = 0.437f;
+                    transform.position = t.position;
+                    transform.parent = t;
+                    transform.localPosition = (Vector3.down * -1.15f);
+                }
+            }
+
+            transform.localScale *= 1 + ((stats.scale - 1) / 2);
+
             created_t = Time.time;
             delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
-
-            origin = stats.attacker.transform.position;
-
-            transform.position = transform.parent.position + transform.parent.up * -1f;
-            transform.localScale *= 1 + ((stats.scale - 1) / 2);
 
             Destroy(gameObject, stats.duration);
         }
@@ -159,10 +176,6 @@ namespace Attacks
         public override void Use(Transform parent)
         {
             Transform t = parent;
-            bool is_player = (parent.gameObject.tag == "Player");
-            if (is_player) {
-                t = parent.Find("root/pelvis/Weapon/Staff01PolyArt").GetComponent<Transform>();
-            }
 
             GameObject instance = GameState.InstantiateParented(GameData.attack_prefabs[prefab_index], parent.position, parent.rotation, t);
 

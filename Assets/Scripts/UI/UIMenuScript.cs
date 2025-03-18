@@ -42,15 +42,18 @@ namespace UI
             screen_color_img = screen_color.GetComponent<Image>();
             screen_color_img.color = Color.black;
 
-            play_button = GameObject.Find("PlayButton").GetComponent<Button>();
-            play_button.onClick.AddListener(PlayGame);
+            if (GameObject.Find("PlayButton") != null) {
+                play_button = GameObject.Find("PlayButton").GetComponent<Button>();
+                play_button.onClick.AddListener(PlayGame);
+            }
             // title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
-            status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
-            /* game UI */
-            if (GameState.has_died) {
-                status.text = "YOU DIED...";
-            } else {
-                status.text = "Welcome...";
+            if (GameObject.Find("Status") != null) {
+                status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
+                if (GameState.has_died) {
+                    status.text = "YOU DIED...";
+                } else {
+                    status.text = "Welcome...";
+                }
             }
 
             GameState.has_died = false;

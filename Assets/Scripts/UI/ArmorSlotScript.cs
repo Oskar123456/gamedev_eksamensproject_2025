@@ -99,7 +99,7 @@ public class ArmorSlotScript : MonoBehaviour
             player_stats.armor.Equip(player_stats);
         }
 
-        player_script.SyncStats();
+        player.SendMessage("SyncStats");
         ui_script.SetHeldItem();
         ui_script.Sync();
 

@@ -14,17 +14,17 @@ public class CharacterSelectScript : MonoBehaviour
 
     public float fade_in = 1;
     float fade_in_left;
-    
+
     public GameObject characterPrefab1;  // Assign in Inspector
     public GameObject characterPrefab2;  // Assign in Inspector
 
     public Button character1Button;
     public Button character2Button;
     public Button confirmButton;
-    
-    private string selectedCharacterName = "Player"; 
+
+    private string selectedCharacterName = "Player";
     private GameObject selectedPrefab;
-    
+
     void Start()
     {
         character1Button.onClick.AddListener(() => SelectCharacter(characterPrefab1, "Mage"));
@@ -38,13 +38,13 @@ public class CharacterSelectScript : MonoBehaviour
         confirm_button = GameObject.Find("Confirm").GetComponent<Button>();
         confirmButton.onClick.AddListener(ConfirmSelection);
         // title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
-        status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
+        // status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
         /* game UI */
-        if (GameState.has_died) {
-            status.text = "YOU DIED...";
-        } else {
-            status.text = "Welcome...";
-        }
+        // if (GameState.has_died) {
+        //     status.text = "YOU DIED...";
+        // } else {
+        //     status.text = "Welcome...";
+        // }
         GameState.has_died = false;
 
         fade_in_left = fade_in;
@@ -54,12 +54,13 @@ public class CharacterSelectScript : MonoBehaviour
     }
     void SelectCharacter(GameObject prefab, string characterName)
     {
-        GameState.Instance.player_prefab = prefab;  // Update GameState directly
+        // GameState.Instance.player_prefab = prefab;  // Update GameState directly
+        GameState.ChangePf(prefab);
         selectedPrefab = prefab;
         selectedCharacterName = characterName;
         Debug.Log("Selected character: " + selectedCharacterName);
     }
-        
+
     void Update()
     {
         if (fade_in > 0) {
@@ -80,7 +81,7 @@ public class CharacterSelectScript : MonoBehaviour
             GameState.ChangePf(selectedPrefab);
             PlayerPrefs.SetString("SelectedCharacter", selectedCharacterName);
             PlayerPrefs.Save();
-            SceneManager.LoadScene("Town"); 
+            SceneManager.LoadScene("Town");
         }
         else
         {

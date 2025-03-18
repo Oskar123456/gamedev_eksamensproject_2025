@@ -99,10 +99,10 @@ namespace Player
         bool is_moving_to_point = false;
         /* animator parameters */
         public float anim_mul_move_speed = 13;
-        public float attack_anim_time = 1.333f;
-        public float attack_thrust_anim_time = 1f;
-        public float cast_anim_speed = 1.4f;
-        public float pickup_anim_time = 1.667f;
+        public float attack_anim_time = 0.533f;
+        public float attack_thrust_anim_time = 0.533f;
+        public float cast_anim_speed = 1.66f;
+        public float pickup_anim_time = 1.66f;
         float footstep_cooldown_left;
         int footstep_next;
         /* effects */
@@ -179,10 +179,8 @@ namespace Player
             }
             if (ui_active_spell != null) {
                 ui_active_spell_text = GameObject.Find("ActiveSpellText").GetComponent<TextMeshProUGUI>();
-            } 
+            }
             /* effects */
-/*
-
             foreach (Transform t in transform) {
                 if (t.gameObject.name == "AudioDummyPlayerFootSteps") {
                     footsteps = t.GetComponent<FootStepsScript>();
@@ -191,7 +189,7 @@ namespace Player
             if (footsteps == null) {
                 Debug.LogError("Player: no footsteps audio source");
             }
-*/
+
             SyncStats();
         }
 
@@ -599,7 +597,7 @@ namespace Player
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if (hit.normal.y >= 0.9f && fall_time > 0.1f) {
-//                footsteps.PlayRandom();
+               footsteps.PlayRandom();
             }
             if (hit.normal.y < 0.1f) {
             }
@@ -622,10 +620,12 @@ namespace Player
             }
 
             else if (is_casting) {
-                animator.Play("JumpFull_Spin_RM_SwordAndShield");
+                animator.SetFloat("cast_speed", stats.spell_speed);
+                animator.Play("Victory_Battle_SwordAndShield");
             }
 
             else if (is_picking_up) {
+                animator.SetFloat("cast_speed", stats.pickup_speed);
                 animator.Play("Victory_Battle_SwordAndShield");
             }
 
@@ -640,31 +640,26 @@ namespace Player
                     animator.SetFloat("move_speed", anim_mul_move_speed * MathF.Min(v_horizontal_0, move_speed) * 0.4f);
                     animator.Play("SprintFWD_Battle_InPlace_SwordAndShield");
                     float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
-                    /*
-                    if (footstep_next == 0 && (anim_time_normed > 0.07f && anim_time_normed < 0.13f)) {
+                    if (footstep_next == 0 && (anim_time_normed > 0.22f && anim_time_normed < 0.28f)) {
                         footsteps.PlayRandom();
                         footstep_next = 1;
                     }
-                    if (footstep_next == 1 && (anim_time_normed > 0.57f && anim_time_normed < 0.63f)) {
+                    if (footstep_next == 1 && (anim_time_normed > 0.67f && anim_time_normed < 0.73f)) {
                         footsteps.PlayRandom();
                         footstep_next = 0;
                     }
-                                    */
-
                 } else {
                     animator.SetFloat("move_speed", anim_mul_move_speed * MathF.Min(v_horizontal_0, move_speed));
                     animator.Play("MoveFWD_Battle_InPlace_SwordAndShield");
                     float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
-                    /*
-                    if (footstep_next == 0 && (anim_time_normed > 0.97f || anim_time_normed < 0.03f)) {
+                    if (footstep_next == 0 && (anim_time_normed > 0.22f || anim_time_normed < 0.28f)) {
                         footsteps.PlayRandom();
                         footstep_next = 1;
                     }
-                    if (footstep_next == 1 && (anim_time_normed > 0.47f && anim_time_normed < 0.53f)) {
+                    if (footstep_next == 1 && (anim_time_normed > 0.67f && anim_time_normed < 0.73f)) {
                         footsteps.PlayRandom();
                         footstep_next = 0;
                     }
-                    */
                 }
             }
 
