@@ -60,6 +60,7 @@
 
 ## TODO:
 
+  - Bug: gamestate does not update default stats, when character selection changes (easy to fix).
   - Fix player rotation (lock x,z probably) [x].
   - Visual cooldown effect on active skill/attack button [x].
   - Prettier UI.

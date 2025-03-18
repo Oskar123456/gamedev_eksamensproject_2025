@@ -520,7 +520,7 @@ MonoBehaviour:
   level: 1
   xp: 0
   xp_max: 1
-  gold: 0
+  gold: 25
   hp: 100
   hp_max: 100
   defense: 0
