@@ -25,14 +25,17 @@ namespace UI
         Image screen_color_img;
 
         Button play_button;
-        // TextMeshProUGUI title;
         TextMeshProUGUI status;
 
         public float fade_in = 1;
         float fade_in_left;
 
+        AudioSource audio_source;
+        public AudioClip[] audio_clips;
+
         void Awake()
         {
+            audio_source = GetComponent<AudioSource>();
         }
 
         void Start()
@@ -46,11 +49,15 @@ namespace UI
                 play_button = GameObject.Find("PlayButton").GetComponent<Button>();
                 play_button.onClick.AddListener(PlayGame);
             }
-            // title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
+
             if (GameObject.Find("Status") != null) {
                 status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
                 if (GameState.has_died) {
                     status.text = "YOU DIED...";
+                    if (audio_source != null) {
+                        audio_source.clip = audio_clips[1];
+                        audio_source.Play();
+                    }
                 } else {
                     status.text = "Welcome...";
                 }
@@ -78,6 +85,10 @@ namespace UI
 
         void PlayGame()
         {
+            if (audio_source != null) {
+                audio_source.clip = audio_clips[1];
+                audio_source.Play();
+            }
             SceneManager.LoadScene("Char_select_screen");
         }
     }
