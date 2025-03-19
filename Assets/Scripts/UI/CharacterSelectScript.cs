@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CharacterSelectScript : MonoBehaviour
 {
+    public GameObject objectA; // Assign in Inspector (e.g., Mage Preview)
+    public GameObject objectB; // Assign in Inspector (e.g., Warrior Preview)
     GameObject screen_color;
     Image screen_color_img;
 
@@ -27,6 +29,7 @@ public class CharacterSelectScript : MonoBehaviour
 
     void Start()
     {
+        
         character1Button.onClick.AddListener(() => SelectCharacter(characterPrefab1, "Mage"));
         character2Button.onClick.AddListener(() => SelectCharacter(characterPrefab2, "Warrior"));
 
@@ -48,16 +51,31 @@ public class CharacterSelectScript : MonoBehaviour
         GameState.has_died = false;
 
         fade_in_left = fade_in;
+         
+        objectA.SetActive(false);
+        objectB.SetActive(false);
 
         if (GameObject.Find("Player") != null)
             Destroy(GameObject.Find("Player"));
     }
     void SelectCharacter(GameObject prefab, string characterName)
     {
-        // GameState.Instance.player_prefab = prefab;  // Update GameState directly
-        GameState.ChangePf(prefab);
         selectedPrefab = prefab;
         selectedCharacterName = characterName;
+        GameState.ChangePf(prefab);
+
+        // Toggle between objectA and objectB
+        if (prefab == characterPrefab1)
+        {
+            objectA.SetActive(true);
+            objectB.SetActive(false);
+        }
+        else if (prefab == characterPrefab2)
+        {
+            objectA.SetActive(false);
+            objectB.SetActive(true);
+        }
+
         Debug.Log("Selected character: " + selectedCharacterName);
     }
 
