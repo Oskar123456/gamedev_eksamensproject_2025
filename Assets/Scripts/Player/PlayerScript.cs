@@ -346,12 +346,13 @@ namespace Player
                 UpdateCam();
             }
 
-            RaycastHit hit_info_enemy;
-            RaycastHit hit_info_floor;
-            RaycastHit hit_info_plane;
             if (Camera.main == null) {
                 return;
             }
+
+            RaycastHit hit_info_enemy;
+            RaycastHit hit_info_floor;
+            RaycastHit hit_info_plane;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             bool hit_enemy = Physics.Raycast(ray, out hit_info_enemy, 500, 1 << 10);
             bool hit_plane = Physics.Raycast(ray, out hit_info_plane, 500, 1 << 8);
@@ -365,7 +366,7 @@ namespace Player
 
             is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_plane;
 
-            if (is_falling || is_attacking || is_casting || is_picking_up) {
+            if (is_falling || is_attacking || is_casting || is_picking_up || (ui_script.is_ui_object_hovered && !is_mouse_hover_loot)) {
                 return;
             }
 
