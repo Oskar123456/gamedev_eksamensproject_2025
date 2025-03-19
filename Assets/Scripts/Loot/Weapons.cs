@@ -83,8 +83,8 @@ namespace Loot
             weight = 500;
             prefab_index = 1;
             sprite_index = 0;
-            name = "DivineDemonStaff";
-            description = "a legendary staff";
+            name = "Demon King's Staff";
+            description = "A legendary demon king's staff";
             spell_damage = GameState.rng.Next() % 10 + 5;
             spell_speed = (GameState.rng.Next() % 10 + 5) * 0.1f;
             spell_scale = (GameState.rng.Next() % 10 + 5) * 0.1f;
