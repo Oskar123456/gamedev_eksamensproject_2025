@@ -18,7 +18,7 @@ public class NPCInteractable : MonoBehaviour
    }
    public void Interact()
    {
-      // ChatBubble.Create(transform.transform,new Vector3(-1.5f,1.7f,-1.5f),"Vendor!",chatBubblePrefab);
+      ChatBubble.Create(transform.transform,new Vector3(-1.5f,1.7f,-1.5f),"Vendor!",chatBubblePrefab);
       //animator.SetTrigger("talk");
       ShopCanvas.SetActive(true);
       uiCanvas.SetActive(false);
