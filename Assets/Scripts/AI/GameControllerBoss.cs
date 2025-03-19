@@ -99,9 +99,6 @@ public class GameControllerBoss : MonoBehaviour
         minimap_cam.orthographic = true;
         minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
-        player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), player_trf);
-        player_marker_trf = player_marker.GetComponent<Transform>();
-
 
         UI = GameObject.Find("UI");
         active_attack_button = GameObject.Find("ActiveAttackButton");
@@ -181,4 +178,3 @@ public class GameControllerBoss : MonoBehaviour
         SceneManager.LoadScene("Town");
     }
 }
-

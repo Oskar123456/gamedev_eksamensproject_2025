@@ -16,7 +16,7 @@ public class BossStats : MonoBehaviour
     void Awake()
     {
         // Initialiser bossens unikke stats
-        hp_max = 5;  // Bossens maksimale HP
+        hp_max = 500;  // Bossens maksimale HP
         hp = hp_max;
         attack_range = 4.0f;  // Boss kan angribe fra længere afstand
         attack_speed = 1.5f;

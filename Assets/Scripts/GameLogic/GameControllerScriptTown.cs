@@ -20,6 +20,7 @@ public class GameControllerScriptMenu : MonoBehaviour
 {
     public GameObject player_prefab;
     public GameObject portal_exit_prefab;
+    public GameObject portal_exit2_prefab;
     public GameObject finish_marker_prefab;
     public GameObject player_marker_prefab;
 
@@ -77,6 +78,7 @@ public class GameControllerScriptMenu : MonoBehaviour
         finish_marker_trf = finish_marker.GetComponent<Transform>();
 
         GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up, Quaternion.identity, transform);
+        GameObject portal_exit2 = Instantiate(portal_exit2_prefab, finish_pos + Vector3.up + Vector3.left * 20, Quaternion.identity, transform);
 
         finish_marker_trf.position = new Vector3(finish_pos.x, 290, finish_pos.z);
         player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
@@ -132,6 +134,14 @@ public class GameControllerScriptMenu : MonoBehaviour
             } else {
                 SceneManager.LoadScene("Arena");
             }
+        }
+    }
+
+    void OnBossPortal(Portal2 p2)
+    {
+        if (p2 == Portal2.Exit) {
+            GameState.SavePlayerStats();
+            SceneManager.LoadScene("Boss1");
         }
     }
 

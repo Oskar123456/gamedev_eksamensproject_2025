@@ -5,22 +5,34 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using Attacks;
 using UnityEngine.UI;
 using Loot;
+using Spells;
 
 
+// Script til at styre bossens adfærd
 public class BossScript : MonoBehaviour
 {
-    private Animator animator;
-    private Transform player_trf;
+    private Animator animator; // Animator til at styre animationer
+    private Transform player_trf; // Referencer til spillerens transform
 
-    private Attack bossAttack;    
+    private Attack bossAttack;  // Bossens meleeAttack
 
-    public float moveSpeed = 6f;  // Gå-hastighed
-    public float stopDistance = 5f;  // Stop ved denne afstand
+    private Spell bossAttackAoe;  // Bossens AOE (Area of Effect) angreb
+
+    public float moveSpeed = 6f;  // Gå-hastighed for bossen
+    public float stopDistance = 5f;  // Stopper ved denne afstand
     public float attackCooldown = 2.5f;
 
     private float attackTime = 2.167f;
 
-    private float attackTimeLift = 0f;
+    private float attackTimeLeft = 0f;
+
+    private float spellBossCooldown = 5f;
+
+    private float spellBossCoolDownleft;
+
+    private float spellCastime = 2.167f;
+
+    private float spellCastimeLeft;
 
     private NavMeshAgent nma;
 
@@ -34,46 +46,46 @@ public class BossScript : MonoBehaviour
     Slider healthbar_slider;
     Transform player_cam_trf;
     public GameObject portal_exit_prefab;
-    
-    private float hitTimeLift = 0f; // Timer to track the hit animation duration 
+
+    private float hitTimeDurationLeft = 0f; // Timer to track the hit animation duration
     private float hitDuration = 1f; // Duration for which the hit animation should play
 
 
     void Start()
     {
-        bossAttack = new MeleeChargeBossAttack(); 
+         // Initialisering af angreb
+        bossAttack = new MeleeChargeBossAttack();
         bossAttack.duration = 1f;
         bossAttack.scale = 1f;
         bossAttack.damage = 1;
-        
 
+
+        // Initialisering af meteor spell
+        bossAttackAoe = new MeteorSpell();
+        bossAttack.duration = 1f;
+        bossAttack.scale = 1f;
+        bossAttack.damage = 1;
+
+        // Finder nødvendige komponenter
         animator = GetComponent<Animator>();
         nma = GetComponent<NavMeshAgent>();
         stats = GetComponent<BossStats>();
-         
+
         player_cam_trf = GameObject.Find("Main Camera").GetComponent<Transform>();
 
+        // Opretter Healthbar
             healthbar = Instantiate(healthbar_prefab, transform.position + Vector3.up * 5, Quaternion.identity, transform);
             healthbar_slider = healthbar.transform.GetChild(0).gameObject.GetComponent<Slider>();
             Transform upSlider = healthbar_slider.GetComponent<Transform>();
             upSlider.position += Vector3.up * 5;
-             
+
             healthbar.SetActive(false);
-         
 
 
-        nma.speed = moveSpeed; 
+        // Sætte bossens gå hastighed til moveSpeed
+        nma.speed = moveSpeed;
 
-        player_trf = GameObject.FindWithTag("Player")?.transform;
-        if (player_trf == null)
-        {
-            Debug.LogError("❌ Player transform not found!");
-        }
 
-        if (animator == null)
-            Debug.LogError("❌ Animator component is missing on Boss!");
-
-        
     }
 
     void Update()
@@ -82,15 +94,20 @@ public class BossScript : MonoBehaviour
             player_trf = GameObject.FindWithTag("Player")?.transform;
               Debug.Log(player_trf.position);
         }
-         
+
         if (player_trf.hasChanged) {
               if (stats.hp < stats.hp_max) {
                  FixHealthBar();
               }
         }
-        
+
         float distanceToPlayer = Vector3.Distance(transform.position, player_trf.position);
-        if(attackTimeLift <= 0) {
+
+        if(spellBossCoolDownleft <= 0 && distanceToPlayer >= 20 && attackTimeLeft <= 0 && spellCastimeLeft <= 0 && hitTimeDurationLeft <= 0  ) {
+            nma.ResetPath();
+            PerformMeteorSpellAttack();
+        }
+        else if(attackTimeLeft <= 0 && spellCastimeLeft <= 0 && hitTimeDurationLeft <= 0) {
            if (distanceToPlayer > stopDistance)
         {
             MoveTowardsPlayer();
@@ -98,35 +115,44 @@ public class BossScript : MonoBehaviour
         else
         {
 
-         nma.ResetPath();    
+         nma.ResetPath();
          PerformAttack();
-         
-        } 
-        } else {
-            attackTimeLift -= Time.deltaTime;
+
+
         }
-       
+        } else {
+
+        }
+        attackTimeLeft -= Time.deltaTime;
+        spellCastimeLeft -= Time.deltaTime;
+        spellBossCoolDownleft -= Time.deltaTime;
 
         ChooseAnimation();
     }
-     
+
      void ChooseAnimation()
 {
-    if (hitTimeLift > 0)  // Prioritize "gethit1" a timer that tells us if the boss is still in the hit animation state.
-    { 
+    if (hitTimeDurationLeft > 0)  // Prioritize "gethit1" a timer that tells us if the boss is still in the hit animation state.
+    {
         animator.Play("gethit1");
-        hitTimeLift -= Time.deltaTime; // Count down hit time
+        hitTimeDurationLeft -= Time.deltaTime; // Count down hit time
         return; // Prevents any other animations from playing
     }
-    else if (attackTimeLift > 0) 
+    else if (attackTimeLeft > 0)
     {
         animator.Play("attack1");
-    } 
-    else if (nma.velocity.magnitude > 0) 
+    }
+    else if (spellCastimeLeft > 0) {
+
+     animator.Play("attack1LSpike");
+
+
+    }
+    else if (nma.velocity.magnitude > 0)
     {
         animator.Play("walk2");
-    } 
-    else 
+    }
+    else
     {
         animator.Play("idle1");
     }
@@ -142,159 +168,106 @@ public class BossScript : MonoBehaviour
 
         nma.SetDestination(player_trf.position);
 
-        
+
     }
 
     void OnHit(HitInfo hit_info)
-        {
-            if (hit_info.parent.tag != "Player")
-                return;
-
-            TakeDamage(hit_info.damage);
-            healthbar_slider.value = (float)stats.hp / stats.hp_max;
-            healthbar.SetActive(true);
-            
-            /* TODO: refactor as "pushback()" or something */
-            if (nma.enabled)
-                nma.ResetPath();
-
-            if (stats.hp < 1) {
-                hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
-                // death_effect = Instantiate(death_effect_prefab, transform.position + halfway_up_vec, Quaternion.identity);
-               //death_effect.transform.localScale = death_effect.transform.localScale * death_effect_scale;
-               // Destroy(death_effect, death_effect_delete_t);
-                Destroy(gameObject);
-                return;
-            }
-        }
-
-/*   
-    void PerformAttack()
 {
-    if (player_trf == null) return;
+    if (hit_info.parent.tag != "Player")
+        return;
 
-    float attackDistance = 30f; // Boss skal angribe, hvis spilleren er under 30f væk
-    float projectileSpeed = 25f; // Juster hastigheden efter behov
+    // ✅ Add cooldown to prevent spam hits from Blizzard
+    if (hitTimeDurationLeft > 0)
+        return;
 
-    float distanceToPlayer = Vector3.Distance(transform.position, player_trf.position);
-    if (distanceToPlayer > attackDistance) return; // Stop hvis spilleren er for langt væk
+    TakeDamage(hit_info.damage);
+    healthbar_slider.value = (float)stats.hp / stats.hp_max;
+    healthbar.SetActive(true);
 
-    attackTimeLift = attackTime; 
-    isAttacking = true;
+    if (nma.enabled)
+        nma.ResetPath();
 
+    // ✅ Apply hit animation cooldown to avoid being stuck
+    hitTimeDurationLeft = hitDuration;
 
-    // Find hænderne
-    Transform rightHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_RightShoulder/Character1_Ctrl_RightArm/Character1_Ctrl_RightForeArm/Character1_Ctrl_RightHand");
-    Transform leftHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_LeftShoulder/Character1_Ctrl_LeftArm/Character1_Ctrl_LeftForeArm/Character1_Ctrl_LeftHand");            
-
-    if (rightHand == null || leftHand == null) return;
-
-    // Beregn retning fra hver hånd mod spilleren
-    Vector3 directionRight = (player_trf.position - rightHand.position).normalized;
-    Vector3 directionLeft = (player_trf.position - leftHand.position).normalized;
-
-
-
-    // Instansier projektiler fra hænderne
-    GameObject projectileRight = Instantiate(GameData.attack_prefabs[bossAttack.prefab_index], 
-                                             rightHand.position, Quaternion.identity);
-    GameObject projectileLeft = Instantiate(GameData.attack_prefabs[bossAttack.prefab_index], 
-                                            leftHand.position, Quaternion.identity);
-
-    // Sørg for, at projektilerne har en Rigidbody og ikke er børn af bossen
-    Rigidbody rbRight = projectileRight.GetComponent<Rigidbody>();
-    Rigidbody rbLeft = projectileLeft.GetComponent<Rigidbody>();
-
-    projectileRight.transform.parent = null; // Fjern som child af bossen
-    projectileLeft.transform.parent = null;
-
-    // Retter rotationen så projektilerne peger på spilleren
-    projectileRight.transform.LookAt(player_trf.position);
-    projectileLeft.transform.LookAt(player_trf.position);
-
-    if (rbRight != null)
-    {
-        rbRight.useGravity = false; // Undgå at det falder ned
-        rbRight.linearVelocity = directionRight * projectileSpeed;
+    if (stats.hp < 1) {
+        hit_info.parent.SendMessage("OnRecXp", stats.xp, SendMessageOptions.DontRequireReceiver);
+        Destroy(gameObject);
     }
-
-    if (rbLeft != null)
-    {
-        rbLeft.useGravity = false;
-        rbLeft.linearVelocity = directionLeft * projectileSpeed;
-    }
-
-    // Tilføj angrebsstatistikker
-    ApplyAttackStats(projectileRight);
-    ApplyAttackStats(projectileLeft);
-
-    isAttacking = false;
-    nextAttackTime = Time.time + attackCooldown;
 }
 
 
-// Metode til at tilføje angrebsstatistikker til projektiler
-void ApplyAttackStats(GameObject projectile)
-{
-    if (projectile == null) return;
 
-    AttackStats attackStats = projectile.GetComponent<AttackStats>();
-    if (attackStats != null)
-    {
-        attackStats.damage = bossAttack.damage;
-        attackStats.scale = bossAttack.scale;
-        attackStats.duration = bossAttack.duration;
-        attackStats.base_duration = bossAttack.duration;
-        attackStats.damage_type = DamageType.Normal;
-        attackStats.attacker = gameObject; 
-    }
-}
-
-*/   
-    
-    
-
-
-
-
+    //Funktion til bossens meleeAttack
      void PerformAttack()
     {
-        attackTimeLift = attackTime; 
-       
-       
-       // Finder højre hånd og venstre hånd 
+       // Sikrer, at bossen ikke kan meleeAttack igen, mens han er ved at angribe.
+        attackTimeLeft = attackTime;
+
+
+       // Finder højre hånd og venstre hånd
        Transform rightHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_RightShoulder/Character1_Ctrl_RightArm/Character1_Ctrl_RightForeArm/Character1_Ctrl_RightHand");
-       Transform leftHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_LeftShoulder/Character1_Ctrl_LeftArm/Character1_Ctrl_LeftForeArm/Character1_Ctrl_LeftHand");            
-       
+       Transform leftHand = transform.Find("Character1_Ctrl_Reference/Character1_Ctrl_Hips/Character1_Ctrl_Spine/Character1_Ctrl_Spine1/Character1_Ctrl_Spine2/Character1_Ctrl_LeftShoulder/Character1_Ctrl_LeftArm/Character1_Ctrl_LeftForeArm/Character1_Ctrl_LeftHand");
+
        // Instantiere hændernes position og sætter spells effects på
        GameObject instance = Instantiate(GameData.attack_prefabs[bossAttack.prefab_index],
                     rightHand.position, rightHand.rotation, rightHand);
 
-       
-       GameObject instance1 = Instantiate(GameData.attack_prefabs[bossAttack.prefab_index],
-                    leftHand.position, leftHand.rotation, leftHand); 
 
-       // Tildeler attack stats til hænderne   
+       GameObject instance1 = Instantiate(GameData.attack_prefabs[bossAttack.prefab_index],
+                    leftHand.position, leftHand.rotation, leftHand);
+
+       // Tildeler attack stats til hænderne
             AttackStats attack_statsRight = instance.GetComponent<AttackStats>();
             AttackStats attack_statsLeft = instance1.GetComponent<AttackStats>();
-            
-            attack_statsRight.damage = 1;
+
+            attack_statsRight.damage = 10;
             attack_statsRight.scale = 1;
             attack_statsRight.duration = 2.167f;
             attack_statsRight.base_duration = 2.167f;
             attack_statsRight.damage_type = DamageType.Normal;
-            attack_statsRight.attacker = gameObject; 
-            
+            attack_statsRight.attacker = gameObject;
+
             attack_statsLeft.damage = 1;
             attack_statsLeft.scale = 1;
             attack_statsLeft.duration = 2.167f;
             attack_statsLeft.base_duration = 2.167f;
             attack_statsLeft.damage_type = DamageType.Normal;
-            attack_statsLeft.attacker = gameObject; 
-            
+            attack_statsLeft.attacker = gameObject;
+
+        }
+
+    //Funktion til bossens MeteorSpell
+    void PerformMeteorSpellAttack() {
+
+             // Sikrer, at bossen ikke kan angribe igen, mens den er ved at kaste sin spell.
+             spellCastimeLeft = spellCastime;
+
+             // Sikrer, at bossen ikke kan bruge meteor-spellet igen, før cooldown er færdig.
+             spellBossCoolDownleft = spellBossCooldown;
+
+
+            // Skaber et nyt Meteor-spell objekt baseret på en prefab fra GameData.spell_prefabs.
+             GameObject instanceMeteor = Instantiate(GameData.spell_prefabs[bossAttackAoe.prefab_index],
+                    player_trf.position, player_trf.rotation);
+
+                    // Juster størrelsen af Meteor-spellet
+                    instanceMeteor.transform.localScale = new Vector3(instanceMeteor.transform.localScale.x * 5, instanceMeteor.transform.localScale.y, instanceMeteor.transform.localScale.z * 5);
+
+
+            // Tildeler spell stats til hænderne
+            SpellStats spell_stats = instanceMeteor.GetComponent<SpellStats>();
+            spell_stats.damage = 10;
+            spell_stats.scale = 5;
+            spell_stats.duration = 4;
+            spell_stats.base_duration = 4;
+            spell_stats.damage_type = DamageType.Fire;
+            spell_stats.caster = gameObject;
+
     }
 
 
+    //Funktion sørger for, at bossens healthbar altid vender mod kameraet, så spilleren ser den.
      void FixHealthBar()
         {
             Vector3 p1 = player_cam_trf.position;
@@ -305,14 +278,15 @@ void ApplyAttackStats(GameObject projectile)
 
 
 
+    // Funktion til når bossen tager skade
       public void TakeDamage(int damage)
     {
         stats.hp -= damage;
         Debug.Log($"🔥 Boss took {damage} damage! HP: {stats.hp}/{stats.hp_max}");
-       
-        attackTimeLift = 0f; 
-        hitTimeLift = hitDuration; // Setting hit animation timer
-       
+
+        attackTimeLeft = 0f;
+        hitTimeDurationLeft = hitDuration; // Sætter hit animation timer
+
 
         if (stats.hp <= 0)
         {
@@ -321,21 +295,27 @@ void ApplyAttackStats(GameObject projectile)
     }
 
 
-
+    // Funktion til at håndtere bossens død
     private void Die()
     {
         Debug.Log("💀 Boss is dead!");
         GameObject portal_exit = Instantiate(portal_exit_prefab, transform.position, Quaternion.identity);
         portal_exit.transform.position += Vector3.up * 3.5f;
         Destroy(gameObject); // Fjern bossen fra spillet
- 
+
+         //  Tilføjer 50% chance for at droppe loot
+    if (Random.value < 0.5f)  // 50% chance (0.0 - 0.5)
+    {
+        Debug.Log("🎁 Boss dropped loot!");
         Item item_dropped = GameData.GenerateBossLoot();
-                    item_dropped.Drop(transform.position);
+        item_dropped.Drop(transform.position);
+    }
+    else
+    {
+        Debug.Log("❌ No loot dropped this time.");
     }
 
-}  
-  
-
-    
-    
-
+    // Fjern bossen fra spillet
+    Destroy(gameObject);
+ }
+}
