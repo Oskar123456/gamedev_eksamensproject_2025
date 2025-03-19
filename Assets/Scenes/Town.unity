@@ -350,6 +350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_prefab: {fileID: 5931893304690391489, guid: e8f10f20493fa4d41ae04c51a95e66bf, type: 3}
   portal_exit_prefab: {fileID: 6227429834635096751, guid: a7cdf8ad66611dc6ab3aa8968a9edc2f, type: 3}
+  portal_exit2_prefab: {fileID: 6227429834635096751, guid: 98abecbc67c9c5940845c9ff77cb1bda, type: 3}
   finish_marker_prefab: {fileID: 7326373210986856476, guid: bb922b4945c3e6d5a86b6c1ee5db0a8f, type: 3}
   player_marker_prefab: {fileID: 8217330875636043583, guid: 9b7adf0de77e814d4a149c01b92b7d19, type: 3}
   finish_pos: {x: 10, y: 3, z: 10}
