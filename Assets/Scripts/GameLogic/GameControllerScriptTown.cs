@@ -99,7 +99,7 @@ public class GameControllerScriptMenu : MonoBehaviour
                 minimap_img.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
             } else {
                 minimap_img.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-                minimap_img.GetComponent<Transform>().localScale = new Vector3(4, 4, 4);
+                minimap_img.GetComponent<Transform>().localScale = new Vector3(3, 3, 3);
             }
             minimap_maximized = !minimap_maximized;
         }

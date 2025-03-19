@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections;
 using PCG;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
@@ -60,6 +61,8 @@ public class GameControllerScript : MonoBehaviour
 
     LevelType current_level_type;
     Level current_level;
+
+    Light minimap_light;
 
     bool no_player_found;
 
@@ -125,6 +128,11 @@ public class GameControllerScript : MonoBehaviour
 
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
         Debug.Log("finish: " + current_level.GetFinishPosition().ToString());
+
+        minimap_light = GameObject.Find("Directional Light").GetComponent<Light>();
+        RenderPipelineManager.beginCameraRendering += PreRender;
+        RenderPipelineManager.endCameraRendering += PostRender;
+
     }
 
     void Update()
@@ -197,5 +205,27 @@ public class GameControllerScript : MonoBehaviour
     {
         GameState.SavePlayerStats();
         SceneManager.LoadScene("Town");
+    }
+
+    void PreRender(ScriptableRenderContext context, Camera camera)
+    {
+        if (camera.tag == "MainCamera") {
+            return;
+        }
+        if (minimap_light == null) {
+            return;
+        }
+        minimap_light.enabled = true;
+    }
+
+    void PostRender(ScriptableRenderContext context, Camera camera)
+    {
+        if (camera.tag == "MainCamera") {
+            return;
+        }
+        if (minimap_light == null) {
+            return;
+        }
+        minimap_light.enabled = false;
     }
 }

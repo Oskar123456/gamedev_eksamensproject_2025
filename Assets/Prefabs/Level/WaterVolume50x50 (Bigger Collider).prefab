@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2857111876298527857}
   - component: {fileID: 610670262929460275}
   - component: {fileID: 8357500442069597453}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 8861433302838569712}
   - component: {fileID: 6347305767816831558}
   - component: {fileID: 5244014808803073453}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: WaterVolume50x50 (Bigger Collider)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
