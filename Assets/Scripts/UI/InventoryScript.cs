@@ -106,8 +106,8 @@ public class InventoryScript : MonoBehaviour
 
         RectTransform inventory_rect = inventory.GetComponent<RectTransform>();
 
-        float outer_padding = 34;
-        float y_padding = 10;
+        float outer_padding = 14;
+        float y_padding = 18;
         float padding = 0;
         float i_slot_width = (inventory_rect.rect.size.x - 2 * outer_padding - 7 * padding) / 8;
         float i_slot_height = i_slot_width;
@@ -123,9 +123,6 @@ public class InventoryScript : MonoBehaviour
                 ItemSlotScript iss = i_slot.GetComponent<ItemSlotScript>();
                 iss.inventory_index = i * 8 + j;
                 iss.item = player_stats.inventory[iss.inventory_index];
-
-                // Debug.Log("inventory slot no." + iss.inventory_index + " : "
-                //         + (player_stats.inventory[iss.inventory_index] == null ? "null" : player_stats.inventory[iss.inventory_index].name));
 
                 if (player_stats.inventory[i * 8 + j] != null) {
                     GameObject iss_img = Instantiate(inventory_slot_image_prefab, Vector3.zero, Quaternion.identity, i_slot.transform);

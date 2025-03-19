@@ -91,6 +91,7 @@ public class GameState : MonoBehaviour
     public static void ChangePf(GameObject new_pf)
     {
         pf = new_pf;
+        Reset();
     }
 
 
@@ -103,10 +104,6 @@ public class GameState : MonoBehaviour
             first_load = false;
             p = Instantiate(pf, new Vector3(0, -100, 0), Quaternion.identity);
             ps = p.GetComponent<PlayerStats>();
-
-            Debug.Log("p: " + p);
-            Debug.Log(ps);
-            Debug.Log(ps.learned_attacks);
 
             ps.learned_attacks.Add(attacks[0]);
             ps.learned_spells.Add(spells[0]);

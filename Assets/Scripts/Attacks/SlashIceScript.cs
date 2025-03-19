@@ -74,7 +74,7 @@ namespace Attacks
                     t = transform.parent.Find("root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/weapon_r").GetComponent<Transform>();
                     transform.parent = t;
                     delay = 0.096f;
-                    effect_duration = 0.437f;
+                    effect_duration = 0.4f;
                     transform.localPosition = (Vector3.down * -1f);
                     transform.localScale *= stats.scale * 0.6f;
                     transform.localRotation = Quaternion.identity;

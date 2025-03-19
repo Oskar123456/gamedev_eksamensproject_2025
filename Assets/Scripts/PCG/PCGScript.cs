@@ -41,10 +41,6 @@ namespace PCG
         List<GameObject> decos = new List<GameObject>();
         GameObject level_container;
 
-        GameObject player;
-        Transform player_trf;
-        PlayerStats player_stats;
-
         int max_lights = 128, light_count = 0;
         System.Random rng = new System.Random();
         public int level, difficulty;
@@ -66,9 +62,6 @@ namespace PCG
 
         public Level New(LevelType level_type)
         {
-            player = GameObject.Find("Player");
-            player_trf = player.GetComponent<Transform>();
-
             Clean();
             level_container = Instantiate(level_container_prefab, Vector3.zero, Quaternion.identity, transform);
             maze = new Maze(maze_width + (GameState.rng.Next() % (int)MathF.Sqrt(GameState.level + 1)),

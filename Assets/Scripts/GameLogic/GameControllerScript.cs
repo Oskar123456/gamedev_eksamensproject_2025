@@ -87,19 +87,14 @@ public class GameControllerScript : MonoBehaviour
         level_builder = arena.GetComponent<LevelBuilder>();
         level_builder.Init();
 
+        StartNew();
+
         GameState.InstantiatePlayer();
         player = GameObject.Find("Player");
 
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
-
-
-        minimap_img = GameObject.Find("MiniMapImg");
-        minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
-        minimap_cam_trf = GameObject.Find("MiniMapCamera").GetComponent<Transform>();
-        minimap_cam.orthographic = true;
-        minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
 
         player_marker = Instantiate(player_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), player_trf);
         finish_marker = Instantiate(finish_marker_prefab, Vector3.zero, Quaternion.Euler(90, 0, 0), transform);
@@ -110,7 +105,23 @@ public class GameControllerScript : MonoBehaviour
         active_attack_button = GameObject.Find("ActiveAttackButton");
         active_spell_button = GameObject.Find("ActiveSpellButton");
 
-        StartNew();
+        minimap_img = GameObject.Find("MiniMapImg");
+        minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
+        minimap_cam_trf = GameObject.Find("MiniMapCamera").GetComponent<Transform>();
+        minimap_cam.orthographic = true;
+        minimap_img_pos = minimap_img.GetComponent<RectTransform>().anchoredPosition;
+
+        UpdateMiniMapCam();
+        WarpPlayerToStart();
+        player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);
+
+        Vector3 start_pos = current_level.GetStartPosition();
+        Vector3 finish_pos = current_level.GetFinishPosition();
+
+        Instantiate(portal_entrance_prefab, start_pos + Vector3.up * -1f, Quaternion.identity, level_object_container.transform);
+        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 2.75f, Quaternion.identity, level_object_container.transform);
+
+        finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
 
         Debug.Log("start: " + current_level.GetStartPosition().ToString());
         Debug.Log("finish: " + current_level.GetFinishPosition().ToString());
@@ -133,13 +144,9 @@ public class GameControllerScript : MonoBehaviour
                 minimap_img.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
             } else {
                 minimap_img.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-                minimap_img.GetComponent<Transform>().localScale = new Vector3(4, 4, 4);
+                minimap_img.GetComponent<Transform>().localScale = new Vector3(3, 3, 3);
             }
             minimap_maximized = !minimap_maximized;
-        }
-
-        if (player_trf.hasChanged) {
-            // player_marker_trf.position = new Vector3(player_trf.position.x, 290, player_trf.position.z);
         }
     }
 
@@ -148,18 +155,6 @@ public class GameControllerScript : MonoBehaviour
         Clean();
 
         current_level = PCG.New(current_level_type);
-
-        UpdateMiniMapCam();
-        WarpPlayerToStart();
-
-        Vector3 start_pos = current_level.GetStartPosition();
-        Vector3 finish_pos = current_level.GetFinishPosition();
-
-        Instantiate(portal_entrance_prefab, start_pos + Vector3.up * -1f, Quaternion.identity, level_object_container.transform);
-        GameObject portal_exit = Instantiate(portal_exit_prefab, finish_pos + Vector3.up * 2.75f, Quaternion.identity, level_object_container.transform);
-
-        finish_marker_trf.position = new Vector3(finish_pos.x, 271, finish_pos.z);
-        player_marker_trf.position = new Vector3(player_trf.position.x, 270, player_trf.position.z);
     }
 
     void UpdateMiniMapCam()

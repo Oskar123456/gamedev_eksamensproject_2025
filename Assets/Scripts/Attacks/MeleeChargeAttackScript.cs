@@ -52,6 +52,8 @@ namespace Attacks
 
             bool is_player = (transform.parent.gameObject.tag == "Player");
 
+            delay = delay / (stats.base_duration / stats.duration);
+
             if (is_player) {
                 Transform trf = transform.parent.Find("root/pelvis/Weapon/Staff01PolyArt");
                 if (trf != null) {
@@ -71,10 +73,9 @@ namespace Attacks
             transform.localScale *= 1 + ((stats.scale - 1) / 2);
 
             created_t = Time.time;
-            delay = delay / (stats.base_duration / stats.duration);
             effect_duration = effect_duration / (stats.base_duration / stats.duration);
 
-            Destroy(gameObject, stats.duration);
+            Destroy(gameObject, delay + effect_duration);
         }
 
         void Update()
