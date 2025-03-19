@@ -40,7 +40,6 @@ namespace UI
 
         void Start()
         {
-            /* level intro */
             screen_color = GameObject.Find("ScreenPanel");
             screen_color_img = screen_color.GetComponent<Image>();
             screen_color_img.color = Color.black;

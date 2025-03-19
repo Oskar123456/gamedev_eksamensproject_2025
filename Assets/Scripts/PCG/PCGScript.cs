@@ -67,6 +67,7 @@ namespace PCG
             maze = new Maze(maze_width + (GameState.rng.Next() % (int)MathF.Sqrt(GameState.level + 1)),
                     maze_height + (GameState.rng.Next() % (int)MathF.Sqrt(GameState.level + 1)));
             Level level = level_builder.Medieval(maze, level_container.GetComponent<Transform>(), level_type);
+            level_builder.CreateMesh(level, level_container.GetComponent<Transform>());
 
             level_container.GetComponent<NavMeshSurface>().BuildNavMesh();
 

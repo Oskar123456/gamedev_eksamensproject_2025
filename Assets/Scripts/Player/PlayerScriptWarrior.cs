@@ -652,7 +652,7 @@ namespace Player
                     animator.SetFloat("move_speed", anim_mul_move_speed * MathF.Min(v_horizontal_0, move_speed));
                     animator.Play("MoveFWD_Battle_InPlace_SwordAndShield");
                     float anim_time_normed = anim_state_info.normalizedTime % 1.0f;
-                    if (footstep_next == 0 && (anim_time_normed > 0.22f || anim_time_normed < 0.28f)) {
+                    if (footstep_next == 0 && (anim_time_normed > 0.22f && anim_time_normed < 0.28f)) {
                         footsteps.PlayRandom();
                         footstep_next = 1;
                     }

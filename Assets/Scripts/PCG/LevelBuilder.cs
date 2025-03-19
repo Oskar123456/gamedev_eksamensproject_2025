@@ -60,6 +60,11 @@ namespace PCG
             level.InitVoxels();
             level.BuildMesh();
 
+            return level;
+        }
+
+        public void CreateMesh(Level level, Transform parent)
+        {
             List<GameObject> floors = new List<GameObject>();
             List<GameObject> walls = new List<GameObject>();
             List<GameObject> ceilings = new List<GameObject>();
@@ -81,8 +86,6 @@ namespace PCG
                 SetMesh(ceiling, level.ceiling_vertices[i], level.ceiling_triangles[i], level.ceiling_uvs[i]);
                 ceilings.Add(ceiling);
             }
-
-            return level;
         }
 
         void SetMesh(GameObject skeleton, List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
