@@ -14,12 +14,13 @@
   - Drink Potion : 1
   - Change Active Skills : Click on Skill Bar (Lower Right Corner)
   - Toggle Minimap Overlay : Tab
-  - Open Skill TreeT : 
-  - Open Character SheetC : 
-  - Open InventoryI/E : 
+  - Open Skill Tree : T 
+  - Open Character Sheet : C 
+  - Open Inventory : I/E 
   - Drop item on cursor : Left Mouse Button or F (Cursor Must Point to Floor) 
   - Close UI : Escape
   - Skip Current Level : R
+  - Quick Potion From Inventory to Belt : Left Shift + Click on Potion in Inventory
 
 #### Inventory Management
 
