@@ -25,7 +25,7 @@ Features:
   - Diablo style combat, character progression with skill tree [T], character sheet [C] and inventory [E/I].
   - Dynamically generated loot drops from enemies
   - Boss fight every 3 levels
-  - Item shop in-between each level
+  - Item shop in-between each levels
 
 ## Instructions
 
