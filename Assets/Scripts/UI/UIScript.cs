@@ -19,6 +19,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Spells;
 using Attacks;
 using Player;
@@ -72,6 +73,8 @@ namespace UI
         GameObject stats;
         GameObject skill_tree_container;
         InventoryScript inventory_script;
+
+        GameObject pause_overlay;
 
         List<GameObject> occluding_gameobjects = new List<GameObject>();
 
@@ -138,6 +141,22 @@ namespace UI
             player_hp_bar = GameObject.Find("PlayerHPBar").GetComponent<Slider>();
             player_xp_bar = GameObject.Find("PlayerXPBar").GetComponent<Slider>();
 
+            pause_overlay = GameObject.Find("PauseScreen");
+            if (pause_overlay != null) {
+                Button resume_button = GameObject.Find("ResumeButton").GetComponent<Button>();
+                Button exit_button = GameObject.Find("MenuButton").GetComponent<Button>();
+                resume_button.onClick.AddListener(() => {
+                        pause_overlay.SetActive(false);
+                        Time.timeScale = 1;
+                        });
+                exit_button.onClick.AddListener(() => {
+                        GameState.Reset();
+                        Time.timeScale = 1;
+                        SceneManager.LoadScene("Menu");
+                        });
+                pause_overlay.SetActive(false);
+            }
+
             BuildSkillTree();
 
             SetHeldItem();
@@ -194,9 +213,19 @@ namespace UI
             }
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
-                HideUI();
                 active_attack_button.SendMessage("Hide");
                 active_spell_button.SendMessage("Hide");
+                if (is_inventory_active || stats_toggled || skill_tree_toggled) {
+                    HideUI();
+                } else {
+                    if (Time.timeScale < 1) {
+                        Time.timeScale = 1;
+                        pause_overlay.SetActive(false);
+                    } else {
+                        Time.timeScale = 0;
+                        pause_overlay.SetActive(true);
+                    }
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.T)) {
@@ -256,6 +285,9 @@ namespace UI
             skill_tree.SetActive(false);
             stats.SetActive(false);
             HideInventory();
+            skill_tree_toggled = false;
+            stats_toggled = false;
+            inventory_toggled = false;
         }
 
         public void ToggleStats()

@@ -49,6 +49,11 @@ namespace UI
                 play_button.onClick.AddListener(PlayGame);
             }
 
+            if (GameObject.Find("ExitButton") != null) {
+                play_button = GameObject.Find("ExitButton").GetComponent<Button>();
+                play_button.onClick.AddListener(() => Application.Quit());
+            }
+
             if (GameObject.Find("Status") != null) {
                 status = GameObject.Find("Status").GetComponent<TextMeshProUGUI>();
                 if (GameState.has_died) {
