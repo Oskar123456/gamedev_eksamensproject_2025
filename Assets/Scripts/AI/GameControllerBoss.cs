@@ -19,7 +19,6 @@ using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
-using PCG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Player;
@@ -42,10 +41,6 @@ public class GameControllerBoss : MonoBehaviour
     Camera minimap_cam;
     Transform minimap_cam_trf;
 
-    PCGScript PCG;
-    LevelBuilder level_builder;
-    GameObject arena;
-
     GameObject player;
     Transform player_trf;
     CharacterController player_char_ctrl;
@@ -61,9 +56,6 @@ public class GameControllerBoss : MonoBehaviour
     /* game state */
     bool minimap_maximized = false;
     Vector2 minimap_img_pos;
-
-    LevelType current_level_type;
-    Level current_level;
 
     bool no_player_found;
 
@@ -95,12 +87,8 @@ public class GameControllerBoss : MonoBehaviour
             ps.camera_dist = 1.0f;
         }
 
-        current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
-
         GameState.level++;
-        GameState.level_name = (current_level_type == LevelType.Medieval) ? "Dungeon (" + GameState.level.ToString() + ")"
-            : "Cistern (" + GameState.level.ToString() + ")";
-        arena = GameObject.Find("Arena");
+        GameState.level_name = "Level " + GameState.level.ToString() + Environment.NewLine + "Boss";
 
         minimap_img = GameObject.Find("MiniMapImg");
         minimap_cam = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
@@ -143,23 +131,11 @@ public class GameControllerBoss : MonoBehaviour
         }
     }
 
-
-
     void UpdateMiniMapCam()
     {
-        if (current_level == null)
-            return;
-        minimap_cam_trf.position = new Vector3(current_level.world_width / 2.0f, 400, current_level.world_height / 2.0f);
+        minimap_cam_trf.position = new Vector3(100 / 2.0f, 400, 100 / 2.0f);
         minimap_cam_trf.eulerAngles = new Vector3(90, 0, 0);
-        minimap_cam.orthographicSize = (float)Math.Max(current_level.world_width, current_level.world_height) / 2.0f;
-    }
-
-    void WarpPlayerToStart()
-    {
-        Vector3 start_pos = current_level.GetStartPosition();
-        player_char_ctrl.enabled = false;
-        player_trf.position = start_pos;
-        player_char_ctrl.enabled = true;
+        minimap_cam.orthographicSize = (float)Math.Max(100, 100) / 2.0f;
     }
 
     void Clean()

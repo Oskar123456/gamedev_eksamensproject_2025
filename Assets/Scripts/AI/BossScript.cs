@@ -301,6 +301,7 @@ public class BossScript : MonoBehaviour
         Debug.Log("💀 Boss is dead!");
         GameObject portal_exit = Instantiate(portal_exit_prefab, transform.position, Quaternion.identity);
         portal_exit.transform.position += Vector3.up * 3.5f;
+        portal_exit.transform.position += player_trf.forward * 7.5f;
         Destroy(gameObject); // Fjern bossen fra spillet
 
          //  Tilføjer 50% chance for at droppe loot
