@@ -5,7 +5,7 @@
 Group 4
 
 ### Members
-  
+
   - Ferdinand
   - Laith
   - Mahdi
@@ -25,11 +25,12 @@ Group 4
   - Drink Potion : 1
   - Change Active Skills : Click on Skill Bar (Lower Right Corner)
   - Toggle Minimap Overlay : Tab
-  - Open Skill Tree : T 
-  - Open Character Sheet : C 
-  - Open Inventory : I/E 
-  - Drop item on cursor : Left Mouse Button or F (Cursor Must Point to Floor) 
+  - Open Skill Tree : T
+  - Open Character Sheet : C
+  - Open Inventory : I/E
+  - Drop item on cursor : Left Mouse Button or F (Cursor Must Point to Floor)
   - Close UI : Escape
+  - Pause and Show Menu : Escape (closes UI if active, otherwise pauses and shows menu)
   - Skip Current Level : R
   - Quick Potion From Inventory to Belt : Left Shift + Click on Potion in Inventory
 
