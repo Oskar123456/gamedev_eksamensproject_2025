@@ -35,6 +35,7 @@ Diablo Style Roguelike
   - Pause and Show Menu : Escape (closes UI if active, otherwise pauses and shows menu)
   - Skip Current Level : R
   - Quick Potion From Inventory to Belt : Left Shift + Click on Potion in Inventory
+  - Talk to NPC in Town : E
 
 #### Inventory Management
 
