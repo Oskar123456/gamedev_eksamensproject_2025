@@ -871,7 +871,7 @@ PrefabInstance:
     - target: {fileID: 6416373483657804133, guid: 3529b77b504fb874594fa0d31dccef92, type: 3}
       propertyPath: uiCanvas
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1459024976}
     - target: {fileID: 6416373483657804133, guid: 3529b77b504fb874594fa0d31dccef92, type: 3}
       propertyPath: ShopCanvas
       value: 
@@ -3216,6 +3216,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 336eeb61f2b6cdeb19c8b796e33c3db8, type: 3}
+--- !u!1 &1459024976 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7348100526617897852, guid: 336eeb61f2b6cdeb19c8b796e33c3db8, type: 3}
+  m_PrefabInstance: {fileID: 1459024975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1486887179 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6416373483657804133, guid: 3529b77b504fb874594fa0d31dccef92, type: 3}
