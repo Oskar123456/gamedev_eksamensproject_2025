@@ -17,6 +17,18 @@ Group 4
 
 Diablo Style Roguelike
 
+After selecting your starting character, you are transported to the Town, and can choose to purchase items from the shopkeeper, before proceeding through the portal to the next dungeon level, or boss fight.
+
+Features: 
+
+  - Procedurally generated levels
+  - Different types of enemies
+  - Character selection
+  - Diablo style combat, character progression with skill tree, character sheet and inventory.
+  - Dynamically generated loot drops from enemies
+  - Boss fight every 3 levels
+  - Item shop in-between each level
+
 ### Controls
 
   - Character Control: Diablo Style (Point and Click) & WASD
