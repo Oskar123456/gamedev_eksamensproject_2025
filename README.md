@@ -6,10 +6,10 @@ Group 4
 
 ### Members
 
-  - Ferdinand
-  - Laith
-  - Mahdi
-  - Oskar
+  - [Ferdinand](https://github.com/FerdinandAV)
+  - [Laith](https://github.com/MINGO-INC)
+  - [Mahdi](https://github.com/cphmk)
+  - [Oskar](https://github.com/Oskar123456)
 
 ## Instructions
 
