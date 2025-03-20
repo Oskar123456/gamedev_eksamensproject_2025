@@ -13,7 +13,7 @@ Group 4
 
 ## Instructions
 
-  >> Link to a build that is ready to play ?? <<
+  > Link to a build that is ready to play ??
 
 ### Controls
 
