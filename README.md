@@ -11,9 +11,7 @@ Group 4
   - [Mahdi](https://github.com/cphmk)
   - [Oskar](https://github.com/Oskar123456)
 
-## Instructions
-
-### General
+## Introduction
 
 Diablo Style Roguelike
 
@@ -28,6 +26,8 @@ Features:
   - Dynamically generated loot drops from enemies
   - Boss fight every 3 levels
   - Item shop in-between each level
+
+## Instructions
 
 ### Controls
 
