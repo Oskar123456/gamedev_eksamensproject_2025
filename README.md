@@ -2,7 +2,18 @@
 
 ## Team
 
+Group 4
+
+### Members
+  
+  - Ferdinand
+  - Laith
+  - Mahdi
+  - Oskar
+
 ## Instructions
+
+  >> Link to a build that is ready to play ?? <<
 
 ### Controls
 
