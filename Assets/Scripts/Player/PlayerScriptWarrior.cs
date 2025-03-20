@@ -347,7 +347,7 @@ namespace Player
             float mwheel = Input.GetAxis("Mouse ScrollWheel");
             if (mwheel != 0) {
                 camera_dist -= scroll_speed * mwheel;
-                camera_dist = Mathf.Clamp(camera_dist, 0.2f, 0.8f);
+                camera_dist = Mathf.Clamp(camera_dist, 0.2f, 1.1f);
                 UpdateCam();
             }
 

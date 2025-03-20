@@ -2761,8 +2761,8 @@ MonoBehaviour:
   pickup_range: 3
   pickup_time: 0.25
   pickup_speed: 1
-  skill_points: 5
-  attack_damage: 0
+  skill_points: 1
+  attack_damage: 1
   attack_damage_normal: 0
   attack_damage_ice: 0
   attack_damage_fire: 0

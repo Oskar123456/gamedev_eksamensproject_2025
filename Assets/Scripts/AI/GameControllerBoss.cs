@@ -22,6 +22,7 @@ using System.Threading;
 using PCG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Player;
 
 public class GameControllerBoss : MonoBehaviour
 {
@@ -85,6 +86,14 @@ public class GameControllerBoss : MonoBehaviour
         player_trf = player.GetComponent<Transform>();
         player_char_ctrl = player.GetComponent<CharacterController>();
         GameState.player_trf = player_trf;
+
+        if (player.GetComponent<PlayerScript>() != null) {
+            PlayerScript ps = player.GetComponent<PlayerScript>();
+            ps.camera_dist = 1.0f;
+        } else {
+            PlayerScriptWarrior ps = player.GetComponent<PlayerScriptWarrior>();
+            ps.camera_dist = 1.0f;
+        }
 
         current_level_type = (Utils.rng.Next() % 2 == 0) ? LevelType.Medieval : LevelType.Water;
 
