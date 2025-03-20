@@ -6,22 +6,20 @@
 
 ### Controls
 
-  - Left Mouse Button : Move to location / Attack enemy / Pick up loot
-  - Right Mouse Button: Cast Spell
-  - Left Ctrl : Attack in Place
-  - WASD : Movement
-  - Shift : Sprint
-  - Space : Jump
-  - 1 : Drink Potion
-  - Number Keys : Switch Active Attack
-  - [Left-Shift+]Number Keys : Switch Active Spell
-  - Tab : [Maximize] Minimap
-  - T : Open Skill Tree
-  - C : Open Character Sheet
-  - I/E : Open Inventory
-  - F : Drop item on cursor
-  - Escape : Close UI
-  - R : [R]estart
+  - Character Control: Diablo Style (Point and Click) & WASD
+  - Sprint : Left Shift
+  - Jump : Space Bar
+  - Attack : Left Mouse Button ( + Left Control : Attack in Place)
+  - Cast Spell : Right Mouse Button
+  - Drink Potion : 1
+  - Change Active Skills : Click on Skill Bar (Lower Right Corner)
+  - Toggle Minimap Overlay : Tab
+  - Open Skill TreeT : 
+  - Open Character SheetC : 
+  - Open InventoryI/E : 
+  - Drop item on cursor : Left Mouse Button or F (Cursor Must Point to Floor) 
+  - Close UI : Escape
+  - Skip Current Level : R
 
 #### Inventory Management
 
