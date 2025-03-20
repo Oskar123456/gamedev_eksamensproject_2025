@@ -1,4 +1,4 @@
-# GameDev 2025 Exam Project
+# GameDev 2025 Exam Project -- Dungeon Survivor
 
 ## Team
 
@@ -12,6 +12,10 @@ Group 4
   - [Oskar](https://github.com/Oskar123456)
 
 ## Instructions
+
+### General
+
+Diablo Style Roguelike
 
 ### Controls
 
