@@ -1,4 +1,4 @@
-# GameDev 2025 Exam Project -- Dungeon Survivor
+# GameDev 2025 Exam Project - Dungeon Survivor
 
 ## Team
 
