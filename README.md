@@ -25,7 +25,6 @@
 #### Inventory Management
 
   - Diablo 2 Style
-  - LeftShift + Left Mouse Button : Move potion from inventory to belt
 
 ## Third Party Assets List
 
