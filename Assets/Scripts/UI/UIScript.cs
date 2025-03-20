@@ -53,7 +53,6 @@ namespace UI
         Slider player_hp_bar;
         Slider player_xp_bar;
 
-        TextMeshProUGUI player_info;
         TextMeshProUGUI debug_info;
         TextMeshProUGUI hp_info;
         TextMeshProUGUI xp_info;
@@ -134,7 +133,6 @@ namespace UI
             item_tooltip_rt = item_tooltip.GetComponent<RectTransform>();
             item_tooltip_text = GameObject.Find("ItemToolTipText").GetComponent<TextMeshProUGUI>();
 
-            player_info = GameObject.Find("PlayerInfo").GetComponent<TextMeshProUGUI>();
             debug_info = GameObject.Find("DebugInfo").GetComponent<TextMeshProUGUI>();
             hp_info = GameObject.Find("PlayerHPText").GetComponent<TextMeshProUGUI>();
             xp_info = GameObject.Find("PlayerXPText").GetComponent<TextMeshProUGUI>();
