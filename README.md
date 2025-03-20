@@ -71,14 +71,3 @@ Group 4
 
 ## TODO:
 
-  - Boss room zoom
-  - Shop inventory update need to be fixed
-  - Town chat bubble null reference error need to be fixed
-
-
-
-
-
-
-
-
