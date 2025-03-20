@@ -34,8 +34,7 @@ public class NPCInteractable : MonoBehaviour
       uiCanvas.SetActive(true);
 
       GameObject UI = GameObject.Find("UI");
-      UI.SendMessage("ToggleInventory");
-      UI.SendMessage("ToggleInventory");
+      UI.SendMessage("ShowInventory");
 
       // Switch back to the main camera
       shopCamera.gameObject.SetActive(false);
