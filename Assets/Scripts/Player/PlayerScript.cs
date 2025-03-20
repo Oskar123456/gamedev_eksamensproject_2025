@@ -338,11 +338,16 @@ namespace Player
 
         void PollMouse()
         {
+            if (Time.timeScale == 0) {
+                return;
+            }
+
             point_and_move_cooldown_left -= Time.deltaTime;
 
             float mwheel = Input.GetAxis("Mouse ScrollWheel");
             if (mwheel != 0) {
                 camera_dist -= scroll_speed * mwheel;
+                camera_dist = Mathf.Clamp(camera_dist, 0.2f, 0.8f);
                 UpdateCam();
             }
 

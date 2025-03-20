@@ -338,11 +338,16 @@ namespace Player
 
         void PollMouse()
         {
+            if (Time.timeScale == 0) {
+                return;
+            }
+
             point_and_move_cooldown_left -= Time.deltaTime;
 
             float mwheel = Input.GetAxis("Mouse ScrollWheel");
             if (mwheel != 0) {
                 camera_dist -= scroll_speed * mwheel;
+                camera_dist = Mathf.Clamp(camera_dist, 0.2f, 0.8f);
                 UpdateCam();
             }
 
@@ -365,7 +370,7 @@ namespace Player
 
             is_mouse_hover_floor = !(ui_script.is_ui_object_hovered && !is_mouse_hover_loot) && !is_mouse_hover_loot && !is_mouse_hover_enemy && hit_plane;
 
-            if (is_falling || is_attacking || is_casting || is_picking_up) {
+            if (is_falling || is_attacking || is_casting || is_picking_up || (ui_script.is_ui_object_hovered && !is_mouse_hover_loot)) {
                 return;
             }
 
