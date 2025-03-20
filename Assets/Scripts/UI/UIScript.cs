@@ -148,11 +148,13 @@ namespace UI
                 resume_button.onClick.AddListener(() => {
                         pause_overlay.SetActive(false);
                         Time.timeScale = 1;
+                        PlaySwapSound();
                         });
                 exit_button.onClick.AddListener(() => {
                         GameState.Reset();
                         Time.timeScale = 1;
                         SceneManager.LoadScene("Menu");
+                        PlaySwapSound();
                         });
                 pause_overlay.SetActive(false);
             }
@@ -222,6 +224,7 @@ namespace UI
                         Time.timeScale = 1;
                         pause_overlay.SetActive(false);
                     } else {
+                        PlaySwapSound();
                         Time.timeScale = 0;
                         pause_overlay.SetActive(true);
                     }
