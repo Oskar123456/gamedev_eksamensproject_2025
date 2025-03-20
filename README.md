@@ -51,7 +51,7 @@ Features:
 
 #### Inventory Management
 
-  - Diablo 2 Style
+  - Diablo Style
 
 ## Third Party Assets List
 
