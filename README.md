@@ -13,8 +13,6 @@ Group 4
 
 ## Instructions
 
-  > Link to a build that is ready to play ??
-
 ### Controls
 
   - Character Control: Diablo Style (Point and Click) & WASD
@@ -68,6 +66,3 @@ Group 4
   - [Footsteps](https://assetstore.unity.com/packages/audio/sound-fx/foley/footsteps-essentials-189879)
   - [Cursors](https://assetstore.unity.com/packages/2d/gui/icons/pixel-cursors-109256)
   - [Warrior Class](https://assetstore.unity.com/packages/3d/characters/humanoids/rpg-tiny-hero-duo-pbr-polyart-225148)
-
-## TODO:
-
